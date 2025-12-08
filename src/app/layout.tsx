@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Pacifico } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/shared/Navbar";
-import Footer from "@/components/shared/Footer";
+import { Toaster } from "sonner";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -27,9 +26,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} ${pacifico.variable} antialiased`}>
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        {children}
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );

@@ -9,7 +9,7 @@ export default function Navbar() {
     { name: "Surprises", href: "/surprises" },
     { name: "About Us", href: "/about-us" },
     { name: "Contact", href: "/contact" },
-    { name: "Login", href: "/auth/login" },
+    { name: "Login", href: "/login" },
     { name: "Dashboard", href: "/dashboard/admin" },
   ];
 

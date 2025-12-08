@@ -13,7 +13,7 @@ export default function TermsPage() {
           </p>
 
           <div className="space-y-8">
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow">
+            <Card >
               <CardHeader>
                 <CardTitle>1. Acceptance of Terms</CardTitle>
               </CardHeader>
@@ -27,7 +27,7 @@ export default function TermsPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow">
+            <Card >
               <CardHeader>
                 <CardTitle>2. Services Description</CardTitle>
               </CardHeader>
@@ -41,7 +41,7 @@ export default function TermsPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow">
+            <Card >
               <CardHeader>
                 <CardTitle>3. Orders and Payments</CardTitle>
               </CardHeader>
@@ -64,7 +64,7 @@ export default function TermsPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow">
+            <Card >
               <CardHeader>
                 <CardTitle>4. Delivery Policy</CardTitle>
               </CardHeader>
@@ -86,7 +86,7 @@ export default function TermsPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow">
+            <Card >
               <CardHeader>
                 <CardTitle>5. Cancellation and Refund</CardTitle>
               </CardHeader>
@@ -106,7 +106,7 @@ export default function TermsPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow">
+            <Card >
               <CardHeader>
                 <CardTitle>6. User Responsibilities</CardTitle>
               </CardHeader>
@@ -124,7 +124,7 @@ export default function TermsPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow">
+            <Card >
               <CardHeader>
                 <CardTitle>7. Limitation of Liability</CardTitle>
               </CardHeader>
@@ -138,7 +138,7 @@ export default function TermsPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow">
+            <Card >
               <CardHeader>
                 <CardTitle>8. Changes to Terms</CardTitle>
               </CardHeader>
@@ -152,7 +152,7 @@ export default function TermsPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow">
+            <Card >
               <CardHeader>
                 <CardTitle>9. Contact Information</CardTitle>
               </CardHeader>

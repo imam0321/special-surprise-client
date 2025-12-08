@@ -25,7 +25,7 @@ export default function ContactPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Contact Form */}
-          <Card className="border-none shadow-sm hover:shadow-md transition-shadow bg-surprise-purple/20 hover:bg-surprise-purple/20">
+          <Card className="bg-surprise-purple/20 hover:bg-surprise-purple/20">
             <CardHeader className="mb-2">
               <CardTitle>Send us a Message</CardTitle>
               <CardDescription>
@@ -95,7 +95,7 @@ export default function ContactPage() {
 
           {/* Contact Info */}
           <div className="space-y-2">
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow bg-blue-100 hover:bg-blue-200">
+            <Card className="bg-blue-100 hover:bg-blue-200">
               <CardContent className="p-4">
                 <div className="flex items-start gap-4">
                   <div className="bg-surprise-pink/10 p-3 rounded-lg">
@@ -110,7 +110,7 @@ export default function ContactPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow bg-green-100 hover:bg-green-200">
+            <Card className="bg-green-100 hover:bg-green-200">
               <CardContent className="p-4">
                 <div className="flex items-start gap-4">
                   <div className="bg-surprise-purple/10 p-3 rounded-lg">
@@ -129,7 +129,7 @@ export default function ContactPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow bg-teal-100 hover:bg-teal-200">
+            <Card className="bg-teal-100 hover:bg-teal-200">
               <CardContent className="p-4">
                 <div className="flex items-start gap-4">
                   <div className="bg-green-100 p-3 rounded-lg">
@@ -147,7 +147,7 @@ export default function ContactPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow bg-surprise-coral/10 hover:bg-surprise-coral/20">
+            <Card className="bg-surprise-coral/10 hover:bg-surprise-coral/20">
               <CardContent className="p-4">
                 <div className="flex items-start gap-4">
                   <div className="bg-amber-100 p-3 rounded-lg">

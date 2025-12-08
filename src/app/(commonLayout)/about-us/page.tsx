@@ -80,10 +80,7 @@ export default function AboutUsPage() {
         <section className="mb-16">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:gap-6 gap-4">
             {stats.map((stat, index) => (
-              <Card
-                key={index}
-                className="border-none shadow-sm hover:shadow-md transition-shadow"
-              >
+              <Card key={index} className="">
                 <CardContent className="p-6 text-center">
                   <stat.icon className="h-10 w-10 mx-auto mb-3 text-surprise-pink" />
                   <p className="lg:text-3xl text-xl font-bold text-surprise-purple">
@@ -99,7 +96,7 @@ export default function AboutUsPage() {
         {/* Mission & Vision */}
         <section className="mb-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow bg-linear-to-br from-surprise-pink/5 to-surprise-pink/10">
+            <Card className="bg-linear-to-br from-surprise-pink/5 to-surprise-pink/10">
               <CardContent className="p-8">
                 <Target className="h-12 w-12 text-surprise-pink mb-4" />
                 <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
@@ -110,7 +107,7 @@ export default function AboutUsPage() {
                 </p>
               </CardContent>
             </Card>
-            <Card className="border-none shadow-sm hover:shadow-md transition-shadow bg-linear-to-br from-surprise-purple/5 to-surprise-purple/10">
+            <Card className="bg-linear-to-br from-surprise-purple/5 to-surprise-purple/10">
               <CardContent className="p-8">
                 <Heart className="h-12 w-12 text-surprise-purple mb-4" />
                 <h3 className="text-2xl font-bold mb-4">Our Vision</h3>
@@ -131,10 +128,7 @@ export default function AboutUsPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {team.map((member, index) => (
-              <Card
-                key={index}
-                className="text-center border-none shadow-sm hover:shadow-md transition-shadow"
-              >
+              <Card key={index} className="text-center ">
                 <CardContent className="p-6">
                   <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
                     <Image

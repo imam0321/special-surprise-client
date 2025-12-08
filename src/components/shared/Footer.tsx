@@ -30,24 +30,24 @@ export default function Footer() {
               specialize in customized gifts and surprises for all occasions.
             </p>
             <div className="flex space-x-4">
-              <a
+              <Link
                 href="https://facebook.com/specialsurprise49"
                 className="text-muted-foreground hover:text-surprise-pink transition-colors"
               >
                 <Facebook size={20} />
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#"
                 className="text-muted-foreground hover:text-surprise-pink transition-colors"
               >
                 <Instagram size={20} />
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#"
                 className="text-muted-foreground hover:text-surprise-pink transition-colors"
               >
                 <Twitter size={20} />
-              </a>
+              </Link>
             </div>
           </div>
 
