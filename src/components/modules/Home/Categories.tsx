@@ -86,7 +86,7 @@ export default function Categories() {
                   <div className="bg-white rounded-full p-3 shadow-sm mb-4">
                     {category.icon}
                   </div>
-                  <h3 className="font-semibold text-lg mb-1">
+                  <h3 className="font-semibold md:text-lg text-sm mb-1">
                     {category.name}
                   </h3>
                   <p className="text-muted-foreground text-sm">
