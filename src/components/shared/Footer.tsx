@@ -143,7 +143,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <Separator className="my-6" />
+        <Separator className="my-4" />
 
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-muted-foreground text-sm mb-4 md:mb-0">
