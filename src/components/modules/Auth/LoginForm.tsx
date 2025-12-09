@@ -1,5 +1,5 @@
 "use client";
-
+import InputFieldError from "@/components/shared/InputFieldError";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -11,21 +11,21 @@ import { toast } from "sonner";
 
 export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
   const [showPassword, setShowPassword] = useState(false);
-
   const [state, formAction, isPending] = useActionState(loginUser, null);
 
   useEffect(() => {
-    if (state && !state.success && state.message) {
-      toast.error(state.message);
+    if (state) {
+      if (!state.success && state.message) {
+        toast.error(state.message);
+      }
     }
   }, [state]);
-  console.log(state)
+
   return (
     <form action={formAction} className="space-y-4">
       {redirectPath && (
         <Input type="hidden" name="redirectPath" value={redirectPath} />
       )}
-      {/* Email Field */}
       <Field>
         <FieldLabel>Email Address</FieldLabel>
 
@@ -43,10 +43,10 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
             className="pl-10"
             disabled={isPending}
           />
+          <InputFieldError field="email" state={state} />
         </div>
       </Field>
 
-      {/* Password Field */}
       <Field>
         <FieldLabel>Password</FieldLabel>
 
@@ -77,6 +77,7 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
               <Eye className="h-4 w-4" />
             )}
           </button>
+          <InputFieldError field="password" state={state} />
         </div>
       </Field>
 
@@ -89,7 +90,6 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
         </Link>
       </div>
 
-      {/* Submit Button */}
       <Button
         type="submit"
         disabled={isPending}

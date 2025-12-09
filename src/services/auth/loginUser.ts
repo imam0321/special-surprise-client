@@ -10,10 +10,10 @@ import z from "zod";
 import { zodValidator } from "@/lib/zod-validator";
 
 const loginValidationZodSchema = z.object({
-  email: z.email({
-    message: "Email is required",
+  email: z.string().email({
+    message: "Please enter a valid email address",
   }),
-  password: z.string("Password is required")
+  password: z.string().min(1, { message: "Password is required" })
 });
 
 
@@ -43,7 +43,7 @@ export const loginUser = async (_currentState: any, formData: FormData): Promise
     if (!result.success) {
       return {
         success: false,
-        error: result.message || "Invalid email or password",
+        message: result.message || "Invalid email or password",
       };
     }
 
@@ -62,14 +62,23 @@ export const loginUser = async (_currentState: any, formData: FormData): Promise
         }
       })
     } else {
-      throw new Error("No set-cookie found")
+      return {
+        success: false,
+        message: "Authentication failed. Please try again.",
+      };
     }
 
     if (!accessTokenObject) {
-      throw new Error("AccessToken not found in cookies");
+      return {
+        success: false,
+        message: "Authentication failed. Please try again.",
+      };
     }
     if (!refreshTokenObject) {
-      throw new Error("RefreshToken not found in cookies");
+      return {
+        success: false,
+        message: "Authentication failed. Please try again.",
+      };
     }
 
     await setCookie("accessToken", accessTokenObject.accessToken, {
@@ -91,7 +100,10 @@ export const loginUser = async (_currentState: any, formData: FormData): Promise
     const verifyToken: JwtPayload | string = jwt.verify(accessTokenObject.accessToken, process.env.JWT_ACCESS_SECRET as string)
 
     if (typeof verifyToken === "string") {
-      throw new Error("invalid token")
+      return {
+        success: false,
+        message: "Authentication failed. Please try again.",
+      };
     }
 
     const userRole: UserRole = verifyToken.role;
@@ -111,6 +123,9 @@ export const loginUser = async (_currentState: any, formData: FormData): Promise
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
       throw error
     }
-    return { error: error.message || "Login failed" }
+    return {
+      success: false,
+      message: error.message || "Login failed. Please try again."
+    }
   }
 }

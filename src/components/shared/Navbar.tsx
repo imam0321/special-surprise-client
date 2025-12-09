@@ -2,16 +2,26 @@ import Link from "next/link";
 import { Gift } from "lucide-react";
 import { Button } from "../ui/button";
 import MobileNavMenu from "./MobileNavMenu";
+// import { getCookie } from "@/services/auth/tokenHandlers";
+// import { getDefaultDashboardRoute } from "@/lib/auth.utils";
+// import { getUserInfo } from "@/services/auth/getUserInfo";
 
-export default function Navbar() {
+export default async function Navbar() {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Surprises", href: "/surprises" },
     { name: "About Us", href: "/about-us" },
     { name: "Contact", href: "/contact" },
-    { name: "Login", href: "/login" },
     { name: "Dashboard", href: "/dashboard/admin" },
   ];
+
+  // const accessToken = await getCookie("accessToken");
+  // const userInfo = accessToken ? await getUserInfo() : null;
+  // console.log(userInfo)
+  // const dashboardRoute = userInfo
+  //   ? getDefaultDashboardRoute(userInfo.role)
+  //   : "/";
+  // console.log(dashboardRoute)
 
   return (
     <nav className="backdrop-blur-3xl sticky top-0 z-50 w-full py-1">
@@ -36,12 +46,17 @@ export default function Navbar() {
           ))}
 
           <Button className="text-white bg-linear-to-r from-surprise-pink to-surprise-purple hover:opacity-90 btn-bounce">
-            Order Now
+            Login
           </Button>
         </div>
 
         {/* Mobile Navigation Trigger */}
-        <MobileNavMenu navLinks={navLinks} />
+        <MobileNavMenu
+          navLinks={navLinks}
+          // initialHasToken={!!accessToken}
+          // initialUserInfo={userInfo}
+          // initialDashboardRoute={dashboardRoute}
+        />
       </div>
     </nav>
   );

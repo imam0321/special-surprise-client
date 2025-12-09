@@ -33,7 +33,7 @@ export default function MobileNavMenu({ navLinks }: { navLinks: TNavLink[] }) {
             ))}
 
             <Button className="text-white font-semibold bg-linear-to-r from-surprise-pink to-surprise-purple hover:opacity-90 w-full">
-              Order Now
+              Login
             </Button>
           </div>
         </div>

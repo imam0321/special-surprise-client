@@ -56,6 +56,7 @@ export default function Hero() {
                       src="/images/hero-cover.PNG"
                       alt="Surprise gift box"
                       className=" object-cover"
+                      loading="eager"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>

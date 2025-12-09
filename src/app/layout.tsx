@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Poppins, Pacifico } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { Suspense } from "react";
+import LoginSuccessToast from "@/components/shared/LoginSuccessToast";
+import LogoutSuccessToast from "@/components/shared/LogoutSuccessToast";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -28,6 +31,10 @@ export default function RootLayout({
       <body className={`${poppins.variable} ${pacifico.variable} antialiased`}>
         {children}
         <Toaster position="top-right" richColors />
+        <Suspense fallback={null}>
+          <LoginSuccessToast />
+          <LogoutSuccessToast />
+        </Suspense>
       </body>
     </html>
   );
