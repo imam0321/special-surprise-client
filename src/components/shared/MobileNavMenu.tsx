@@ -3,13 +3,20 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { UserInfo } from "@/types/user.interface";
+import LogoutButton from "./LogoutButton";
 
-export type TNavLink = {
-  name: string;
-  href: string;
-};
+interface MobileNavMenuProps {
+  navLinks: Array<{ name: string; href: string }>;
+  hasAccessToken: boolean;
+  userInfo?: UserInfo | null;
+}
 
-export default function MobileNavMenu({ navLinks }: { navLinks: TNavLink[] }) {
+export default function MobileNavMenu({
+  navLinks,
+  hasAccessToken,
+  userInfo,
+}: MobileNavMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -32,9 +39,13 @@ export default function MobileNavMenu({ navLinks }: { navLinks: TNavLink[] }) {
               </Link>
             ))}
 
-            <Button className="text-white font-semibold bg-linear-to-r from-surprise-pink to-surprise-purple hover:opacity-90 w-full">
-              Login
-            </Button>
+            {hasAccessToken && userInfo ? (
+              <LogoutButton />
+            ) : (
+              <Button className="text-white font-semibold bg-linear-to-r from-surprise-pink to-surprise-purple hover:opacity-90 w-full">
+                <Link href="/login">Login</Link>
+              </Button>
+            )}
           </div>
         </div>
       )}

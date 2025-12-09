@@ -6,15 +6,8 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { redirect } from "next/navigation";
 import { setCookie } from "./tokenHandlers";
 import { serverFetch } from "@/lib/server-fetch";
-import z from "zod";
-import { zodValidator } from "@/lib/zod-validator";
-
-const loginValidationZodSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address",
-  }),
-  password: z.string().min(1, { message: "Password is required" })
-});
+import { zodValidator } from "@/lib/zodValidator";
+import { loginValidationZodSchema } from "@/zod/auth.validation";
 
 
 export const loginUser = async (_currentState: any, formData: FormData): Promise<any> => {
@@ -28,14 +21,33 @@ export const loginUser = async (_currentState: any, formData: FormData): Promise
       password: formData.get("password")
     }
 
-    const validated = zodValidator(payload, loginValidationZodSchema);
-    if (!validated.success) {
-      return validated;
+    const validatedPayload = zodValidator(payload, loginValidationZodSchema);
+
+    if (!validatedPayload.success && validatedPayload.errors) {
+      return {
+        success: validatedPayload.success,
+        message: "Validation failed",
+        formData: payload,
+        errors: validatedPayload.errors,
+      }
+    }
+
+    if (!validatedPayload.data) {
+      return {
+        success: false,
+        message: "Validation failed",
+        formData: payload,
+      }
+    }
+
+    const backendPayload = {
+      email: validatedPayload.data.email,
+      password: validatedPayload.data.password
     }
 
     const res = await serverFetch.post("/auth/login", {
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(validated.data)
+      body: JSON.stringify(backendPayload)
     });
 
     const result = await res.json();

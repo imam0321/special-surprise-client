@@ -28,23 +28,18 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
       )}
       <Field>
         <FieldLabel>Email Address</FieldLabel>
-
         <div className="relative">
           <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-
           <Input
-            id="email"
             name="email"
             type="email"
-            required
-            autoComplete="email"
-            autoFocus
-            placeholder="Enter your email"
+            placeholder="Enter email"
+            defaultValue={state?.formData?.email || ""}
             className="pl-10"
             disabled={isPending}
           />
-          <InputFieldError field="email" state={state} />
         </div>
+        <InputFieldError field="email" state={state} />
       </Field>
 
       <Field>
@@ -54,12 +49,10 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
 
           <Input
-            id="password"
             name="password"
             type={showPassword ? "text" : "password"}
-            required
-            autoComplete="current-password"
-            placeholder="Enter your password"
+            placeholder="Enter password"
+            defaultValue={state?.formData?.password || ""}
             className="pl-10 pr-10"
             disabled={isPending}
           />
@@ -77,8 +70,8 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
               <Eye className="h-4 w-4" />
             )}
           </button>
-          <InputFieldError field="password" state={state} />
         </div>
+        <InputFieldError field="password" state={state} />
       </Field>
 
       <div className="text-right">

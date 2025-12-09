@@ -1,9 +1,11 @@
 "use client";
 
+import InputFieldError from "@/components/shared/InputFieldError";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { registerCustomer } from "@/services/auth/registerCustomer";
 import {
   Mail,
   UserPlus,
@@ -16,31 +18,38 @@ import {
   Home,
   Key,
 } from "lucide-react";
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  let isPending;
+  const [state, formAction, isPending] = useActionState(registerCustomer, null);
+
+  useEffect(() => {
+    if (state && !state.success && state.message) {
+      toast.error(state.message);
+    }
+  }, [state]);
 
   return (
-    <form className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <form action={formAction} className="space-y-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         {/* Name */}
         <Field>
           <FieldLabel>Full Name</FieldLabel>
           <div className="relative">
             <UserPlus className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              id="name"
               name="name"
               type="text"
-              required
               placeholder="Enter full name"
+              defaultValue={state?.formData?.name || ""}
               className="pl-10"
               disabled={isPending}
             />
           </div>
+          <InputFieldError field="name" state={state} />
         </Field>
 
         <Field>
@@ -48,15 +57,15 @@ export default function RegisterForm() {
           <div className="relative">
             <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              id="phone"
               name="phone"
               type="tel"
-              required
               placeholder="Enter phone number"
+              defaultValue={state?.formData?.phone || ""}
               className="pl-10"
               disabled={isPending}
             />
           </div>
+          <InputFieldError field="phone" state={state} />
         </Field>
 
         {/* Email */}
@@ -66,28 +75,28 @@ export default function RegisterForm() {
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
-                id="email"
                 name="email"
                 type="email"
-                required
                 placeholder="Enter email"
+                defaultValue={state?.formData?.email || ""}
                 className="pl-10"
                 disabled={isPending}
               />
             </div>
+            <InputFieldError field="email" state={state} />
           </Field>
         </div>
+
         {/* Password */}
         <Field>
           <FieldLabel>Password</FieldLabel>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              id="password"
               name="password"
               type={showPassword ? "text" : "password"}
-              required
               placeholder="Enter password"
+              defaultValue={state?.formData?.password || ""}
               className="pl-10 pr-10"
               disabled={isPending}
             />
@@ -105,6 +114,7 @@ export default function RegisterForm() {
               )}
             </button>
           </div>
+          <InputFieldError field="password" state={state} />
         </Field>
 
         {/* Confirm Password */}
@@ -113,11 +123,10 @@ export default function RegisterForm() {
           <div className="relative">
             <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              id="confirm_password"
               name="confirm_password"
               type={showConfirm ? "text" : "password"}
-              required
               placeholder="Confirm password"
+              defaultValue={state?.formData?.confirm_password || ""}
               className="pl-10 pr-10"
               disabled={isPending}
             />
@@ -135,6 +144,7 @@ export default function RegisterForm() {
               )}
             </button>
           </div>
+          <InputFieldError field="confirm_password" state={state} />
         </Field>
 
         {/* Country */}
@@ -143,15 +153,15 @@ export default function RegisterForm() {
           <div className="relative">
             <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              id="country"
-              name="address[country]"
+              name="country"
               type="text"
-              required
               placeholder="Enter country"
+              defaultValue={state?.formData?.address?.country || ""}
               className="pl-10"
               disabled={isPending}
             />
           </div>
+          <InputFieldError field="address.country" state={state} />
         </Field>
 
         {/* City */}
@@ -160,15 +170,15 @@ export default function RegisterForm() {
           <div className="relative">
             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              id="city"
-              name="address[city]"
+              name="city"
               type="text"
-              required
               placeholder="Enter city"
+              defaultValue={state?.formData?.address?.city || ""}
               className="pl-10"
               disabled={isPending}
             />
           </div>
+          <InputFieldError field="address.city" state={state} />
         </Field>
 
         {/* Address Detail - Full width */}
@@ -178,15 +188,15 @@ export default function RegisterForm() {
             <div className="relative">
               <Home className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <Textarea
-                id="address_detail"
-                name="address[address_detail]"
-                required
+                name="address_detail"
                 placeholder="Enter street/house"
                 className="pl-10 w-full resize-none"
+                defaultValue={state?.formData?.address?.addressDetail || ""}
                 disabled={isPending}
                 rows={1}
               />
             </div>
+            <InputFieldError field="address.address_detail" state={state} />
           </Field>
         </div>
       </div>
