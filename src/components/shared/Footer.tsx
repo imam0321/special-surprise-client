@@ -73,7 +73,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/how-it-works"
+                  href="#how-it-works"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   How It Works

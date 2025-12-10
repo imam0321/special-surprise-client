@@ -15,7 +15,11 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
 
   useEffect(() => {
     if (state) {
-      if (!state.success && state.message) {
+      if (
+        !state.success &&
+        state.message &&
+        state.message != "Validation failed"
+      ) {
         toast.error(state.message);
       }
     }

@@ -7,7 +7,6 @@ export const loginValidationZodSchema = z.object({
   password: z.string().min(1, { message: "Password is required" })
 });
 
-
 export const registerCustomerValidationZodSchema = z.object({
   name: z
     .string()
@@ -43,3 +42,20 @@ export const registerCustomerValidationZodSchema = z.object({
       path: ["confirm_password"],
     }
   );
+
+export const forgotPasswordSchema = z.object({
+  email: z.email("Please enter a valid email address"),
+});
+
+export const resetPasswordSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .max(50, "Password cannot exceed 50 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });

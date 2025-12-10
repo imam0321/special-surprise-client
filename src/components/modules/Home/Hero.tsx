@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Gift, Heart } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -31,15 +32,17 @@ export default function Hero() {
               <Button
                 size="lg"
                 className="bg-linear-to-r from-surprise-pink to-surprise-purple hover:opacity-90 btn-bounce"
+                asChild
               >
-                Browse Surprises <ArrowRight size={16} className="ml-2" />
+                <Link href="/surprises" className="flex items-center">Browse Surprises <ArrowRight size={16} className="ml-2" /></Link>
               </Button>
               <Button
                 size="lg"
                 variant="outline"
                 className="border-surprise-purple text-surprise-purple hover:bg-surprise-purple/10 btn-bounce"
+                asChild
               >
-                How It Works
+                <Link href="#how-it-works">How It Works</Link>
               </Button>
             </div>
           </div>

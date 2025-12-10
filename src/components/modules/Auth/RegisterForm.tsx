@@ -27,7 +27,12 @@ export default function RegisterForm() {
   const [state, formAction, isPending] = useActionState(registerCustomer, null);
 
   useEffect(() => {
-    if (state && !state.success && state.message) {
+    if (
+      state &&
+      !state.success &&
+      state.message &&
+      state.message != "Validation failed"
+    ) {
       toast.error(state.message);
     }
   }, [state]);
@@ -201,7 +206,6 @@ export default function RegisterForm() {
         </div>
       </div>
 
-      {/* Submit Button */}
       <Button
         type="submit"
         disabled={isPending}
