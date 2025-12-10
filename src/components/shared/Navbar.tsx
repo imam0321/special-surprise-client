@@ -6,6 +6,7 @@ import { getCookie } from "@/services/auth/tokenHandlers";
 import { getUserInfo } from "@/services/auth/getUserInfo";
 import { getDefaultDashboardRoute } from "@/lib/auth.utils";
 import LogoutButton from "./LogoutButton";
+import CartButton from "./Buttons/CartButton";
 
 export default async function Navbar() {
   const accessToken = await getCookie("accessToken");
@@ -45,6 +46,7 @@ export default async function Navbar() {
               {link.name}
             </Link>
           ))}
+          <CartButton />
 
           {accessToken && userInfo ? (
             <LogoutButton />

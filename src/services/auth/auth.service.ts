@@ -6,7 +6,8 @@ import { zodValidator } from "@/lib/zodValidator";
 import { forgotPasswordSchema, resetPasswordSchema } from "@/zod/auth.validation";
 import { deleteCookie, getCookie, setCookie } from "./tokenHandlers";
 import { parse } from "cookie";
-import { verifyAccessToken, verifyResetPasswordToken } from "@/lib/jwt";
+import { verifyAccessToken } from "@/lib/jwt";
+import jwt from "jsonwebtoken";
 
 
 export const forgotPassword = async (
@@ -81,29 +82,22 @@ export const resetPassword = async (_prevState: any, formData: FormData): Promis
   }
 
   if (!id || !token) {
-    return { success: false, message: "Invalid reset link" };
-  }
-
-  const tokenVerification = await verifyResetPasswordToken(token);
-
-  if (!tokenVerification.success) {
     return {
       success: false,
-      message: tokenVerification.message || "Invalid or expired reset token",
-      formData: validationPayload,
+      message: "Invalid reset link",
     };
   }
 
   try {
+    jwt.verify(token, process.env.JWT_RESET_SECRET as string);
     const response = await serverFetch.post("/auth/reset-password", {
-      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        "Authorization": `accessToken=${token}`,  
       },
       body: JSON.stringify({
         id,
-        newPassword: validationPayload.newPassword,
+        password: validationPayload.newPassword,
       }),
     });
 
@@ -136,14 +130,12 @@ export async function getNewAccessToken() {
     const accessToken = await getCookie("accessToken");
     const refreshToken = await getCookie("refreshToken");
 
-    //Case 1: Both tokens are missing - user is logged out
     if (!accessToken && !refreshToken) {
       return {
         tokenRefreshed: false,
       }
     }
 
-    // Case 2 : Access Token exist- and need to verify
     if (accessToken) {
       const verifiedToken = await verifyAccessToken(accessToken);
 
@@ -210,7 +202,7 @@ export async function getNewAccessToken() {
     await setCookie("refreshToken", refreshTokenObject.refreshToken, {
       secure: true,
       httpOnly: true,
-      maxAge: parseInt(refreshTokenObject['Max-Age']) || 1000 * 60 * 60 * 24 * 90,
+      maxAge: parseInt(refreshTokenObject['Max-Age']) || 1000 * 60 * 60 * 24 * 30,
       path: refreshTokenObject.Path || "/",
       sameSite: refreshTokenObject['SameSite'] || "none",
     });

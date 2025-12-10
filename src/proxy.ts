@@ -3,47 +3,65 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getDefaultDashboardRoute, getRouteOwner, isAuthRoute, UserRole } from './lib/auth.utils';
 import { deleteCookie, getCookie } from './services/auth/tokenHandlers';
+import { getNewAccessToken } from './services/auth/auth.service';
 
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+  const hasTokenRefreshedParam = request.nextUrl.searchParams.has('tokenRefreshed');
+
+  if (hasTokenRefreshedParam) {
+    const url = request.nextUrl.clone();
+    url.searchParams.delete('tokenRefreshed');
+    return NextResponse.redirect(url);
+  }
+
+  const tokenRefreshResult = await getNewAccessToken();
+
+  if (tokenRefreshResult?.tokenRefreshed) {
+    const url = request.nextUrl.clone();
+    url.searchParams.set('tokenRefreshed', 'true');
+    return NextResponse.redirect(url);
+  }
+
   const accessToken = await getCookie("accessToken") || null;
 
   let userRole: UserRole | null = null;
   if (accessToken) {
-    const verifyToken: JwtPayload | string = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET as string)
+      const verifiedToken: JwtPayload | string = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET as string);
 
-    if (typeof verifyToken === "string") {
-      await deleteCookie("accessToken");
-      await deleteCookie("refreshToken");
-      return NextResponse.redirect(new URL("/login", request.url))
+      if (typeof verifiedToken === "string") {
+        await deleteCookie("accessToken");
+        await deleteCookie("refreshToken");
+          return NextResponse.redirect(new URL('/login', request.url));
+        }
+
+      userRole = verifiedToken.role;
     }
 
-    userRole = verifyToken.role;
-  }
+  const routerOwner = getRouteOwner(pathname);
 
-  const routeOwner = getRouteOwner(pathname);
-  const isAuth = isAuthRoute(pathname);
+  const isAuth = isAuthRoute(pathname)
 
   if (accessToken && isAuth) {
     return NextResponse.redirect(new URL(getDefaultDashboardRoute(userRole as UserRole), request.url))
   }
 
-  if (routeOwner === null) {
+  if (routerOwner === null) {
     return NextResponse.next();
   }
 
   if (!accessToken) {
-    const loginUrl = new URL("/login", request.url)
-    loginUrl.searchParams.set("redirect", pathname)
-    return NextResponse.redirect(loginUrl)
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
-  if (routeOwner === "COMMON") {
+  if (routerOwner === "COMMON") {
     return NextResponse.next();
   }
 
-  if (routeOwner === "ADMIN" || routeOwner === "MODERATOR" || routeOwner === "USER") {
-    if (userRole !== routeOwner) {
+  if (routerOwner === "ADMIN" || routerOwner === "MODERATOR" || routerOwner === "USER") {
+    if (userRole !== routerOwner) {
       return NextResponse.redirect(new URL(getDefaultDashboardRoute(userRole as UserRole), request.url))
     }
   }
