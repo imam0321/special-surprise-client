@@ -1,0 +1,39 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use server"
+
+import { serverFetch } from "@/lib/server-fetch"
+
+export const getAllProduct = async (query?: Record<string, any>) => {
+  try {
+    let queryString = "";
+
+    if (query) {
+      queryString = new URLSearchParams(query as any).toString();
+    }
+
+    const res = await serverFetch.get(`/product${queryString ? `?${queryString}` : ""}`);
+    const result = await res.json();
+    return result;
+
+  } catch (error: any) {
+    console.log(error);
+    return {
+      success: false,
+      message: error.message
+    };
+  }
+};
+
+export const getProductByCode = async (productCode: string) => {
+  try {
+    const res = await serverFetch.get(`/product/${productCode}`);
+    const result = await res.json();
+    return result;
+  } catch (error: any) {
+    console.log(error);
+    return {
+      success: false,
+      message: error.message
+    };
+  }
+}

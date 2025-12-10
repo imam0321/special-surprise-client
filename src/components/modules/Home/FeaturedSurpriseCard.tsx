@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import HeartButton from "@/components/shared/HeartButton";
+import Link from "next/link";
 
 export default function FeaturedSurpriseCard({
   surprise,
@@ -32,7 +33,7 @@ export default function FeaturedSurpriseCard({
         <Badge className="absolute top-3 right-3 bg-surprise-pink hover:bg-surprise-pink">
           Popular
         </Badge>
-        <HeartButton/>
+        <HeartButton />
       </div>
 
       <CardHeader className="px-3">
@@ -63,8 +64,11 @@ export default function FeaturedSurpriseCard({
         <Button
           size="sm"
           className="bg-surprise-purple hover:bg-surprise-purple/90 btn-bounce"
+          asChild
         >
-          <ShoppingCart size={16} className="mr-1" /> Add
+          <Link href={`/product/${surprise.productCode}`}>
+            <ShoppingCart size={16} className="mr-1" /> Buy
+          </Link>
         </Button>
       </CardFooter>
     </Card>
