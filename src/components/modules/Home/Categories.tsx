@@ -78,7 +78,7 @@ export default function Categories() {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {categories.map((category, index) => (
-            <Link href={`/category/${category.name.toLowerCase()}`} key={index}>
+            <Link href={`/surprises/category/${category.name.toLowerCase()}`} key={index}>
               <Card
                 className={`border-none shadow-sm hover:shadow-md transition-shadow ${category.color} h-full`}
               >

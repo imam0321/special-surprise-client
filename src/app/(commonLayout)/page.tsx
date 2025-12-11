@@ -7,7 +7,6 @@ import { getAllProduct } from "@/services/product/product";
 
 export default async function HomePage() {
   const surprises = await getAllProduct();
-  console.log(surprises);
   return (
     <>
       <Hero />

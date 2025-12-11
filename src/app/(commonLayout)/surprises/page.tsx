@@ -1,42 +1,54 @@
-import SurpriseCard from "@/components/modules/Surprises/SurpriseCard";
 import SurpriseFilters from "@/components/modules/Surprises/SurpriseFilters";
-import PaginationHelper from "@/components/shared/PaginationHelper";
+import SurprisesList from "@/components/modules/Surprises/SurprisesList";
+import SurprisesLoading from "@/components/modules/Surprises/SurprisesLoading";
+import SurprisesSearch from "@/components/modules/Surprises/SurprisesSearch";
 import { getAllCategories } from "@/services/product/categories";
-import { getAllProduct } from "@/services/product/product";
-import { Product } from "@/types/product.interface";
+import { Suspense } from "react";
 
-export default async function SurprisesPage() {
-  const surprises = await getAllProduct();
+export default async function SurprisesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const searchParamsObj = await searchParams;
+
+  const queryParams = new URLSearchParams();
+  const validParams = ["searchTerm", "category", "min", "max", "page"];
+
+  validParams.forEach((param) => {
+    if (searchParamsObj[param]) {
+      queryParams.set(param, String(searchParamsObj[param]));
+    }
+  });
+
   const categories = await getAllCategories();
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-4">
-        <h1 className="text-3xl font-bold mb-6">All Surprises Gift</h1>
 
-        {/* Filter and Products Grid */}
-        <div className="flex flex-col md:flex-row gap-8">
-          <div className="hidden md:block w-64 shrink">
+  return (
+    <div className="container mx-auto px-4 py-4">
+      <h1 className="text-3xl font-bold mb-6">All Surprises Gift</h1>
+
+      <div className="flex flex-col md:flex-row gap-6">
+        {/* Desktop Filter - Sticky */}
+        <aside className="hidden md:block w-64 shrink-0">
+          <div className="sticky top-4">
             <SurpriseFilters categories={categories?.data} />
           </div>
+        </aside>
 
-          {/* Products Section */}
-          <div className="flex-1">
-            {/* Products sorting and view options */}
-            <div className="flex flex-wrap items-center justify-between gap-y-4 mb-6 pb-4 border-b">
-              {/* search and filter */}
-            </div>
-
-            {/* Products Grid View */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {surprises &&
-                surprises.data.map((surprise: Product) => (
-                  <SurpriseCard key={surprise.id} surprise={surprise} />
-                ))}
-            </div>
-
-            {/* Pagination */}
-            <PaginationHelper />
+        {/* Products Section */}
+        <div className="flex-1 min-w-0">
+          {/* Search Bar */}
+          <div className="flex justify-end gap-y-4 mb-6 pb-4 border-b">
+            <SurprisesSearch />
           </div>
+
+          {/* Products Grid with Suspense */}
+          <Suspense
+            key={queryParams.toString()}
+            fallback={<SurprisesLoading />}
+          >
+            <SurprisesList queryParams={queryParams} />
+          </Suspense>
         </div>
       </div>
     </div>

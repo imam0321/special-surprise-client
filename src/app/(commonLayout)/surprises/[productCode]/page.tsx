@@ -47,6 +47,10 @@ export default async function SurpriseDetailPage({
     category: product?.category?.name,
   });
 
+  if (!surprises) {
+    return null;
+  }
+
   return (
     <div className="bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -74,7 +78,7 @@ export default async function SurpriseDetailPage({
               <div className="text-2xl font-bold">৳ {product?.price}</div>
               <div className="flex justify-start items-center gap-x-2 mb-6">
                 <Badge className="bg-surprise-purple hover:bg-surprise-purple/90">
-                  {product.category.name}
+                  {product?.category?.name}
                 </Badge>
                 <div className="font-bold">Code: {product?.productCode}</div>
               </div>
@@ -104,7 +108,7 @@ export default async function SurpriseDetailPage({
                 className="bg-linear-to-r from-surprise-pink to-surprise-purple hover:opacity-90 flex-1"
                 asChild
               >
-                <Link href={`/surprises/check-out/${product.productCode}`}>
+                <Link href={`/surprises/${product?.productCode}/check-out`}>
                   <ShoppingCart size={16} className="mr-1" /> Check Out
                 </Link>
               </Button>
@@ -123,7 +127,7 @@ export default async function SurpriseDetailPage({
                 <TabsContent value="features">
                   <h3 className="text-lg font-medium mb-4">Package Features</h3>
                   <ul className="space-y-2">
-                    {product.items.map((feature: string, index: number) => (
+                    {product?.items.map((feature: string, index: number) => (
                       <li key={index} className="flex items-center">
                         <div className="mr-2 h-2 w-2 rounded-full bg-surprise-pink"></div>
                         <span>{feature}</span>
