@@ -11,15 +11,11 @@ import { Badge } from "@/components/ui/badge";
 import HeartButton from "@/components/shared/HeartButton";
 import Link from "next/link";
 
-export default function FeaturedSurpriseCard({
-  surprise,
-}: {
-  surprise: Product;
-}) {
+export default function SurpriseCard({ surprise }: { surprise: Product }) {
   return (
     <Card className="group -p-2 transition-all duration-300 overflow-hidden hover:shadow-xl hover:shadow-blue-400/10 rounded-sm">
       <div className="relative">
-        <div className="aspect-3/2 overflow-hidden w-full h-60">
+        <div className="aspect-3/2 overflow-hidden w-full h-56">
           <Image
             src={surprise?.thumbnail}
             fill
@@ -44,7 +40,7 @@ export default function FeaturedSurpriseCard({
         <div className="flex justify-between items-start"></div>
       </CardHeader>
 
-      <CardContent className="px-3 -mt-4">
+      <CardContent className="px-3 -mt-6">
         <p className="text-sm text-muted-foreground">
           {surprise?.description
             ? surprise?.description.length > 80
@@ -60,12 +56,17 @@ export default function FeaturedSurpriseCard({
             </Link>
           )}
         </p>
+        <div className="flex justify-between items-center mt-2">
+          <div className="font-bold">৳{surprise?.price}</div>
+          <Badge className="bg-surprise-pink hover:bg-surprise-pink/90">
+            {surprise?.category?.name}
+          </Badge>
+        </div>
       </CardContent>
-      <CardFooter className="flex justify-between items-center px-3 pb-4 mt-auto">
-        <div className="font-bold">৳{surprise?.price}</div>
+      <CardFooter className="px-3 pb-4 mt-auto">
         <Button
           size="sm"
-          className="bg-surprise-purple hover:bg-surprise-purple/90 btn-bounce"
+          className="bg-surprise-purple hover:bg-surprise-purple/90 btn-bounce w-full"
           asChild
         >
           <Link href={`/surprises/${surprise.productCode}`}>View Details</Link>

@@ -7,7 +7,7 @@ import { getAllProduct, getProductByCode } from "@/services/product/product";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import RecommendProduct from "@/components/modules/Products/RecommendProduct";
+import RecommendSurprises from "@/components/modules/Surprises/RecommendSurprises";
 
 const reviews = [
   {
@@ -36,7 +36,7 @@ const reviews = [
   },
 ];
 
-export default async function ProductDetailPage({
+export default async function SurpriseDetailPage({
   params,
 }: {
   params: { productCode: string };
@@ -104,7 +104,7 @@ export default async function ProductDetailPage({
                 className="bg-linear-to-r from-surprise-pink to-surprise-purple hover:opacity-90 flex-1"
                 asChild
               >
-                <Link href={`/product/check-out/${product.productCode}`}>
+                <Link href={`/surprises/check-out/${product.productCode}`}>
                   <ShoppingCart size={16} className="mr-1" /> Check Out
                 </Link>
               </Button>
@@ -160,7 +160,7 @@ export default async function ProductDetailPage({
             </Tabs>
           </CardContent>
         </Card>
-        <RecommendProduct surprises={surprises} />
+        <RecommendSurprises surprises={surprises} />
       </div>
     </div>
   );

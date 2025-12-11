@@ -4,7 +4,7 @@ import { Product } from "@/types/product.interface";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function RecommendProduct({
+export default function RecommendSurprises({
   surprises,
 }: {
   surprises: Product[];

@@ -4,6 +4,7 @@ import { Product } from "@/types/product.interface";
 
 import FeaturedSurpriseCard from "./FeaturedSurpriseCard";
 import FeaturedSurpriseCardSkeleton from "@/components/shared/Skeleton/FeaturedSurpriseCardSkeleton";
+import Link from "next/link";
 
 export default function FeaturedSurprises({
   surprises,
@@ -37,8 +38,9 @@ export default function FeaturedSurprises({
           <Button
             variant="outline"
             className="border-surprise-purple text-surprise-purple hover:bg-surprise-purple/10 btn-bounce"
+            asChild
           >
-            View All Surprises
+            <Link href="/surprises">View All Surprises</Link>
           </Button>
         </div>
       </div>
