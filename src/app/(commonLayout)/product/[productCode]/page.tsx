@@ -7,7 +7,34 @@ import { getAllProduct, getProductByCode } from "@/services/product/product";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Product } from "@/types/product.interface";
+import RecommendProduct from "@/components/modules/Products/RecommendProduct";
+
+const reviews = [
+  {
+    id: 1,
+    user: "Alice",
+    date: "2025-12-10",
+    comment: "Amazing product! Highly recommend.",
+  },
+  {
+    id: 2,
+    user: "Bob",
+    date: "2025-12-09",
+    comment: "Good quality, but delivery was slow.",
+  },
+  {
+    id: 3,
+    user: "Charlie",
+    date: "2025-12-08",
+    comment: "Not satisfied, expected better packaging.",
+  },
+  {
+    id: 4,
+    user: "Diana",
+    date: "2025-12-07",
+    comment: "Value for money. Will buy again.",
+  },
+];
 
 export default async function ProductDetailPage({
   params,
@@ -16,15 +43,10 @@ export default async function ProductDetailPage({
 }) {
   const { productCode } = await params;
   const { data: product } = await getProductByCode(productCode);
-
-  if (!product) {
-    return null;
-  }
   const { data: surprises } = await getAllProduct({
     category: product?.category?.name,
   });
-  console.log(surprises);
-  console.log(product);
+
   return (
     <div className="bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -82,8 +104,8 @@ export default async function ProductDetailPage({
                 className="bg-linear-to-r from-surprise-pink to-surprise-purple hover:opacity-90 flex-1"
                 asChild
               >
-                <Link href={`/product/${product.productCode}/check-out`}>
-                  Check Out
+                <Link href={`/product/check-out/${product.productCode}`}>
+                  <ShoppingCart size={16} className="mr-1" /> Check Out
                 </Link>
               </Button>
             </div>
@@ -116,8 +138,8 @@ export default async function ProductDetailPage({
                       <Button>Write a Review</Button>
                     </div>
 
-                    {/* <div className="space-y-6">
-                      {product.items.map((review) => (
+                    <div className="space-y-6">
+                      {reviews.map((review) => (
                         <div
                           key={review.id}
                           className="border-b border-border pb-4 last:border-0"
@@ -128,68 +150,17 @@ export default async function ProductDetailPage({
                               {review.date}
                             </span>
                           </div>
-                          <div className="flex items-center mb-2">0</div>
                           <p>{review.comment}</p>
                         </div>
                       ))}
-                    </div> */}
+                    </div>
                   </div>
                 </TabsContent>
               </div>
             </Tabs>
           </CardContent>
         </Card>
-
-        <div>
-          <h3 className="text-2xl font-bold mb-6">You May Also Like</h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {surprises &&
-              surprises.slice(0, 4)?.map((product: Product) => (
-                <Card
-                  key={product.id}
-                  className="overflow-hidden -p-2 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
-                >
-                  {/* Image */}
-                  <div className="aspect-square overflow-hidden">
-                    <Image
-                      src={product.thumbnail}
-                      alt={product.title}
-                      width={200}
-                      height={200}
-                      className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
-                    />
-                  </div>
-
-                  {/* Content */}
-                  <CardContent className="p-4">
-                    <h4 className="font-semibold text-base mb-1 line-clamp-1">
-                      {product.title}
-                    </h4>
-
-                    <p className="text-sm text-gray-500 mb-2">
-                      {product?.category?.name}
-                    </p>
-
-                    <div className="flex justify-between items-center">
-                      <div className="font-bold text-lg text-primary">
-                        ৳ {product?.price}
-                      </div>
-                      <Button
-                        size="sm"
-                        className="bg-surprise-purple hover:bg-surprise-purple/90 btn-bounce"
-                        asChild
-                      >
-                        <Link href={`/product/${product.productCode}`}>
-                          <ShoppingCart size={16} className="mr-1" /> Buy
-                        </Link>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-          </div>
-        </div>
+        <RecommendProduct surprises={surprises} />
       </div>
     </div>
   );

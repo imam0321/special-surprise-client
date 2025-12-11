@@ -7,15 +7,14 @@ import { getAllProduct } from "@/services/product/product";
 
 export default async function HomePage() {
   const surprises = await getAllProduct();
-  console.log(surprises)
+  console.log(surprises);
   return (
     <>
       <Hero />
       <Categories />
-      <FeaturedSurprises surprises={surprises.data}/>
+      <FeaturedSurprises surprises={surprises?.data} />
       <HowItWorks />
       <CallToAction />
-
     </>
   );
 }

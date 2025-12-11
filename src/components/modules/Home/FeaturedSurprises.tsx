@@ -3,16 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Product } from "@/types/product.interface";
 
 import FeaturedSurpriseCard from "./FeaturedSurpriseCard";
+import FeaturedSurpriseCardSkeleton from "@/components/shared/Skeleton/FeaturedSurpriseCardSkeleton";
 
 export default function FeaturedSurprises({
   surprises,
 }: {
   surprises: Product[];
 }) {
-  if (!surprises) {
-    return null;
-  }
-
   return (
     <div className="bg-linear-to-b from-background to-accent/30 py-16">
       <div className="container mx-auto px-4">
@@ -27,12 +24,13 @@ export default function FeaturedSurprises({
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {surprises &&
-            surprises
-              .slice(0, 4)
-              .map((surprise) => (
-                <FeaturedSurpriseCard key={surprise.id} surprise={surprise} />
-              ))}
+          {!surprises
+            ? [1, 2, 3, 4].map((i) => <FeaturedSurpriseCardSkeleton key={i} />)
+            : surprises
+                .slice(0, 4)
+                .map((surprise) => (
+                  <FeaturedSurpriseCard key={surprise.id} surprise={surprise} />
+                ))}
         </div>
 
         <div className="text-center mt-12">

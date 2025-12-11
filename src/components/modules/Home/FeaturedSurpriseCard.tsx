@@ -1,5 +1,4 @@
 import { Product } from "@/types/product.interface";
-import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import {
   Card,
@@ -20,7 +19,7 @@ export default function FeaturedSurpriseCard({
   return (
     <Card className="group -p-2 transition-all duration-300 overflow-hidden hover:shadow-xl hover:shadow-blue-400/10 rounded-sm">
       <div className="relative">
-        <div className="aspect-3/2 overflow-hidden w-full h-36 md:h-52 lg:h-60">
+        <div className="aspect-3/2 overflow-hidden w-full h-60">
           <Image
             src={surprise?.thumbnail}
             fill
@@ -66,9 +65,7 @@ export default function FeaturedSurpriseCard({
           className="bg-surprise-purple hover:bg-surprise-purple/90 btn-bounce"
           asChild
         >
-          <Link href={`/product/${surprise.productCode}`}>
-            <ShoppingCart size={16} className="mr-1" /> Buy
-          </Link>
+          <Link href={`/product/${surprise.productCode}`}>View Details</Link>
         </Button>
       </CardFooter>
     </Card>
