@@ -3,15 +3,34 @@ import Categories from "@/components/modules/Home/Categories";
 import FeaturedSurprises from "@/components/modules/Home/FeaturedSurprises";
 import Hero from "@/components/modules/Home/Hero";
 import HowItWorks from "@/components/modules/Home/HowItWorks";
-import { getAllProduct } from "@/services/product/product";
+import { Metadata } from "next";
 
-export default async function HomePage() {
-  const surprises = await getAllProduct();
+export const metadata: Metadata = {
+  title: "Home - Special Surprise Gift Store",
+  description:
+    "Discover amazing surprise gifts for your loved ones. Browse our collection of unique gifts, personalized surprises, and special occasions gifts.",
+  keywords: [
+    "surprise gifts",
+    "special gifts",
+    "personalized gifts",
+    "gift store",
+    "unique gifts",
+  ],
+  openGraph: {
+    title: "Special Surprise Gift Store",
+    description: "Discover amazing surprise gifts for your loved ones",
+    type: "website",
+  },
+};
+
+export const dynamic = "force-dynamic";
+
+export default function HomePage() {
   return (
     <>
       <Hero />
       <Categories />
-      <FeaturedSurprises surprises={surprises?.data} />
+      <FeaturedSurprises />
       <HowItWorks />
       <CallToAction />
     </>

@@ -1,18 +1,14 @@
-import { Button } from "@/components/ui/button";
-
-import { Product } from "@/types/product.interface";
-
+import { getAllProduct } from "@/services/product/product";
 import FeaturedSurpriseCard from "./FeaturedSurpriseCard";
-import FeaturedSurpriseCardSkeleton from "@/components/shared/Skeleton/FeaturedSurpriseCardSkeleton";
+import { Product } from "@/types/product.interface";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export default function FeaturedSurprises({
-  surprises,
-}: {
-  surprises: Product[];
-}) {
+export default async function FeaturedSurprises() {
+  const { data: surprises } = await getAllProduct();
+  
   return (
-    <div className="bg-linear-to-b from-background to-accent/30 py-16">
+    <section className="bg-linear-to-b from-background to-accent/30 py-16">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -23,18 +19,16 @@ export default function FeaturedSurprises({
             Perfect for any occasion and guaranteed to bring joy.
           </p>
         </div>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {!surprises
-            ? [1, 2, 3, 4].map((i) => <FeaturedSurpriseCardSkeleton key={i} />)
-            : surprises
-                .slice(0, 4)
-                .map((surprise) => (
-                  <FeaturedSurpriseCard key={surprise.id} surprise={surprise} />
-                ))}
+          {surprises &&
+            surprises
+              .slice(0, 4)
+              .map((surprise: Product) => (
+                <FeaturedSurpriseCard key={surprise.id} surprise={surprise} />
+              ))}
         </div>
 
-        <div className="text-center mt-12">
+        <div className="text-center mt-6">
           <Button
             variant="outline"
             className="border-surprise-purple text-surprise-purple hover:bg-surprise-purple/10 btn-bounce"
@@ -44,6 +38,6 @@ export default function FeaturedSurprises({
           </Button>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

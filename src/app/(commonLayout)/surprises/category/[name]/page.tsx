@@ -1,6 +1,6 @@
 import SurpriseCard from "@/components/modules/Surprises/SurpriseCard";
+import SurpriseCardSkeleton from "@/components/modules/Surprises/SurpriseCardSkeleton";
 import PaginationHelper from "@/components/shared/PaginationHelper";
-import FeaturedSurpriseCardSkeleton from "@/components/shared/Skeleton/FeaturedSurpriseCardSkeleton";
 import { getAllProduct } from "@/services/product/product";
 import { Product } from "@/types/product.interface";
 
@@ -21,7 +21,7 @@ export default async function CategoryByNamePage({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {!surprises
-          ? [1, 2, 3, 4].map((i) => <FeaturedSurpriseCardSkeleton key={i} />)
+          ? [1, 2, 3, 4].map((i) => <SurpriseCardSkeleton key={i} />)
           : surprises.map((surprise: Product) => (
               <SurpriseCard key={surprise.id} surprise={surprise} />
             ))}

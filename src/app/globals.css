@@ -46,9 +46,8 @@
   --color-surprise-yellow: #ffd700;
   --color-surprise-teal: #40e0d0;
   --color-surprise-coral: #ff7f50;
-  --color-accent: #f3f4f6 --foreground: 222.2 84% 4.9%;
+  --foreground: 222.2 84% 4.9%;
   --muted-foreground: 210 10% 40%;
-
   --background: 0 0% 100%;
   --accent: 240 100% 50%;
 }
@@ -123,7 +122,6 @@
 }
 
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0);
@@ -135,7 +133,6 @@
 }
 
 @keyframes bounce-slight {
-
   0%,
   100% {
     transform: scale(1);
@@ -150,6 +147,7 @@
   * {
     @apply border-border;
   }
+  
   body {
     font-family: "Poppins", sans-serif;
   }
@@ -181,12 +179,11 @@
   .font-display {
     font-family: 'Pacifico', cursive;
   }
-
 }
 
 @layer components {
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-linear-to-r from-surprise-pink to-surprise-purple;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-surprise-pink to-surprise-purple;
   }
 
   .btn-bounce {
