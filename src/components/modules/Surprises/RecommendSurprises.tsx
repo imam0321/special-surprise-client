@@ -22,7 +22,7 @@ export default function RecommendSurprises({
               {/* Image */}
               <div className="aspect-square h-60 overflow-hidden">
                 <Image
-                  src={product.thumbnail}
+                  src={product.thumbnail || "/images/hero-cover.PNG"}
                   alt={product.title}
                   width={200}
                   height={200}
