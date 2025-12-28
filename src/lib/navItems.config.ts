@@ -26,7 +26,7 @@ export const getCommonNavItems = (role: UserRole): NavSection[] => {
 
 export const moderatorNavItems: NavSection[] = [
   {
-    title: "Patient Management",
+    title: "Moderator Management",
     items: [
       {
         title: "Appointments",
@@ -93,44 +93,38 @@ export const adminNavItems: NavSection[] = [
     title: "User Management",
     items: [
       {
-        title: "Admins",
-        href: "/admin/dashboard/admins-management",
+        title: "Moderators",
+        href: "/admin/dashboard/moderators-management",
         icon: "Shield",
         roles: ["ADMIN"]
       },
       {
-        title: "Doctors",
-        href: "/admin/dashboard/doctors-management",
-        icon: "Stethoscope",
-        roles: ["ADMIN"]
-      },
-      {
-        title: "Patients",
-        href: "/admin/dashboard/patients-management",
+        title: "Users",
+        href: "/admin/dashboard/users-management",
         icon: "Users",
         roles: ["ADMIN"]
       },
     ]
   },
   {
-    title: "Hospital Management",
+    title: "Gift Management",
     items: [
       {
-        title: "Appointments",
-        href: "/admin/dashboard/appointments-management",
-        icon: "Calender",
+        title: "Serprices",
+        href: "/admin/dashboard/serprices-management",
+        icon: "Gift",
         roles: ["ADMIN"]
       },
       {
-        title: "Schedules",
-        href: "/admin/dashboard/schedules-management",
-        icon: "Clock",
+        title: "Orders",
+        href: "/admin/dashboard/oreders-management",
+        icon: "Box",
         roles: ["ADMIN"]
       },
       {
-        title: "Specialties",
-        href: "/admin/dashboard/specialties-management",
-        icon: "Hospital",
+        title: "Categories",
+        href: "/admin/dashboard/categories-management",
+        icon: "category",
         roles: ["ADMIN"]
       },
     ]
