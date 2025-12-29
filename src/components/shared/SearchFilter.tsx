@@ -15,18 +15,16 @@ export default function SearchFilter({
   paramName = "searchTerm",
 }: SearchFilterProps) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   const searchParams = useSearchParams();
   const [value, setValue] = useState(searchParams.get(paramName) || "");
   const debouncedValue = useDebounce(value, 500);
+  const [, startTransition] = useTransition();
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
-    const initialValue = searchParams.get(paramName) || "";
+    const currentParam = searchParams.get(paramName) || "";
 
-    if (debouncedValue === initialValue) {
-      return;
-    }
+    if (debouncedValue === currentParam) return;
 
     if (debouncedValue) {
       params.set(paramName, debouncedValue);
@@ -49,7 +47,6 @@ export default function SearchFilter({
         className="pl-10"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        disabled={isPending}
       />
     </div>
   );

@@ -4,22 +4,23 @@ import { UserInfo } from "@/types/user.interface";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { moderatorsColumns } from "./moderatorsColumns";
 import { softDeleteModerator } from "@/services/admin/moderatorsManagement";
-import ModeratorViewDetailDialog from "./ModeratorViewDetailDialog";
 import ConfirmDialog from "@/components/shared/ConfirmDialog";
+import { customersColumns } from "./customersColumns";
+import ModeratorViewDetailDialog from "../ModeratorsManagement/ModeratorViewDetailDialog";
 
-export default function ModeratorTable({
-  moderators,
+
+export default function UserTable({
+  customers,
 }: {
-  moderators: UserInfo[];
+  customers: UserInfo[];
 }) {
   const router = useRouter();
   const [, startTransition] = useTransition();
-  const [deletingModerator, setDeletingModerator] = useState<UserInfo | null>(
+  const [deletingCustomer, setDeletingCustomer] = useState<UserInfo | null>(
     null
   );
-  const [viewingModerator, setViewingModerator] = useState<UserInfo | null>(
+  const [viewingCustomer, setViewingCustomer] = useState<UserInfo | null>(
     null
   );
   const [, setIsDeleting] = useState(false);
@@ -30,12 +31,12 @@ export default function ModeratorTable({
     });
   };
 
-  const handleView = (moderator: UserInfo) => {
-    setViewingModerator(moderator);
+  const handleView = (customer: UserInfo) => {
+    setViewingCustomer(customer);
   };
 
-  const handleDelete = (moderator: UserInfo) => {
-    setDeletingModerator(moderator);
+  const handleDelete = (customer: UserInfo) => {
+    setDeletingCustomer(customer);
   };
 
   const confirmDelete = async (id: string) => {
@@ -47,7 +48,7 @@ export default function ModeratorTable({
 
     if (result.success) {
       toast.success(result.message || "Moderator deleted successfully");
-      setDeletingModerator(null);
+      setDeletingCustomer(null);
       handleRefresh();
     } else {
       toast.error(result.message || "Failed to delete moderator");
@@ -57,33 +58,33 @@ export default function ModeratorTable({
   return (
     <>
       <ManagementTable
-        data={moderators}
-        columns={moderatorsColumns}
+        data={customers}
+        columns={customersColumns}
         onView={handleView}
         onDelete={handleDelete}
-        getRowKey={(moderator) => moderator.id!}
-        emptyMessage="No moderators found"
+        getRowKey={(customer) => customer.id!}
+        emptyMessage="No customers found"
       />
 
-      {/* View Moderator Detail Dialog */}
+      {/* View Customer Detail Dialog */}
       <ModeratorViewDetailDialog
-        open={!!viewingModerator}
-        onClose={() => setViewingModerator(null)}
-        moderator={viewingModerator}
+        open={!!viewingCustomer}
+        onClose={() => setViewingCustomer(null)}
+        moderator={viewingCustomer}
       />
 
       {/* Delete Confirmation Dialog */}
       <ConfirmDialog
-        open={!!deletingModerator}
+        open={!!deletingCustomer}
         setOpen={(val) => {
-          if (!val) setDeletingModerator(null);
+          if (!val) setDeletingCustomer(null);
         }}
         title="Delete Moderator"
-        description={`Are you sure you want to delete ${deletingModerator?.name}? This action cannot be undone.`}
+        description={`Are you sure you want to delete ${deletingCustomer?.name}? This action cannot be undone.`}
         confirmText="Delete"
         confirmVariant="destructive"
         onConfirm={() => {
-          if (deletingModerator?.id) confirmDelete(deletingModerator.id);
+          if (deletingCustomer?.id) confirmDelete(deletingCustomer.id);
         }}
       />
     </>

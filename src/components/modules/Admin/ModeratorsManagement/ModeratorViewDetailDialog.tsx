@@ -75,20 +75,19 @@ export default function ModeratorViewDetailDialog({
             label="Phone"
             value={moderator.phone || "N/A"}
           />
-          <InfoItem
-            icon={<User size={16} />}
-            label="NID"
-            value={moderator.nid || "N/A"}
-          />
+          {
+            moderator.role === "MODERATOR" && (
+              <InfoItem
+                icon={<User size={16} />}
+                label="NID"
+                value={moderator.nid || "N/A"}
+              />
+            )
+          }
           <InfoItem
             icon={<Calendar size={16} />}
             label="Joined"
             value={new Date(moderator.createdAt!).toLocaleDateString()}
-          />
-          <InfoItem
-            icon={<Calendar size={16} />}
-            label="Updated"
-            value={new Date(moderator.updatedAt!).toLocaleDateString()}
           />
         </div>
 
@@ -100,9 +99,9 @@ export default function ModeratorViewDetailDialog({
             <MapPin size={18} /> Address
           </h3>
           <p className="text-muted-foreground text-sm sm:text-base">
-            {moderator.address?.address_detail || "N/A"},{" "}
-            {moderator.address?.city || "N/A"},{" "}
-            {moderator.address?.country || "N/A"}
+            {moderator.address?.address_detail},{" "}
+            {moderator.address?.city},{" "}
+            {moderator.address?.country}
           </p>
         </div>
       </DialogContent>

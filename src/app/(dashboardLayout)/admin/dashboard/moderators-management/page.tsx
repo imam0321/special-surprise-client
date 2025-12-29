@@ -3,11 +3,19 @@ import ModeratorTable from "@/components/modules/Admin/ModeratorsManagement/Mode
 import SearchFilter from "@/components/shared/SearchFilter";
 // import SelectFilter from "@/components/shared/SelectFilter";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
+import { queryStringFormatter } from "@/lib/formatters";
 import { getModerators } from "@/services/admin/moderatorsManagement";
 import { Suspense } from "react";
 
-export default async function ModeratorsManagementPage() {
-  const moderators = await getModerators("");
+export default async function ModeratorsManagementPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const searchParamsObj = await searchParams;
+  const queryString = queryStringFormatter(searchParamsObj);
+  const moderators = await getModerators(queryString);
+
   return (
     <div className="space-y-6">
       <ModeratorHeader />
@@ -25,7 +33,7 @@ export default async function ModeratorsManagementPage() {
           placeholder="Filter by specialty"
         /> */}
       </div>
-      <Suspense fallback={<TableSkeleton columns={3} rows={10} />}>
+      <Suspense fallback={<TableSkeleton columns={5} rows={6} />}>
         <ModeratorTable moderators={moderators?.data} />
       </Suspense>
     </div>

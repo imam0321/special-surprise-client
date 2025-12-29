@@ -6,33 +6,33 @@ import { UserInfoCell } from "@/components/shared/Cell/UserInfoCell";
 import { Column } from "@/components/shared/ManagementTable";
 import { UserInfo } from "@/types/user.interface";
 
-export const moderatorsColumns: Column<UserInfo>[] = [
+export const customersColumns: Column<UserInfo>[] = [
   {
-    header: "Moderator",
-    accessor: (moderator) => (
+    header: "Customer",
+    accessor: (customer) => (
       <UserInfoCell
-        name={moderator.name}
-        email={moderator.email}
-        photo={moderator.profile}
+        name={customer.name}
+        email={customer.email}
+        photo={customer.profile}
       />
     ),
   },
   {
     header: "Contact",
-    accessor: (moderator) => (
+    accessor: (customer) => (
       <div className="flex flex-col">
-        <span className="text-sm">{moderator.phone}</span>
+        <span className="text-sm">{customer.phone}</span>
       </div>
     ),
   },
   {
     header: "Status",
-    accessor: (moderator) => (
-      <StatusBadgeCell isDeleted={moderator.isDeleted} />
+    accessor: (customer) => (
+      <StatusBadgeCell isDeleted={customer.isDeleted} />
     ),
   },
   {
     header: "Joined",
-    accessor: (moderator) => <DateCell date={moderator.createdAt} />,
+    accessor: (customer) => <DateCell date={customer.createdAt} />,
   },
 ];
