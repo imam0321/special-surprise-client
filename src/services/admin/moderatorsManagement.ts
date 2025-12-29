@@ -1,3 +1,4 @@
+"use server";
 import { serverFetch } from "@/lib/server-fetch";
 
 export const getModerators = async (queryString: string) => {
@@ -15,7 +16,7 @@ export const getModerators = async (queryString: string) => {
 
 export const softDeleteModerator = async (moderatorId: string) => {
   try {
-    const res = await serverFetch.delete(`/user/soft-delete/${moderatorId}`);
+    const res = await serverFetch.patch(`/user/soft-delete/${moderatorId}`);
     return await res.json();
   } catch (error) {
     console.log(error);

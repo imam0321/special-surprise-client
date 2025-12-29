@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { registerCustomer } from "@/services/auth/registerCustomer";
+import { registerModerator } from "@/services/auth/registerModerator";
 import {
   Mail,
   UserPlus,
@@ -17,14 +17,16 @@ import {
   MapPin,
   Home,
   Key,
+  IdCard,
 } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-export default function RegisterForm() {
-  const [showPassword, setShowPassword] = useState(false);
+
+export default function ModeratorRegisterForm() {
+   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [state, formAction, isPending] = useActionState(registerCustomer, null);
+  const [state, formAction, isPending] = useActionState(registerModerator, null);
 
   useEffect(() => {
     if (
@@ -74,7 +76,7 @@ export default function RegisterForm() {
         </Field>
 
         {/* Email */}
-        <div className="md:col-span-2">
+        <div className="md:col-span-1">
           <Field>
             <FieldLabel>Email Address</FieldLabel>
             <div className="relative">
@@ -91,6 +93,23 @@ export default function RegisterForm() {
             <InputFieldError field="email" state={state} />
           </Field>
         </div>
+
+         <Field>
+          <FieldLabel>NID Number</FieldLabel>
+          <div className="relative">
+           <IdCard className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              name="nid"
+              type="tel"
+              placeholder="Enter NID number"
+              defaultValue={state?.formData?.nid || ""}
+              className="pl-10"
+              disabled={isPending}
+            />
+          </div>
+          <InputFieldError field="nid" state={state} />
+        </Field>
+
 
         {/* Password */}
         <Field>

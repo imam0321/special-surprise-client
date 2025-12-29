@@ -6,15 +6,16 @@ import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { getModerators } from "@/services/admin/moderatorsManagement";
 import { Suspense } from "react";
 
-
 export default async function ModeratorsManagementPage() {
   const moderators = await getModerators("");
-  
-    return (
-     <div className="space-y-6">
+  return (
+    <div className="space-y-6">
       <ModeratorHeader />
       <div className="flex items-center gap-2">
-        <SearchFilter paramName="searchTerm" placeholder="Search moderators..." />
+        <SearchFilter
+          paramName="searchTerm"
+          placeholder="Search moderators..."
+        />
         {/* <SelectFilter
           paramName="specialty"
           options={specialtiesResult.data.map((specialty: ISpecialty) => ({
@@ -28,5 +29,5 @@ export default async function ModeratorsManagementPage() {
         <ModeratorTable moderators={moderators?.data} />
       </Suspense>
     </div>
-  )
+  );
 }

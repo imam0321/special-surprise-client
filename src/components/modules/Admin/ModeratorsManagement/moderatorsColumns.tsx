@@ -1,11 +1,14 @@
 "use client";
 
-import { DateCell } from "@/components/shared/cell/DateCell";
-import { StatusBadgeCell } from "@/components/shared/cell/StatusBadgeCell";
-import { UserInfoCell } from "@/components/shared/cell/UserInfoCell";
+import { DateCell } from "@/components/shared/Cell/DateCell";
+import { StatusBadgeCell } from "@/components/shared/Cell/StatusBadgeCell";
+import { UserInfoCell } from "@/components/shared/Cell/UserInfoCell";
+// import { DateCell } from "@/components/shared/cell/DateCell";
+// import { StatusBadgeCell } from "@/components/shared/cell/StatusBadgeCell";
+// import { UserInfoCell } from "@/components/shared/cell/UserInfoCell";
 import { Column } from "@/components/shared/ManagementTable";
 import { UserInfo } from "@/types/user.interface";
-import { Star } from "lucide-react";
+// import { Star } from "lucide-react";
 
 export const moderatorsColumns: Column<UserInfo>[] = [
   {
@@ -18,72 +21,72 @@ export const moderatorsColumns: Column<UserInfo>[] = [
       />
     ),
   },
-  {
-    header: "Specialties",
-    accessor: (doctor) => (
-      <div className="flex flex-wrap gap-1">
-        {doctor.doctorSpecialties && doctor.doctorSpecialties.length > 0 ? (
-          doctor.doctorSpecialties.map((specialty, index) => (
-            <span
-              key={specialty.specialties?.id || index}
-              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-            >
-              {specialty.specialties?.title || "N/A"}
-            </span>
-          ))
-        ) : (
-          <span className="text-xs text-gray-500">No specialties</span>
-        )}
-      </div>
-    ),
-  },
+//   {
+//     header: "Specialties",
+//     accessor: (doctor) => (
+//       <div className="flex flex-wrap gap-1">
+//         {doctor.doctorSpecialties && doctor.doctorSpecialties.length > 0 ? (
+//           doctor.doctorSpecialties.map((specialty, index) => (
+//             <span
+//               key={specialty.specialties?.id || index}
+//               className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+//             >
+//               {specialty.specialties?.title || "N/A"}
+//             </span>
+//           ))
+//         ) : (
+//           <span className="text-xs text-gray-500">No specialties</span>
+//         )}
+//       </div>
+//     ),
+//   },
   {
     header: "Contact",
-    accessor: (doctor) => (
+    accessor: (moderator) => (
       <div className="flex flex-col">
-        <span className="text-sm">{doctor.contactNumber}</span>
+        <span className="text-sm">{moderator.phone}</span>
       </div>
     ),
   },
-  {
-    header: "Experience",
-    accessor: (doctor) => (
-      <span className="text-sm font-medium">
-        {doctor.experience ?? 0} years
-      </span>
-    ),
-  },
-  {
-    header: "Fee",
-    accessor: (doctor) => (
-      <span className="text-sm font-semibold text-green-600">
-        ${doctor.appointmentFee}
-      </span>
-    ),
-  },
-  {
-    header: "Rating",
-    accessor: (doctor) => (
-      <div className="flex items-center gap-1">
-        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-        <span className="text-sm font-medium">
-          {doctor.averageRating!.toFixed(1)}
-        </span>
-      </div>
-    ),
-  },
-  {
-    header: "Gender",
-    accessor: (doctor) => (
-      <span className="text-sm capitalize">{doctor.gender.toLowerCase()}</span>
-    ),
-  },
+//   {
+//     header: "Experience",
+//     accessor: (doctor) => (
+//       <span className="text-sm font-medium">
+//         {doctor.experience ?? 0} years
+//       </span>
+//     ),
+//   },
+//   {
+//     header: "Fee",
+//     accessor: (doctor) => (
+//       <span className="text-sm font-semibold text-green-600">
+//         ${doctor.appointmentFee}
+//       </span>
+//     ),
+//   },
+//   {
+//     header: "Rating",
+//     accessor: (doctor) => (
+//       <div className="flex items-center gap-1">
+//         <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+//         <span className="text-sm font-medium">
+//           {doctor.averageRating!.toFixed(1)}
+//         </span>
+//       </div>
+//     ),
+//   },
+//   {
+//     header: "Gender",
+//     accessor: (doctor) => (
+//       <span className="text-sm capitalize">{doctor.gender.toLowerCase()}</span>
+//     ),
+//   },
   {
     header: "Status",
-    accessor: (doctor) => <StatusBadgeCell isDeleted={doctor.isDeleted} />,
+    accessor: (moderator) => <StatusBadgeCell isDeleted={moderator.isDeleted} />,
   },
   {
     header: "Joined",
-    accessor: (doctor) => <DateCell date={doctor.createdAt} />,
+    accessor: (moderator) => <DateCell date={moderator.createdAt} />,
   },
-];
+]; 

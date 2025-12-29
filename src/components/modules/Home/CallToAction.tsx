@@ -19,7 +19,7 @@ export default function CallToAction() {
             className="bg-white text-surprise-purple hover:bg-white/90 btn-bounce"
             asChild
           >
-            <Link href="/surprise" className="flex items-center">
+            <Link href="/surprises" className="flex items-center">
               Browse Surprises <ArrowRight size={16} className="ml-2" />
             </Link>
           </Button>

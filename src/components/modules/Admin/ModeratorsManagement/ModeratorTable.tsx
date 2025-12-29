@@ -5,13 +5,26 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { moderatorsColumns } from "./moderatorsColumns";
+import { softDeleteModerator } from "@/services/admin/moderatorsManagement";
+import ModeratorViewDetailDialog from "./ModeratorViewDetailDialog";
+import ConfirmDialog from "@/components/shared/ConfirmDialog";
 
-export default function ModeratorTable({moderators}: {moderators: UserInfo[]}) {
+export default function ModeratorTable({
+  moderators,
+}: {
+  moderators: UserInfo[];
+}) {
   const router = useRouter();
   const [, startTransition] = useTransition();
-  const [deletingDoctor, setDeletingDoctor] = useState<UserInfo | null>(null);
-  const [viewingDoctor, setViewingDoctor] = useState<UserInfo | null>(null);
-  // const [editingDoctor, setEditingDoctor] = useState<UserInfo | null>(null);
+  const [deletingModerator, setDeletingModerator] = useState<UserInfo | null>(
+    null
+  );
+  const [viewingModerator, setViewingModerator] = useState<UserInfo | null>(
+    null
+  );
+  const [editingModerator, setEditingModerator] = useState<UserInfo | null>(
+    null
+  );
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleRefresh = () => {
@@ -20,31 +33,31 @@ export default function ModeratorTable({moderators}: {moderators: UserInfo[]}) {
     });
   };
 
-  const handleView = (doctor: UserInfo) => {
-    setViewingDoctor(doctor);
+  const handleView = (moderator: UserInfo) => {
+    setViewingModerator(moderator);
   };
 
-  // const handleEdit = (doctor: IDoctor) => {
-  //   setEditingDoctor(doctor);
-  // };
-
-  const handleDelete = (doctor: UserInfo) => {
-    setDeletingDoctor(doctor);
+  const handleEdit = (moderator: UserInfo) => {
+    setEditingModerator(moderator);
   };
 
-  const confirmDelete = async () => {
-    if (!deletingDoctor) return;
+  const handleDelete = (moderator: UserInfo) => {
+    setDeletingModerator(moderator);
+  };
+
+  const confirmDelete = async (id: string) => {
+    if (!id) return;
 
     setIsDeleting(true);
-    const result = await softDeleteDoctor(deletingDoctor.id!);
+    const result = await softDeleteModerator(id);
     setIsDeleting(false);
 
     if (result.success) {
-      toast.success(result.message || "Doctor deleted successfully");
-      setDeletingDoctor(null);
+      toast.success(result.message || "Moderator deleted successfully");
+      setDeletingModerator(null);
       handleRefresh();
     } else {
-      toast.error(result.message || "Failed to delete doctor");
+      toast.error(result.message || "Failed to delete moderator");
     }
   };
 
@@ -54,28 +67,33 @@ export default function ModeratorTable({moderators}: {moderators: UserInfo[]}) {
         data={moderators}
         columns={moderatorsColumns}
         onView={handleView}
-        // onEdit={handleEdit}
+        onEdit={handleEdit}
         onDelete={handleDelete}
         getRowKey={(moderator) => moderator.id!}
         emptyMessage="No moderators found"
       />
 
-      {/* View Doctor Detail Dialog */}
-      {/* <DoctorViewDetailDialog
-        open={!!viewingDoctor}
-        onClose={() => setViewingDoctor(null)}
-        doctor={viewingDoctor}
-      /> */}
+      {/* View Moderator Detail Dialog */}
+      <ModeratorViewDetailDialog
+        open={!!viewingModerator}
+        onClose={() => setViewingModerator(null)}
+        moderator={viewingModerator}
+      />
 
       {/* Delete Confirmation Dialog */}
-      {/* <DeleteConfirmationDialog
-        open={!!deletingDoctor}
-        onOpenChange={(open) => !open && setDeletingDoctor(null)}
-        onConfirm={confirmDelete}
-        title="Delete Doctor"
-        description={`Are you sure you want to delete ${deletingDoctor?.name}? This action cannot be undone.`}
-        isDeleting={isDeleting}
-      /> */}
+      <ConfirmDialog
+        open={!!deletingModerator}
+        setOpen={(val) => {
+          if (!val) setDeletingModerator(null);
+        }}
+        title="Delete Moderator"
+        description={`Are you sure you want to delete ${deletingModerator?.name}? This action cannot be undone.`}
+        confirmText="Delete"
+        confirmVariant="destructive"
+        onConfirm={() => {
+          if (deletingModerator?.id) confirmDelete(deletingModerator.id);
+        }}
+      />
     </>
   );
 }

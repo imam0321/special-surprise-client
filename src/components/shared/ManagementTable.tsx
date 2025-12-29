@@ -1,13 +1,8 @@
 "use client";
-import { Edit, Eye, MoreHorizontal, Trash } from "lucide-react";
+
+import { Edit, Eye, Trash } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -31,7 +26,6 @@ interface ManagementTableProps<T> {
   onDelete?: (row: T) => void;
   getRowKey: (row: T) => string;
   emptyMessage?: string;
-  isRefreshing?: boolean;
 }
 
 export default function ManagementTable<T>({
@@ -46,93 +40,83 @@ export default function ManagementTable<T>({
   const hasActions = onView || onEdit || onDelete;
 
   return (
-    <>
-      <div className="rounded-lg relative bg-background">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {columns?.map((column, colIndex) => (
-                <TableHead key={colIndex} className={column.className}>
-                  {column.header}
-                </TableHead>
-              ))}
-
-              {hasActions && (
-                <TableHead className="text-right">Actions</TableHead>
-              )}
-            </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            {data.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length + (hasActions ? 1 : 0)}
-                  className="text-center py-8 text-muted-foreground"
-                >
-                  {emptyMessage}
-                </TableCell>
-              </TableRow>
-            ) : (
-              data?.map((item) => (
-                <TableRow key={getRowKey(item)}>
-                  {columns.map((col, idx) => (
-                    <TableCell key={idx} className={col.className}>
-                      {typeof col.accessor === "function"
-                        ? col.accessor(item)
-                        : String(item[col.accessor])}
-                    </TableCell>
-                  ))}
-                  {hasActions && (
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          {onView && (
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              className="h-8 w-8 mr-2"
-                            >
-                              <Eye size={16} />
-                            </Button>
-                          )}
-                          {onEdit && (
-                            <DropdownMenuItem onClick={() => onEdit(item)}>
-                              <Button
-                                variant="outline"
-                                size="icon"
-                                className="h-8 w-8 mr-2"
-                              >
-                                <Edit size={16} />
-                              </Button>
-                            </DropdownMenuItem>
-                          )}
-                          {onDelete && (
-                            <DropdownMenuItem onClick={() => onDelete(item)}>
-                              <Button
-                                variant="outline"
-                                size="icon"
-                                className="h-8 w-8 text-red-500 hover:text-red-700"
-                              >
-                                <Trash size={16} />
-                              </Button>
-                            </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  )}
-                </TableRow>
-              ))
+    <div className="rounded-lg bg-background p-4 shadow-sm border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {columns.map((column, index) => (
+              <TableHead key={index} className={column.className}>
+                {column.header}
+              </TableHead>
+            ))}
+            {hasActions && (
+              <TableHead className="text-center">Actions</TableHead>
             )}
-          </TableBody>
-        </Table>
-      </div>
-    </>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
+          {data.length === 0 ? (
+            <TableRow>
+              <TableCell
+                colSpan={columns.length + (hasActions ? 1 : 0)}
+                className="text-center py-8 text-muted-foreground"
+              >
+                {emptyMessage}
+              </TableCell>
+            </TableRow>
+          ) : (
+            data.map((item) => (
+              <TableRow key={getRowKey(item)}>
+                {columns.map((col, idx) => (
+                  <TableCell key={idx} className={col.className}>
+                    {typeof col.accessor === "function"
+                      ? col.accessor(item)
+                      : String(item[col.accessor])}
+                  </TableCell>
+                ))}
+
+                {hasActions && (
+                  <TableCell className="text-center">
+                    <div className="flex justify-center gap-2">
+                      {onView && (
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => onView(item)}
+                        >
+                          <Eye size={16} />
+                        </Button>
+                      )}
+
+                      {onEdit && (
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => onEdit(item)}
+                        >
+                          <Edit size={16} />
+                        </Button>
+                      )}
+
+                      {onDelete && (
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="text-red-500 hover:text-red-700"
+                          onClick={() => onDelete(item)}
+                        >
+                          <Trash size={16} />
+                        </Button>
+                      )}
+                    </div>
+                  </TableCell>
+                )}
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
