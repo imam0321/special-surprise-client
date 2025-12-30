@@ -10,13 +10,11 @@ export default function ModeratorRegisterPage() {
         description="This is a Moderator Registration"
       />
 
-      <div className="">
-        <Card className="w-full max-w-3xl">
-          <CardContent>
-            <ModeratorRegisterForm />
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="w-full max-w-3xl">
+        <CardContent>
+          <ModeratorRegisterForm />
+        </CardContent>
+      </Card>
     </div>
   );
 }

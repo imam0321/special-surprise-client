@@ -11,18 +11,18 @@ export const getCommonNavItems = (role: UserRole): NavSection[] => {
           title: "Dashboard",
           href: defaultDashboard,
           icon: "LayoutDashboard",
-          roles: ["ADMIN", "MODERATOR", "USER"]
+          roles: ["ADMIN", "MODERATOR", "USER"],
         },
         {
           title: "My Profile",
           href: "/my-profile",
           icon: "User",
-          roles: ["ADMIN", "MODERATOR", "USER"]
+          roles: ["ADMIN", "MODERATOR", "USER"],
         },
-      ]
-    }
+      ],
+    },
   ];
-}
+};
 
 export const moderatorNavItems: NavSection[] = [
   {
@@ -33,21 +33,21 @@ export const moderatorNavItems: NavSection[] = [
         href: "/doctor/dashboard/appointments",
         icon: "Calender",
         badge: "3",
-        roles: ["MODERATOR"]
+        roles: ["MODERATOR"],
       },
       {
         title: "My Schedules",
         href: "/doctor/dashboard/schedules",
         icon: "Clock",
-        roles: ["MODERATOR"]
+        roles: ["MODERATOR"],
       },
       {
         title: "Prescriptions",
         href: "/doctor/dashboard/prescriptions",
         icon: "FileText",
-        roles: ["MODERATOR"]
+        roles: ["MODERATOR"],
       },
-    ]
+    ],
   },
 ];
 
@@ -59,15 +59,15 @@ export const UserNavItems: NavSection[] = [
         title: "My Appointments",
         href: "/dashboard/my-appointments",
         icon: "Calender",
-        roles: ["USER"]
+        roles: ["USER"],
       },
       {
         title: "Book Appointment",
         href: "/consultation",
         icon: "ClipboardList",
-        roles: ["USER"]
+        roles: ["USER"],
       },
-    ]
+    ],
   },
   {
     title: "Medical Records",
@@ -76,16 +76,16 @@ export const UserNavItems: NavSection[] = [
         title: "My Prescriptions",
         href: "/dashboard/my-prescriptions",
         icon: "FileText",
-        roles: ["USER"]
+        roles: ["USER"],
       },
       {
         title: "Health Records",
         href: "/dashboard/health-records",
         icon: "Activity",
-        roles: ["USER"]
+        roles: ["USER"],
       },
-    ]
-  }
+    ],
+  },
 ];
 
 export const adminNavItems: NavSection[] = [
@@ -96,53 +96,52 @@ export const adminNavItems: NavSection[] = [
         title: "Moderators",
         href: "/admin/dashboard/moderators-management",
         icon: "Shield",
-        roles: ["ADMIN"]
+        roles: ["ADMIN"],
       },
       {
         title: "Users",
         href: "/admin/dashboard/users-management",
         icon: "Users",
-        roles: ["ADMIN"]
+        roles: ["ADMIN"],
       },
-    ]
+    ],
   },
   {
     title: "Gift Management",
     items: [
       {
-        title: "Serprices",
-        href: "/admin/dashboard/serprices-management",
+        title: "Surprises",
+        href: "/admin/dashboard/surprises-management",
         icon: "Gift",
-        roles: ["ADMIN"]
-      },
-      {
-        title: "Orders",
-        href: "/admin/dashboard/oreders-management",
-        icon: "Box",
-        roles: ["ADMIN"]
+        roles: ["ADMIN"],
       },
       {
         title: "Categories",
         href: "/admin/dashboard/categories-management",
         icon: "category",
-        roles: ["ADMIN"]
+        roles: ["ADMIN"],
       },
-    ]
+      {
+        title: "Orders",
+        href: "/admin/dashboard/orders-management",
+        icon: "Box",
+        roles: ["ADMIN"],
+      },
+    ],
   },
 ];
-
 
 export const getNavItemsByRole = (role: UserRole): NavSection[] => {
   const commonNavItems = getCommonNavItems(role);
 
   switch (role) {
     case "ADMIN":
-      return [...commonNavItems, ...adminNavItems]
+      return [...commonNavItems, ...adminNavItems];
     case "MODERATOR":
-      return [...commonNavItems, ...moderatorNavItems]
+      return [...commonNavItems, ...moderatorNavItems];
     case "USER":
-      return [...commonNavItems, ...UserNavItems]
+      return [...commonNavItems, ...UserNavItems];
     default:
       return [];
   }
-}
+};

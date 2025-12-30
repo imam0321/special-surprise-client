@@ -3,6 +3,19 @@
 
 import { serverFetch } from "@/lib/server-fetch"
 
+export const createProduct = async (formData: FormData) => {
+  try {
+    const res = await serverFetch.post("/product", {   
+        body: JSON.stringify(Object.fromEntries(formData)),
+        headers: { "Content-Type": "application/json" },
+    });
+    return await res.json();
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Something went wrong" };
+  } 
+};
+
 export const getAllProduct = async (query?: Record<string, any>) => {
   try {
     let queryString = "";

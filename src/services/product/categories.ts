@@ -1,5 +1,55 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { serverFetch } from "@/lib/server-fetch"
+"use server";
+import { serverFetch } from "@/lib/server-fetch";
+import { zodValidator } from "@/lib/zodValidator";
+import { CategoryValidationZodSchema } from "@/zod/product";
+import { revalidateTag } from "next/cache";
+
+export const createCategory = async (_prevState: any, formData: FormData) => {
+  try {
+    const payload = {
+      name: formData.get("name"),
+    };
+    const validatedPayload = zodValidator(payload, CategoryValidationZodSchema);
+
+    if (!validatedPayload.success && validatedPayload.errors) {
+      return {
+        success: validatedPayload.success,
+        message: "Validation failed",
+        formData: payload,
+        errors: validatedPayload.errors,
+      };
+    }
+
+    if (!validatedPayload.data) {
+      return {
+        success: false,
+        message: "Validation failed",
+        formData: payload,
+      };
+    }
+
+    const res = await serverFetch.post("/category", {
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: validatedPayload?.data?.name }),
+    });
+    const result = await res.json();
+
+    if (!result.success) {
+      return {
+        success: false,
+        message: result.message,
+      };
+    }
+
+    revalidateTag("categories-list", { expire: 0 });
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Something went wrong" };
+  }
+};
 
 export const getAllCategories = async (query?: Record<string, any>) => {
   try {
@@ -9,15 +59,21 @@ export const getAllCategories = async (query?: Record<string, any>) => {
       queryString = new URLSearchParams(query as any).toString();
     }
 
-    const res = await serverFetch.get(`/category${queryString ? `?${queryString}` : ""}`);
+    const res = await serverFetch.get(
+      `/category${queryString ? `?${queryString}` : ""}`,
+      {
+        next: {
+          tags: ["categories-list"],
+        },
+      }
+    );
     const result = await res.json();
     return result;
-
   } catch (error: any) {
     console.log(error);
     return {
       success: false,
-      message: error.message
+      message: error.message,
     };
   }
 };

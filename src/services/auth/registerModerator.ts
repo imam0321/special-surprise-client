@@ -75,11 +75,6 @@ export const registerModerator = async (
     }
 
     redirect("/admin/dashboard/moderators-management");
-
-    return {
-      success: true,
-      message: "Moderator Registration successful!",
-    };
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
       throw error;

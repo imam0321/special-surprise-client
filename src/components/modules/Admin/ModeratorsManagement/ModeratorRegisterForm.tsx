@@ -22,11 +22,13 @@ import {
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-
 export default function ModeratorRegisterForm() {
-   const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [state, formAction, isPending] = useActionState(registerModerator, null);
+  const [state, formAction, isPending] = useActionState(
+    registerModerator,
+    null
+  );
 
   useEffect(() => {
     if (
@@ -94,10 +96,10 @@ export default function ModeratorRegisterForm() {
           </Field>
         </div>
 
-         <Field>
+        <Field>
           <FieldLabel>NID Number</FieldLabel>
           <div className="relative">
-           <IdCard className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <IdCard className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               name="nid"
               type="tel"
@@ -109,7 +111,6 @@ export default function ModeratorRegisterForm() {
           </div>
           <InputFieldError field="nid" state={state} />
         </Field>
-
 
         {/* Password */}
         <Field>
