@@ -51,14 +51,58 @@ export const createCategory = async (_prevState: any, formData: FormData) => {
   }
 };
 
-export const getAllCategories = async (query?: Record<string, any>) => {
+export const updateCategory = async (
+  id: string,
+  _prevState: any,
+  formData: FormData
+) => {
   try {
-    let queryString = "";
+    const payload = {
+      name: formData.get("name"),
+    };
+    const validatedPayload = zodValidator(payload, CategoryValidationZodSchema);
 
-    if (query) {
-      queryString = new URLSearchParams(query as any).toString();
+    if (!validatedPayload.success && validatedPayload.errors) {
+      return {
+        success: validatedPayload.success,
+        message: "Validation failed",
+        formData: payload,
+        errors: validatedPayload.errors,
+      };
     }
 
+    if (!validatedPayload.data) {
+      return {
+        success: false,
+        message: "Validation failed",
+        formData: payload,
+      };
+    }
+
+    const res = await serverFetch.patch(`/category/${id}`, {
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: validatedPayload?.data?.name }),
+    });
+    const result = await res.json();
+
+    if (!result.success) {
+      return {
+        success: false,
+        message: result.message,
+      };
+    }
+
+    revalidateTag("categories-list", { expire: 0 });
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Something went wrong" };
+  }
+};
+
+export const getAllCategories = async (queryString: string) => {
+  try {
     const res = await serverFetch.get(
       `/category${queryString ? `?${queryString}` : ""}`,
       {
@@ -75,5 +119,23 @@ export const getAllCategories = async (query?: Record<string, any>) => {
       success: false,
       message: error.message,
     };
+  }
+};
+
+export const deleteCategory = async (id: string) => {
+  try {
+    const res = await serverFetch.delete(`/category/${id}`);
+    const result = await res.json();
+    if (!result.success) {
+      return {
+        success: false,
+        message: result.message,
+      };
+    }
+    revalidateTag("categories-list", { expire: 0 });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Something went wrong" };
   }
 };

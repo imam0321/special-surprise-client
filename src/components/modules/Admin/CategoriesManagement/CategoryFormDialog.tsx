@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { createCategory } from "@/services/product/categories";
+import { createCategory, updateCategory } from "@/services/product/categories";
 import { Category } from "@/types/product.interface";
 import { useActionState, useEffect, useRef } from "react";
 import { toast } from "sonner";
@@ -32,7 +32,7 @@ export default function CategoryFormDialog({
   const isEdit = !!category;
 
   const [state, formAction, pending] = useActionState(
-    createCategory,
+    isEdit ? updateCategory.bind(null, category.id!) : createCategory,
     null
   );
 
@@ -53,15 +53,20 @@ export default function CategoryFormDialog({
       onSuccess();
       onClose();
     } else if (state && !state.success && state.message) {
-      toast.error(state.message);
+      if (
+        state.message.toLowerCase().includes("duplicate") ||
+        state.message.toLowerCase().includes("already exists") ||
+        state.message.toLowerCase().includes("unique")
+      ) {
+        toast.error("This category already exists");
+      } else {
+        toast.error(state.message);
+      }
     }
   }, [state, onSuccess, onClose]);
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(open) => !open && handleClose()}
-    >
+    <Dialog open={open} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent className="max-h-[90vh] flex flex-col p-0 bg-white">
         <DialogHeader className="px-6 pt-6 pb-4">
           <DialogTitle>
@@ -81,9 +86,7 @@ export default function CategoryFormDialog({
                 id="name"
                 name="name"
                 placeholder="Electronics"
-                defaultValue={
-                  state?.formData?.name || category?.name || ""
-                }
+                defaultValue={state?.formData?.name || category?.name || ""}
               />
               <InputFieldError state={state} field="name" />
             </Field>
@@ -99,11 +102,7 @@ export default function CategoryFormDialog({
               Cancel
             </Button>
             <Button type="submit" disabled={pending}>
-              {pending
-                ? "Saving..."
-                : isEdit
-                ? "Update"
-                : "Add"}
+              {pending ? "Saving..." : isEdit ? "Update" : "Add"}
             </Button>
           </div>
         </form>

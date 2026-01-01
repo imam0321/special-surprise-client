@@ -1,7 +1,6 @@
 import ModeratorHeader from "@/components/modules/Admin/ModeratorsManagement/ModeratorHeader";
 import ModeratorTable from "@/components/modules/Admin/ModeratorsManagement/ModeratorTable";
 import SearchFilter from "@/components/shared/SearchFilter";
-// import SelectFilter from "@/components/shared/SelectFilter";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { queryStringFormatter } from "@/lib/formatters";
 import { getModerators } from "@/services/admin/moderatorsManagement";
