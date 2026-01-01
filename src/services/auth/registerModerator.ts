@@ -11,6 +11,7 @@ export const registerModerator = async (
   formData: FormData
 ): Promise<any> => {
   try {
+    const redirectPath = formData.get("redirectPath") || null;
     const payload = {
       name: formData.get("name"),
       email: formData.get("email"),
@@ -74,7 +75,11 @@ export const registerModerator = async (
       };
     }
 
-    redirect("/admin/dashboard/moderators-management");
+    if (redirectPath) {
+      const requestedPath = redirectPath.toString();
+      redirect(requestedPath);
+    }
+
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
       throw error;

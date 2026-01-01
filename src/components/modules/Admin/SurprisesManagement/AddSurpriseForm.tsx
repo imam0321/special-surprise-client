@@ -9,8 +9,17 @@ import InputFieldError from "@/components/shared/InputFieldError";
 import { useActionState, useEffect, useState, useRef } from "react";
 import { toast } from "sonner";
 import { createProduct } from "@/services/product/product";
+import { Product } from "@/types/product.interface";
 
-export default function AddSurpriseForm() {
+interface SurpriseFormDialogProps {
+  onSuccess?: () => void;
+  surprise?: Product;
+}
+
+export default function AddSurpriseForm({
+  onSuccess,
+  surprise,
+}: SurpriseFormDialogProps) {
   const [items, setItems] = useState<string[]>([""]);
   const [state, formAction, isPending] = useActionState(createProduct, null);
   const formRef = useRef<HTMLFormElement>(null);

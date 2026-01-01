@@ -22,7 +22,7 @@ import {
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-export default function ModeratorRegisterForm() {
+export default function ModeratorRegisterForm({ redirectPath }: { redirectPath?: string }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [state, formAction, isPending] = useActionState(
@@ -43,6 +43,9 @@ export default function ModeratorRegisterForm() {
 
   return (
     <form action={formAction} className="space-y-2">
+      {redirectPath && (
+        <Input type="hidden" name="redirectPath" value={redirectPath} />
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         {/* Name */}
         <Field>

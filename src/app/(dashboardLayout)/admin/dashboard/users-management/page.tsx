@@ -6,7 +6,6 @@ import { queryStringFormatter } from "@/lib/formatters";
 import { getCustomers } from "@/services/admin/usersManagement";
 import { Suspense } from "react";
 
-
 export default async function UsersManagementPage({
   searchParams,
 }: {
@@ -21,16 +20,8 @@ export default async function UsersManagementPage({
       <UserHeader />
       <div className="flex items-center gap-2">
         <SearchFilter paramName="searchTerm" placeholder="Search users..." />
-        {/* <SelectFilter
-              paramName="specialty"
-              options={specialtiesResult.data.map((specialty: ISpecialty) => ({
-                label: specialty.title,
-                value: specialty.title,
-              }))}
-              placeholder="Filter by specialty"
-            /> */}
       </div>
-      <Suspense fallback={<TableSkeleton columns={3} rows={10} />}>
+      <Suspense fallback={<TableSkeleton columns={5} rows={6} />}>
         <UserTable customers={customers?.data} />
       </Suspense>
     </div>

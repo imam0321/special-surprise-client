@@ -108,6 +108,7 @@ export const getAllCategories = async (queryString: string) => {
       {
         next: {
           tags: ["categories-list"],
+          revalidate: 1800,
         },
       }
     );

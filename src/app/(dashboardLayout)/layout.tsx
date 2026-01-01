@@ -5,6 +5,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { getUserInfo } from "@/services/auth/getUserInfo";
 import { getNavItemsByRole } from "@/lib/navItems.config";
 import { UserRole } from "@/lib/auth.utils";
+import ModeratorCreateSuccessToast from "@/components/shared/ModeratorCreateSuccessToast";
 
 export default async function DashboardLayout({
   children,
@@ -34,6 +35,7 @@ export default async function DashboardLayout({
           </div>
         </div>
       </SidebarInset>
+      <ModeratorCreateSuccessToast/>
     </SidebarProvider>
   );
 }

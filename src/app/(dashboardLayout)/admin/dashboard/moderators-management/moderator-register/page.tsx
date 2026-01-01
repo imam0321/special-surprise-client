@@ -2,7 +2,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
 import ModeratorRegisterForm from "@/components/modules/Admin/ModeratorsManagement/ModeratorRegisterForm";
 
-export default function ModeratorRegisterPage() {
+export default async function ModeratorRegisterPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ redirect?: string }>;
+}) {
+  const params = (await searchParams) || {};
   return (
     <div className="space-y-1">
       <ManagementPageHeader
@@ -12,7 +17,7 @@ export default function ModeratorRegisterPage() {
 
       <Card className="w-full max-w-3xl">
         <CardContent>
-          <ModeratorRegisterForm />
+          <ModeratorRegisterForm redirectPath={params?.redirect} />
         </CardContent>
       </Card>
     </div>
