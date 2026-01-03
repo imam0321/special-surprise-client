@@ -3,6 +3,7 @@ import Categories from "@/components/modules/Home/Categories";
 import FeaturedSurprises from "@/components/modules/Home/FeaturedSurprises";
 import Hero from "@/components/modules/Home/Hero";
 import HowItWorks from "@/components/modules/Home/HowItWorks";
+import { getAllCategories } from "@/services/product/categories";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -25,11 +26,12 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const categories = await getAllCategories("");
   return (
     <>
       <Hero />
-      <Categories />
+      <Categories categories={categories.data} />
       <FeaturedSurprises />
       <HowItWorks />
       <CallToAction />

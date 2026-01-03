@@ -23,8 +23,9 @@ export default function SurpriseFilters({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const initialCategory = searchParams.get("category") || "";
 
-  const [selectCategory, setSelectCategory] = useState<string>("");
+  const [selectCategory, setSelectCategory] = useState<string>(initialCategory);
 
   const memoizedCategories = useMemo(() => categories, [categories]);
 
