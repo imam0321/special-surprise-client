@@ -43,9 +43,9 @@ export default async function SurpriseDetailPage({
 }) {
   const { productCode } = await params;
   const { data: product } = await getProductByCode(productCode);
-  const { data: surprises } = await getAllProduct({
-    category: product?.category?.name,
-  });
+  const { data: surprises } = await getAllProduct(
+    `category=${product?.category?.name}`
+  );
 
   if (!surprises) {
     return null;

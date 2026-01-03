@@ -22,7 +22,11 @@ import {
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-export default function ModeratorRegisterForm({ redirectPath }: { redirectPath?: string }) {
+export default function ModeratorRegisterForm({
+  redirectPath,
+}: {
+  redirectPath?: string;
+}) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [state, formAction, isPending] = useActionState(
