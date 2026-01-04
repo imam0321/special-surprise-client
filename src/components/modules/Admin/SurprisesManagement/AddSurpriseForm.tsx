@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -6,75 +5,42 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import InputFieldError from "@/components/shared/InputFieldError";
-import { useActionState, useEffect, useState, useRef } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { createProduct } from "@/services/product/product";
+import { createProduct, updateProduct } from "@/services/product/product";
 import { Category, Product } from "@/types/product.interface";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Plus } from "lucide-react";
+import CategorySelect from "@/components/shared/CategorySelect";
+import Image from "next/image";
 
-interface SurpriseFormDialogProps {
-  onSuccess?: () => void;
+interface SurpriseFormProps {
   surprise?: Product;
   categories?: Category[];
 }
 
 export default function AddSurpriseForm({
-  onSuccess,
   surprise,
-  categories,
-}: SurpriseFormDialogProps) {
-  const [items, setItems] = useState<string[]>([""]);
-  const formRef = useRef(null);
-  const fileInputRef = useRef(null);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  
-  const [state, formAction, isPending] = useActionState(createProduct, null);
-  
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    setSelectedFile(file || null);
-  };
+  categories = [],
+}: SurpriseFormProps) {
+  const isEdit = !!surprise;
 
-  useEffect(() => {
-    if (
-      state &&
-      !state.success &&
-      state.message &&
-      state.message != "Validation failed"
-    ) {
-      toast.error(state.message);
-    }
-    if (state?.success) {
-      toast.success("Surprise added successfully 🎉");
-      formRef.current?.reset();
-      setItems([""]);
-      setSelectedCategory("");
-      setSelectedFile(null);
+  // Initialize with surprise data in edit mode
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    surprise?.categoryId || ""
+  );
+  const [items, setItems] = useState<string[]>(
+    surprise?.items && surprise.items.length > 0 ? surprise.items : [""]
+  );
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
 
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
+  const [state, formAction, isPending] = useActionState(
+    isEdit ? updateProduct.bind(null, surprise.productCode!) : createProduct,
+    null
+  );
 
-      onSuccess?.();
-    }
-  }, [state]);
-
-  const addItem = () => {
-    setItems((prev) => [...prev, ""]);
-  };
-
-  const removeItem = (index: number) => {
+  const addItem = () => setItems((prev) => [...prev, ""]);
+  const removeItem = (index: number) =>
     setItems((prev) => prev.filter((_, i) => i !== index));
-  };
-
   const updateItem = (index: number, value: string) => {
     setItems((prev) => {
       const updated = [...prev];
@@ -83,9 +49,35 @@ export default function AddSurpriseForm({
     });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setThumbnailFile(file);
+    }
+  };
+
+  useEffect(() => {
+    if (state) {
+      if (
+        !state.success &&
+        state.message &&
+        state.message !== "Validation failed"
+      ) {
+        toast.error(state.message);
+      }
+    }
+    if (state?.success) {
+      toast.success(
+        isEdit
+          ? "Surprise updated successfully 🎉"
+          : "Surprise added successfully 🎉"
+      );
+    }
+  }, [state, isEdit]);
+
   return (
-    <form ref={formRef} action={formAction} className="space-y-3">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <form action={formAction} className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Title */}
         <Field>
           <FieldLabel>
@@ -93,40 +85,23 @@ export default function AddSurpriseForm({
           </FieldLabel>
           <Input
             name="title"
-            type="text"
-            placeholder="Enter title"
-            defaultValue={state?.formData?.title || ""}
+            defaultValue={
+              isEdit ? surprise?.title || "" : state?.formData?.title || ""
+            }
             disabled={isPending}
           />
           <InputFieldError field="title" state={state} />
         </Field>
 
         {/* Category */}
-        <Field className="md:col-span-1">
-          <FieldLabel>
-            Category <span className="text-red-500">*</span>
-          </FieldLabel>
-
-          <Select
-            value={selectedCategory}
-            onValueChange={setSelectedCategory}
-            disabled={isPending}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select category" />
-            </SelectTrigger>
-
-            <SelectContent>
-              {categories?.map((category) => (
-                <SelectItem key={category.id} value={category.id}>
-                  {category.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <input type="hidden" name="categoryId" value={selectedCategory} />
-          <InputFieldError field="categoryId" state={state} />
-        </Field>
+        <CategorySelect
+          selectedCategoryId={selectedCategory}
+          availableCategories={categories}
+          onCategoryChange={setSelectedCategory}
+          disabled={isPending}
+        />
+        {/* Hidden input to submit category */}
+        <input type="hidden" name="categoryId" value={selectedCategory} />
 
         {/* Price */}
         <Field>
@@ -137,37 +112,33 @@ export default function AddSurpriseForm({
             name="price"
             type="number"
             step="0.01"
-            min="0"
-            placeholder="0.00"
+            defaultValue={surprise?.price ?? ""}
             disabled={isPending}
           />
           <InputFieldError field="price" state={state} />
         </Field>
 
-        {/* Discounted Percentage */}
+        {/* Discount */}
         <Field>
-          <FieldLabel>Discounted %</FieldLabel>
+          <FieldLabel>Discounted Price</FieldLabel>
           <Input
             name="discountedPrice"
             type="number"
             step="0.01"
-            min="0"
-            max="100"
-            placeholder="Optional"
+            defaultValue={surprise?.discountedPrice ?? ""}
             disabled={isPending}
           />
           <InputFieldError field="discountedPrice" state={state} />
         </Field>
 
-        {/* Delivery Charge */}
+        {/* Delivery */}
         <Field>
           <FieldLabel>Delivery Charge</FieldLabel>
           <Input
             name="deliveryCharge"
             type="number"
             step="0.01"
-            min="0"
-            placeholder="0.00"
+            defaultValue={surprise?.deliveryCharge ?? ""}
             disabled={isPending}
           />
           <InputFieldError field="deliveryCharge" state={state} />
@@ -175,32 +146,48 @@ export default function AddSurpriseForm({
 
         {/* Thumbnail */}
         <Field>
-          <FieldLabel htmlFor="thumbnail">
-            Thumbnail <span className="text-red-500">*</span>
+          <FieldLabel>
+            Thumbnail {!isEdit && <span className="text-red-500">*</span>}
           </FieldLabel>
 
           <Input
-            ref={fileInputRef}
-            id="thumbnail"
-            name="thumbnail"
             type="file"
+            name="thumbnail"
             accept="image/*"
             onChange={handleFileChange}
             disabled={isPending}
           />
+
+          {/* Edit mode existing image */}
+          {isEdit && surprise?.thumbnail && !thumbnailFile && (
+            <p className="text-sm text-gray-500 mt-1">
+              Current: {surprise.thumbnail.split("/").pop()}
+            </p>
+          )}
+
+          {/* Preview new image */}
+          {thumbnailFile && (
+            <div className="mt-2">
+              <Image
+                src={URL.createObjectURL(thumbnailFile)}
+                alt="Preview"
+                width={80}
+                height={80}
+                className="rounded object-cover"
+              />
+            </div>
+          )}
 
           <InputFieldError field="thumbnail" state={state} />
         </Field>
 
         {/* Description */}
         <Field className="md:col-span-2">
-          <FieldLabel>
-            Description 
-          </FieldLabel>
+          <FieldLabel>Description</FieldLabel>
           <Textarea
             name="description"
-            placeholder="Write description..."
             rows={4}
+            defaultValue={surprise?.description ?? ""}
             disabled={isPending}
           />
           <InputFieldError field="description" state={state} />
@@ -208,7 +195,7 @@ export default function AddSurpriseForm({
 
         {/* Items */}
         <Field className="md:col-span-2">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mb-2">
             <FieldLabel>
               Items <span className="text-red-500">*</span>
             </FieldLabel>
@@ -225,23 +212,20 @@ export default function AddSurpriseForm({
 
           <div className="space-y-2">
             {items.map((value, index) => (
-              <div key={index} className="flex items-center gap-2">
+              <div key={index} className="flex gap-2">
                 <Input
-                  placeholder="Enter item"
                   value={value}
+                  placeholder="Enter item"
                   onChange={(e) => updateItem(index, e.target.value)}
                   disabled={isPending}
                 />
-
                 {items.length > 1 && (
                   <Button
                     type="button"
-                    size="icon"
                     variant="destructive"
+                    size="icon"
                     onClick={() => removeItem(index)}
                     disabled={isPending}
-                    aria-label={`Remove item ${index + 1}`}
-                    className="shrink-0"
                   >
                     ✕
                   </Button>
@@ -253,7 +237,7 @@ export default function AddSurpriseForm({
           <input
             type="hidden"
             name="items"
-            value={items.filter((item) => item.trim()).join("||")}
+            value={items.filter((i) => i.trim()).join("||")}
           />
           <InputFieldError field="items" state={state} />
         </Field>
@@ -264,7 +248,13 @@ export default function AddSurpriseForm({
         disabled={isPending}
         className="w-full bg-linear-to-r from-surprise-pink to-surprise-purple text-white"
       >
-        {isPending ? "Adding..." : "Add Surprise"}
+        {isPending
+          ? isEdit
+            ? "Updating..."
+            : "Adding..."
+          : isEdit
+          ? "Update Surprise"
+          : "Add Surprise"}
       </Button>
     </form>
   );

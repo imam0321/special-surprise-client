@@ -11,7 +11,6 @@ import { deleteProduct } from "@/services/product/product";
 export default function SurpriseTable({ surprises }: { surprises: Product[] }) {
   const router = useRouter();
   const [, startTransition] = useTransition();
-  const [editingSurprise, setEditingSurprise] = useState<Product | null>(null);
   const [deletingSurprise, setDeletingSurprise] = useState<Product | null>(
     null
   );
@@ -28,7 +27,7 @@ export default function SurpriseTable({ surprises }: { surprises: Product[] }) {
   };
 
   const handleEdit = (surprise: Product) => {
-    setEditingSurprise(surprise);
+    redirect(`/admin/dashboard/surprises-management/edit-surprise/${surprise.productCode}`);
   };
 
   const handleDelete = (surprise: Product) => {

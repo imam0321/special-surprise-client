@@ -48,7 +48,7 @@ export default function CategoryFormDialog({
     prevStateRef.current = state;
 
     if (state?.success) {
-      toast.success(state.message || "Category saved successfully");
+      toast.success(state.message || "Category Add successfully");
       formRef.current?.reset();
       onSuccess();
       onClose();
