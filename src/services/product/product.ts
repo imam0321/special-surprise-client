@@ -4,18 +4,21 @@
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { ProductValidationZodSchema } from "@/zod/product";
+import z from "zod";
 
 export const createProduct = async (_currentState: any, formData: FormData) => {
   try {
-    
+    // Get items array correctly
+    const itemsArray = formData.getAll("items[]").filter((item) => item !== "");
+
     const payload = {
       title: formData.get("title"),
       categoryId: formData.get("categoryId"),
       price: Number(formData.get("price")),
-      discountedPrice: Number(formData.get("discountedPrice")),
-      deliveryCharge: Number(formData.get("deliveryCharge")),
-      description: formData.get("description"),
-      items: formData.get("items"),
+      discountedPrice: Number(formData.get("discountedPrice")) || 0,
+      deliveryCharge: Number(formData.get("deliveryCharge")) || 0,
+      description: formData.get("description") || "",
+      items: itemsArray,
       thumbnail: formData.get("thumbnail"),
     };
 
@@ -39,23 +42,24 @@ export const createProduct = async (_currentState: any, formData: FormData) => {
     }
 
     // Prepare FormData for server
-    const fd = new FormData();
-    fd.append("data", JSON.stringify(validatedPayload.data));
-    fd.append("file", {file: validatedPayload.data.thumbnail} as unknown as Blob);
+    const newFormData = new FormData();
+    newFormData.append("data", JSON.stringify(validatedPayload.data));
+    newFormData.append("file", validatedPayload.data.thumbnail);
 
     // Send request to server
-    const res = await serverFetch.post("/product", { body: fd });
+    const res = await serverFetch.post("/product", { body: newFormData });
     const result = await res.json();
 
     if (!result.success) {
       return { success: false, message: result.message };
     }
 
-    return result
+    return result;
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
       throw error;
     }
+    console.log(error);
     return { success: false, message: error.message || "Something went wrong" };
   }
 };
@@ -66,22 +70,32 @@ export const updateProduct = async (
   formData: FormData
 ) => {
   try {
+    // Get items array correctly
+    const itemsArray = formData.getAll("items[]").filter((item) => item !== "");
+
     const payload = {
       title: formData.get("title"),
       categoryId: formData.get("categoryId"),
-      price: formData.get("price"),
-      discountedPrice: formData.get("discountedPrice"),
-      deliveryCharge: formData.get("deliveryCharge"),
-      description: formData.get("description"),
-      items: formData.get("items"),
+      price: Number(formData.get("price")),
+      discountedPrice: Number(formData.get("discountedPrice")) || 0,
+      deliveryCharge: Number(formData.get("deliveryCharge")) || 0,
+      description: formData.get("description") || "",
+      items: itemsArray,
+      thumbnail: formData.get("thumbnail") || undefined,
     };
 
-    const validated = zodValidator(payload, ProductValidationZodSchema);
+    // For update, make thumbnail optional
+    const UpdateProductSchema = ProductValidationZodSchema.extend({
+      thumbnail: z.instanceof(File).optional().or(z.undefined()),
+    });
+
+    const validated = zodValidator(payload, UpdateProductSchema);
     if (!validated.success) {
       return {
         success: false,
         message: "Validation failed",
         errors: validated.errors,
+        formData: payload,
       };
     }
 
@@ -103,7 +117,7 @@ export const updateProduct = async (
       return { success: false, message: result.message };
     }
 
-    return { success: true };
+    return { success: true, message: "Product updated successfully" };
   } catch (error: any) {
     return { success: false, message: error.message };
   }

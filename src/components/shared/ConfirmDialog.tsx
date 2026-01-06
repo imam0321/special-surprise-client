@@ -22,6 +22,7 @@ type ConfirmDialogProps = {
 
   confirmVariant?: "default" | "destructive" | "outline";
   onConfirm: () => void;
+  disabled?: boolean;
 };
 
 export default function ConfirmDialog({
@@ -33,17 +34,35 @@ export default function ConfirmDialog({
   cancelText = "Cancel",
   confirmVariant = "default",
   onConfirm,
+  disabled = false,
 }: ConfirmDialogProps) {
+  const handleConfirm = () => {
+    if (disabled) return;
+    onConfirm();
+  };
+
+  const handleClose = () => {
+    if (!disabled) setOpen(false);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="rounded-xl bg-white">
+    <Dialog open={open} onOpenChange={handleClose}>
+      <DialogContent
+        className="rounded-xl bg-white"
+        onInteractOutside={(e) => disabled && e.preventDefault()}
+        onEscapeKeyDown={(e) => disabled && e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
 
         <DialogFooter className="flex justify-end gap-3">
-          <Button variant="outline" onClick={() => setOpen(false)}>
+          <Button
+            variant="outline"
+            onClick={handleClose}
+            disabled={disabled}
+          >
             {cancelText}
           </Button>
 
@@ -54,12 +73,10 @@ export default function ConfirmDialog({
                 ? "bg-red-500 text-white hover:bg-red-600"
                 : ""
             }
-            onClick={() => {
-              onConfirm();
-              setOpen(false);
-            }}
+            onClick={handleConfirm}
+            disabled={disabled}
           >
-            {confirmText}
+            {disabled ? "Processing..." : confirmText}
           </Button>
         </DialogFooter>
       </DialogContent>

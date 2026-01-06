@@ -20,7 +20,7 @@ export default function CategoriesTable({
   const [deletingCategory, setDeletingCategory] = useState<Category | null>(
     null
   );
-  const [, setIsDeleting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleRefresh = () => {
     startTransition(() => {
@@ -87,6 +87,7 @@ export default function CategoriesTable({
         onConfirm={() => {
           if (deletingCategory?.id) confirmDelete(deletingCategory.id);
         }}
+        disabled={isDeleting}
       />
     </>
   );

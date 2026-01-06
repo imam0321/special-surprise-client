@@ -9,7 +9,7 @@ export default async function SurprisesList({
 }: {
   queryParams: URLSearchParams;
 }) {
-  const surprises = await getAllProduct(queryParams);
+  const surprises = await getAllProduct(queryParams.toString());
 
   if (!surprises?.data) {
     return (

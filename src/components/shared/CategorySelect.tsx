@@ -1,6 +1,4 @@
-// CategorySelect.tsx
-import { Field, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { FieldLabel } from "@/components/ui/field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Category } from "@/types/product.interface";
 
@@ -9,6 +7,7 @@ interface CategorySelectProps {
   availableCategories: Category[];
   onCategoryChange: (id: string) => void;
   disabled?: boolean;
+  name?: string;
 }
 
 export default function CategorySelect({
@@ -16,14 +15,20 @@ export default function CategorySelect({
   availableCategories,
   onCategoryChange,
   disabled,
+  name = "categoryId",
 }: CategorySelectProps) {
   return (
-    <Field>
+    <>
       <FieldLabel htmlFor="category">
         Category <span className="text-red-500">*</span>
       </FieldLabel>
 
-      <Select value={selectedCategoryId} onValueChange={onCategoryChange} disabled={disabled}>
+      <Select 
+        value={selectedCategoryId} 
+        onValueChange={onCategoryChange} 
+        disabled={disabled}
+        name={name}
+      >
         <SelectTrigger>
           <SelectValue placeholder="Select a category" />
         </SelectTrigger>
@@ -42,7 +47,8 @@ export default function CategorySelect({
         </SelectContent>
       </Select>
 
-      <Input type="hidden" name="categoryId" value={selectedCategoryId} />
-    </Field>
+      {/* Hidden input for form submission */}
+      <input type="hidden" name={name} value={selectedCategoryId} />
+    </>
   );
 }

@@ -16,7 +16,7 @@ export default function SurpriseTable({ surprises, categories }: { surprises: Pr
   const [deletingSurprise, setDeletingSurprise] = useState<Product | null>(
     null
   );
-  const [, setIsDeleting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleRefresh = () => {
     startTransition(() => {
@@ -52,6 +52,7 @@ export default function SurpriseTable({ surprises, categories }: { surprises: Pr
     }
   };
 
+
   return (
     <>
       <ManagementTable
@@ -69,7 +70,6 @@ export default function SurpriseTable({ surprises, categories }: { surprises: Pr
         onClose={() => setEditingSurprise(null)}
         surprise={editingSurprise!}
         onSuccess={() => {
-          setEditingSurprise(null);
           handleRefresh();
         }}
         categories={categories}
@@ -78,15 +78,19 @@ export default function SurpriseTable({ surprises, categories }: { surprises: Pr
       {/* Delete Confirmation Dialog */}
       <ConfirmDialog
         open={!!deletingSurprise}
-        setOpen={() => setDeletingSurprise(null)}
+        setOpen={(val) => !val && setDeletingSurprise(null)}
         title="Delete Surprise"
-        description={`Are you sure you want to delete ${deletingSurprise?.title}? This action cannot be undone.`}
+        description={
+          deletingSurprise
+            ? `Are you sure you want to delete "${deletingSurprise.title}"? This action cannot be undone.`
+            : ""
+        }
         confirmText="Delete"
         confirmVariant="destructive"
-        onConfirm={() => {
-          if (deletingSurprise?.productCode)
-            confirmDelete(deletingSurprise.productCode);
+        onConfirm={()=> {
+          if(deletingSurprise?.productCode) confirmDelete(deletingSurprise?.productCode)
         }}
+        disabled={isDeleting}
       />
     </>
   );
