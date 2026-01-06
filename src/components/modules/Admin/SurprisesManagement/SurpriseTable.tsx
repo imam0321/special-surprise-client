@@ -1,16 +1,18 @@
 "use client";
 import ManagementTable from "@/components/shared/ManagementTable";
-import { Product } from "@/types/product.interface";
+import { Category, Product } from "@/types/product.interface";
 import { redirect, useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import ConfirmDialog from "@/components/shared/ConfirmDialog";
 import { surprisesColumns } from "./SurpriseColumns";
 import { deleteProduct } from "@/services/product/product";
+import SurpriseFormDialog from "./SurpriseFormDialog";
 
-export default function SurpriseTable({ surprises }: { surprises: Product[] }) {
+export default function SurpriseTable({ surprises, categories }: { surprises: Product[]; categories: Category[] }) {
   const router = useRouter();
   const [, startTransition] = useTransition();
+  const [editingSurprise, setEditingSurprise] = useState<Product | null>(null);
   const [deletingSurprise, setDeletingSurprise] = useState<Product | null>(
     null
   );
@@ -27,7 +29,7 @@ export default function SurpriseTable({ surprises }: { surprises: Product[] }) {
   };
 
   const handleEdit = (surprise: Product) => {
-    redirect(`/admin/dashboard/surprises-management/edit-surprise/${surprise.productCode}`);
+    setEditingSurprise(surprise);
   };
 
   const handleDelete = (surprise: Product) => {
@@ -62,12 +64,21 @@ export default function SurpriseTable({ surprises }: { surprises: Product[] }) {
         emptyMessage="No surprises found"
       />
 
+      <SurpriseFormDialog
+        open={!!editingSurprise}
+        onClose={() => setEditingSurprise(null)}
+        surprise={editingSurprise!}
+        onSuccess={() => {
+          setEditingSurprise(null);
+          handleRefresh();
+        }}
+        categories={categories}
+      />
+
       {/* Delete Confirmation Dialog */}
       <ConfirmDialog
         open={!!deletingSurprise}
-        setOpen={(val) => {
-          if (!val) setDeletingSurprise(null);
-        }}
+        setOpen={() => setDeletingSurprise(null)}
         title="Delete Surprise"
         description={`Are you sure you want to delete ${deletingSurprise?.title}? This action cannot be undone.`}
         confirmText="Delete"

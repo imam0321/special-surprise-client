@@ -22,7 +22,7 @@ export default async function SurprisesManagementPage({
 
   return (
     <div className="space-y-6">
-      <SurpriseHeader />
+      <SurpriseHeader categories={categoriesResult?.data || []}/>
       <div className="flex items-center gap-2">
         <SearchFilter
           paramName="searchTerm"
@@ -38,7 +38,7 @@ export default async function SurprisesManagementPage({
            />
       </div>
       <Suspense fallback={<TableSkeleton columns={8} rows={6} />}>
-        <SurpriseTable surprises={surprises?.data || []} />
+        <SurpriseTable surprises={surprises?.data || []} categories={categoriesResult?.data || []} />
         <TablePagination currentPage={surprises?.meta?.page || 1} totalPages={surprises?.meta?.totalPages} />
       </Suspense>
     </div>

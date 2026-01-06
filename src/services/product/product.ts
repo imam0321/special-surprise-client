@@ -4,8 +4,6 @@
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { ProductValidationZodSchema } from "@/zod/product";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 export const createProduct = async (_currentState: any, formData: FormData) => {
   try {
@@ -16,10 +14,9 @@ export const createProduct = async (_currentState: any, formData: FormData) => {
       discountedPrice: formData.get("discountedPrice") ? Number(formData.get("discountedPrice")) : 0,
       deliveryCharge: formData.get("deliveryCharge") ? Number(formData.get("deliveryCharge")) : 0,
       description: formData.get("description"),
-      items: (formData.get("items") as string)?.split("||").map(i => i.trim()) || [],
+      items: formData.get("items") ,
     };
 
-    // Validate using Zod
     const validatedPayload = zodValidator(payload, ProductValidationZodSchema);
 
     if (!validatedPayload.success) {
@@ -61,9 +58,7 @@ export const createProduct = async (_currentState: any, formData: FormData) => {
       return { success: false, message: result.message };
     }
 
-    // Redirect on success
-    redirect("/admin/dashboard/surprises-management");
-
+    return result
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
       throw error;
@@ -114,8 +109,6 @@ export const updateProduct = async (
     if (!result.success) {
       return { success: false, message: result.message };
     }
-
-    revalidatePath("/admin/dashboard/surprises-management");
 
     return { success: true };
   } catch (error: any) {
