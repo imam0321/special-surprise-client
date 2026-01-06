@@ -7,14 +7,16 @@ import { ProductValidationZodSchema } from "@/zod/product";
 
 export const createProduct = async (_currentState: any, formData: FormData) => {
   try {
+    
     const payload = {
       title: formData.get("title"),
       categoryId: formData.get("categoryId"),
       price: Number(formData.get("price")),
-      discountedPrice: formData.get("discountedPrice") ? Number(formData.get("discountedPrice")) : 0,
-      deliveryCharge: formData.get("deliveryCharge") ? Number(formData.get("deliveryCharge")) : 0,
+      discountedPrice: Number(formData.get("discountedPrice")),
+      deliveryCharge: Number(formData.get("deliveryCharge")),
       description: formData.get("description"),
-      items: formData.get("items") ,
+      items: formData.get("items"),
+      thumbnail: formData.get("thumbnail"),
     };
 
     const validatedPayload = zodValidator(payload, ProductValidationZodSchema);
@@ -36,19 +38,10 @@ export const createProduct = async (_currentState: any, formData: FormData) => {
       };
     }
 
-    const file = formData.get("thumbnail") as File | null;
-    if (!file || file.size === 0) {
-      return {
-        success: false,
-        message: "Thumbnail image is required",
-        errors: { thumbnail: ["Thumbnail image is required"] },
-      };
-    }
-
     // Prepare FormData for server
     const fd = new FormData();
     fd.append("data", JSON.stringify(validatedPayload.data));
-    fd.append("file", file);
+    fd.append("file", {file: validatedPayload.data.thumbnail} as unknown as Blob);
 
     // Send request to server
     const res = await serverFetch.post("/product", { body: fd });

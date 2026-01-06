@@ -9,21 +9,12 @@ export const CategoryValidationZodSchema = z.object({
 export const ProductValidationZodSchema = z.object({
   title: z.string().min(2, { message: "Product title required" }),
   categoryId: z.string().min(1, { message: "Category is required" }),
-  price: z
-    .string()
-    .min(1, { message: "Price is required" }),
-  discountedPrice: z
-    .string()
-    .optional(),
-  deliveryCharge: z
-    .string()
-    .optional(),
+  price: z.number({ message: "Price is required" }),
+  discountedPrice: z.number().min(0).optional(),
+  deliveryCharge: z.number().min(0).optional(),
   description: z.string().optional(),
-  items: z
-    .string()
-    .min(1, { message: "At least one item is required" })
-    .transform((val) => val.split("||").filter((item) => item.trim() !== ""))
-    .refine((items) => items.length > 0, {
-      message: "At least one item is required",
-    }),
+  items: z.string().min(1, { message: "Item is required" }),
+  thumbnail: z.instanceof(File).refine((file) => file.size > 0, {
+    message: "Product thumbnail is required",
+  }),
 });

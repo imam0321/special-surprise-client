@@ -67,7 +67,7 @@ export default function CategoryFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent className="max-h-[90vh] flex flex-col p-0 bg-white">
+      <DialogContent className="max-h-[90vh] flex flex-col p-0 bg-white" onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader className="px-6 pt-6 pb-4">
           <DialogTitle>
             {isEdit ? "Edit Category" : "Add New Category"}
