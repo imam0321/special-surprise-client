@@ -70,6 +70,7 @@ export default function SurpriseTable({ surprises, categories }: { surprises: Pr
         onClose={() => setEditingSurprise(null)}
         surprise={editingSurprise!}
         onSuccess={() => {
+          setEditingSurprise(null);
           handleRefresh();
         }}
         categories={categories}

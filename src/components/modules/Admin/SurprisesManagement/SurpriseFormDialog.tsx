@@ -15,9 +15,10 @@ import {
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useSingleSelect } from "@/hooks/useSingleSelect";
 import { createProduct, updateProduct } from "@/services/product/product";
 import { Category, Product } from "@/types/product.interface";
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 interface SurpriseFormProps {
@@ -38,9 +39,11 @@ export default function SurpriseFormDialog({
   const isEdit = !!surprise;
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [selectedCategory, setSelectedCategory] = useState(
-    isEdit ? surprise.categoryId! : ""
-  );
+  const categorySelect = useSingleSelect({
+    initialId: surprise?.categoryId,
+    isEdit,
+    open,
+  });
 
   const [state, formAction, isPending] = useActionState(
     isEdit ? updateProduct.bind(null, surprise!.productCode!) : createProduct,
@@ -54,9 +57,9 @@ export default function SurpriseFormDialog({
     prevStateRef.current = state;
 
     if (state?.success) {
-      toast.success(state.message || "Product saved successfully");
+      toast.success(state.message || "Surprise created successfully");
       formRef.current?.reset();
-      onSuccess()
+      onSuccess();
       onClose();
     } else if (
       state &&
@@ -69,7 +72,7 @@ export default function SurpriseFormDialog({
   }, [state, onSuccess, onClose]);
 
   return (
-    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+    <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         className="w-[95vw] max-w-4xl max-h-[90vh] flex flex-col bg-white p-4 sm:p-6"
         onInteractOutside={(e) => e.preventDefault()}
@@ -107,12 +110,13 @@ export default function SurpriseFormDialog({
             {/* Category */}
             <Field>
               <CategorySelect
-                selectedCategoryId={selectedCategory}
-                availableCategories={categories || []}
-                onCategoryChange={setSelectedCategory}
+                selectedCategoryId={categorySelect.selectedId}
+                availableCategories={categories!}
+                onCategoryChange={categorySelect.setSelectedId}
                 disabled={isPending}
                 name="categoryId"
               />
+
               <InputFieldError field="categoryId" state={state} />
             </Field>
 

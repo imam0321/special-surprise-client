@@ -8,7 +8,6 @@ import z from "zod";
 
 export const createProduct = async (_currentState: any, formData: FormData) => {
   try {
-    // Get items array correctly
     const itemsArray = formData.getAll("items[]").filter((item) => item !== "");
 
     const payload = {
@@ -41,12 +40,10 @@ export const createProduct = async (_currentState: any, formData: FormData) => {
       };
     }
 
-    // Prepare FormData for server
     const newFormData = new FormData();
     newFormData.append("data", JSON.stringify(validatedPayload.data));
     newFormData.append("file", validatedPayload.data.thumbnail);
 
-    // Send request to server
     const res = await serverFetch.post("/product", { body: newFormData });
     const result = await res.json();
 
@@ -56,10 +53,6 @@ export const createProduct = async (_currentState: any, formData: FormData) => {
 
     return result;
   } catch (error: any) {
-    if (error?.digest?.startsWith("NEXT_REDIRECT")) {
-      throw error;
-    }
-    console.log(error);
     return { success: false, message: error.message || "Something went wrong" };
   }
 };
@@ -70,8 +63,10 @@ export const updateProduct = async (
   formData: FormData
 ) => {
   try {
-    // Get items array correctly
-    const itemsArray = formData.getAll("items[]").filter((item) => item !== "");
+    const itemsArray = formData
+      .getAll("items[]")
+      .map((item) => item.toString().trim())
+      .filter((item) => item !== "");
 
     const payload = {
       title: formData.get("title"),
@@ -84,31 +79,30 @@ export const updateProduct = async (
       thumbnail: formData.get("thumbnail") || undefined,
     };
 
-    // For update, make thumbnail optional
     const UpdateProductSchema = ProductValidationZodSchema.extend({
       thumbnail: z.instanceof(File).optional().or(z.undefined()),
     });
 
-    const validated = zodValidator(payload, UpdateProductSchema);
-    if (!validated.success) {
+    const validatedPayload = zodValidator(payload, UpdateProductSchema);
+    if (!validatedPayload.success) {
       return {
         success: false,
         message: "Validation failed",
-        errors: validated.errors,
+        errors: validatedPayload.errors,
         formData: payload,
       };
     }
 
-    const fd = new FormData();
-    fd.append("data", JSON.stringify(validated.data));
+    const newFormData = new FormData();
+    newFormData.append("data", JSON.stringify(validatedPayload.data));
 
     const file = formData.get("thumbnail") as File | null;
     if (file && file.size > 0) {
-      fd.append("file", file);
+      newFormData.append("file", file);
     }
 
     const res = await serverFetch.patch(`/product/${productCode}`, {
-      body: fd,
+      body: newFormData,
     });
 
     const result = await res.json();
@@ -117,9 +111,9 @@ export const updateProduct = async (
       return { success: false, message: result.message };
     }
 
-    return { success: true, message: "Product updated successfully" };
+    return result;
   } catch (error: any) {
-    return { success: false, message: error.message };
+    return { success: false, message: error.message || "Something went wrong" };
   }
 };
 
@@ -159,7 +153,6 @@ export const deleteProduct = async (productCode: string) => {
     const result = await res.json();
     return result;
   } catch (error: any) {
-    console.log(error);
     return {
       success: false,
       message: error.message,

@@ -1,9 +1,10 @@
-import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react"
-import { useFileUpload, type FileMetadata } from "@/hooks/use-file-upload";
-import { useEffect, useRef } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react";
+import { useFileUpload } from "@/hooks/use-file-upload";
+import { useEffect, useRef, useState } from "react";
 
 interface SingleImageUploaderProps {
-  onChange: (file: (File | FileMetadata) | null) => void;
+  onChange: (file: File | null) => void; // strictly File or null
   preview?: string | null;
   name?: string;
 }
@@ -15,46 +16,38 @@ export default function SingleImageUploader({
 }: SingleImageUploaderProps) {
   const maxSizeMB = 5;
   const maxSize = maxSizeMB * 1024 * 1024;
+
   const hiddenInputRef = useRef<HTMLInputElement>(null);
+  const [previewRemoved, setPreviewRemoved] = useState(false);
 
   const [
     { files, isDragging, errors },
-    {
-      handleDragEnter,
-      handleDragLeave,
-      handleDragOver,
-      handleDrop,
-      openFileDialog,
-      removeFile,
-      getInputProps,
-    },
-  ] = useFileUpload({
-    accept: "image/*",
-    maxSize,
-  });
+    { handleDragEnter, handleDragLeave, handleDragOver, handleDrop, openFileDialog, removeFile, getInputProps },
+  ] = useFileUpload({ accept: "image/*", maxSize });
 
+  // update parent & hidden input whenever files change
   useEffect(() => {
-    if (files.length > 0 && files[0]?.file) {
-      const file = files[0].file;
-      onChange(file);
-      
-      // Update the hidden input with the file
-      if (hiddenInputRef.current && file instanceof File) {
-        const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(file);
-        hiddenInputRef.current.files = dataTransfer.files;
-      }
-    } else {
-      onChange(null);
-      
-      // Clear the hidden input
-      if (hiddenInputRef.current) {
-        hiddenInputRef.current.value = "";
-      }
-    }
-  }, [files, onChange]);
+    const file = files[0]?.file instanceof File ? files[0].file : null;
+    onChange(file);
+    setPreviewRemoved(false);
 
-  const previewUrl = files[0]?.preview || preview || null;
+    if (hiddenInputRef.current) {
+      const dt = new DataTransfer();
+      if (file) dt.items.add(file);
+      hiddenInputRef.current.files = dt.files;
+    }
+  }, [files]);
+
+  const handleRemove = () => {
+    if (files[0]?.id) removeFile(files[0].id);
+    setPreviewRemoved(true);
+    onChange(null);
+
+    if (hiddenInputRef.current) hiddenInputRef.current.value = "";
+  };
+
+  // Preview: new file or old URL if not removed
+  const previewUrl = files[0]?.preview || (!previewRemoved ? preview : null);
   const inputProps = getInputProps();
 
   return (
@@ -69,71 +62,42 @@ export default function SingleImageUploader({
           onDragOver={handleDragOver}
           onDrop={handleDrop}
           data-dragging={isDragging || undefined}
-          className="border-input hover:bg-accent/50 data-[dragging=true]:bg-accent/50 has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 relative flex min-h-52 flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed p-4 transition-colors has-disabled:pointer-events-none has-disabled:opacity-50 has-[img]:border-none has-[input:focus]:ring-[3px]"
+          className="border-input hover:bg-accent/50 data-[dragging=true]:bg-accent/50 relative flex min-h-52 flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed p-4 transition-colors"
         >
-          {/* Visible input for file selection (not submitted) */}
-          <input
-            {...inputProps}
-            className="sr-only"
-            aria-label="Upload file"
-          />
-          
-          {/* Hidden input for form submission */}
-          <input
-            ref={hiddenInputRef}
-            type="file"
-            name={name}
-            accept="image/*"
-            className="sr-only"
-            tabIndex={-1}
-            aria-hidden="true"
-          />
-          
+          {/* Invisible drop/input */}
+          <input {...inputProps} className="sr-only" aria-label="Upload file" />
+
+          {/* Hidden input for form submit */}
+          <input ref={hiddenInputRef} type="file" name={name} accept="image/*" className="sr-only" tabIndex={-1} aria-hidden="true" />
+
           {previewUrl ? (
-            <div className="absolute inset-0">
-              <img
-                src={previewUrl}
-                alt={files[0]?.file?.name || "Uploaded image"}
-                className="size-full object-cover"
-              />
-            </div>
+            <img src={previewUrl} alt="Thumbnail preview" className="absolute inset-0 w-full h-full object-cover" />
           ) : (
             <div className="flex flex-col items-center justify-center px-4 py-3 text-center">
-              <div
-                className="bg-background mb-2 flex size-11 shrink-0 items-center justify-center rounded-full border"
-                aria-hidden="true"
-              >
-                <ImageUpIcon className="size-4 opacity-60" />
+              <div className="bg-background mb-2 flex h-11 w-11 items-center justify-center rounded-full border">
+                <ImageUpIcon className="h-4 w-4 opacity-60" />
               </div>
-              <p className="mb-1.5 text-sm font-medium">
-                Drop your image here or click to browse
-              </p>
-              <p className="text-muted-foreground text-xs">
-                Max size: {maxSizeMB}MB
-              </p>
+              <p className="mb-1.5 text-sm font-medium">Drop your image here or click to browse</p>
+              <p className="text-muted-foreground text-xs">Max size: {maxSizeMB}MB</p>
             </div>
           )}
         </div>
+
         {previewUrl && (
-          <div className="absolute top-4 right-4">
-            <button
-              type="button"
-              className="focus-visible:border-ring focus-visible:ring-ring/50 z-50 flex size-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white transition-[color,box-shadow] outline-none hover:bg-black/80 focus-visible:ring-[3px]"
-              onClick={() => removeFile(files[0]?.id)}
-              aria-label="Remove image"
-            >
-              <XIcon className="size-4" aria-hidden="true" />
-            </button>
-          </div>
+          <button
+            type="button"
+            className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80 z-50"
+            onClick={handleRemove}
+            aria-label="Remove image"
+          >
+            <XIcon className="h-4 w-4" />
+          </button>
         )}
       </div>
 
       {errors.length > 0 && (
-        <div
-          className="text-destructive flex items-center gap-1 text-xs"
-          role="alert"
-        >
-          <AlertCircleIcon className="size-3 shrink-0" />
+        <div className="text-destructive flex items-center gap-1 text-xs" role="alert">
+          <AlertCircleIcon className="h-3 w-3" />
           <span>{errors[0]}</span>
         </div>
       )}

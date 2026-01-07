@@ -7,6 +7,8 @@ import { getNavItemsByRole } from "@/lib/navItems.config";
 import { UserRole } from "@/lib/auth.utils";
 import ModeratorCreateSuccessToast from "@/components/shared/ModeratorCreateSuccessToast";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardLayout({
   children,
 }: {

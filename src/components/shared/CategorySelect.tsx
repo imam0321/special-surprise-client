@@ -1,5 +1,11 @@
 import { FieldLabel } from "@/components/ui/field";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Category } from "@/types/product.interface";
 
 interface CategorySelectProps {
@@ -19,21 +25,21 @@ export default function CategorySelect({
 }: CategorySelectProps) {
   return (
     <>
-      <FieldLabel htmlFor="category">
+      <FieldLabel>
         Category <span className="text-red-500">*</span>
       </FieldLabel>
 
-      <Select 
-        value={selectedCategoryId} 
-        onValueChange={onCategoryChange} 
+      <Select
+        value={selectedCategoryId || undefined}
+        onValueChange={onCategoryChange}
         disabled={disabled}
-        name={name}
       >
         <SelectTrigger>
           <SelectValue placeholder="Select a category" />
         </SelectTrigger>
+
         <SelectContent>
-          {availableCategories.length > 0 ? (
+          {availableCategories?.length > 0 ? (
             availableCategories.map((cat) => (
               <SelectItem key={cat.id} value={cat.id}>
                 {cat.name}
@@ -47,8 +53,8 @@ export default function CategorySelect({
         </SelectContent>
       </Select>
 
-      {/* Hidden input for form submission */}
-      <input type="hidden" name={name} value={selectedCategoryId} />
+      {/* Form submit এর জন্য hidden input */}
+      <input type="hidden" name={name} value={selectedCategoryId || ""} />
     </>
   );
 }

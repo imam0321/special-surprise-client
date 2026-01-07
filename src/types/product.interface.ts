@@ -22,5 +22,5 @@ export interface Product {
   categoryId: string;
   createdAt: string;
   updatedAt: string;
-  category: Category;
+  category?: Category;
 }

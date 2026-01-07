@@ -20,7 +20,7 @@ export default function ItemsField({
   defaultItems = [""],
 }: ItemsFieldProps) {
   const [items, setItems] = useState<string[]>(
-    defaultItems.length ? defaultItems : [""]
+    defaultItems?.length ? [...defaultItems] : [""]
   );
 
   const addItem = () => setItems((prev) => [...prev, ""]);
@@ -75,14 +75,16 @@ export default function ItemsField({
       </div>
 
       {/* Hidden inputs for proper form submission */}
-      {items.map((value, index) => (
-        <input
-          key={`hidden-${index}`}
-          type="hidden"
-          name="items[]"
-          value={value}
-        />
-      ))}
+      {items
+        .filter((item) => item.trim() !== "")
+        .map((value, index) => (
+          <input
+            key={`hidden-${index}`}
+            type="hidden"
+            name="items[]"
+            value={value}
+          />
+        ))}
 
       <InputFieldError field="items" state={state} />
     </Field>
