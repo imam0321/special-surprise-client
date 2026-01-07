@@ -1,6 +1,3 @@
-// ============================================
-// components/modules/CheckOut/OrderSummary.tsx
-// ============================================
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -41,15 +38,11 @@ export default function OrderSummary({ surprise }: OrderSummaryProps) {
     setIsProcessing(true);
 
     try {
-      // Implement your order placement logic here
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       console.log("Order placed successfully!");
-      // Add: toast.success("Order placed successfully!");
-      // Add: router.push("/order-success");
     } catch (error) {
       console.error("Order placement failed:", error);
-      // Add: toast.error("Failed to place order");
     } finally {
       setIsProcessing(false);
     }

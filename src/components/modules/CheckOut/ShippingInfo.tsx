@@ -1,148 +1,124 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CreditCard, MapPin } from "lucide-react";
 import { useState } from "react";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Button } from "@/components/ui/button";
+import { CreditCard, Globe, Home, MapPin } from "lucide-react";
 
-interface ShippingInfoProps {
-  onPaymentMethodChange?: (method: string) => void;
-}
 
-export default function ShippingInfo({ onPaymentMethodChange }: ShippingInfoProps) {
-  const [paymentMethod, setPaymentMethod] = useState("online-payment");
 
-  const handlePaymentChange = (value: string) => {
-    setPaymentMethod(value);
-    onPaymentMethodChange?.(value);
-  };
+export default function ShippingInfo() {
+  const [paymentMethod] = useState("online-payment");
 
   return (
-    <div className="lg:col-span-2 space-y-6">
+    <form
+      className="lg:col-span-2 space-y-6"
+    >
+      {/* Delivery Information */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <MapPin className="h-5 w-5 text-surprise-pink" />
             Delivery Information
           </CardTitle>
+          <CardDescription>Provide delivery details</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="firstName">First Name *</Label>
-              <Input id="firstName" name="firstName" placeholder="Enter first name" required />
+            <Field>
+              <FieldLabel>Receiver Name *</FieldLabel>
+              <Input name="receiverName" placeholder="Enter receiver name" required />
+            </Field>
+
+            <Field>
+              <FieldLabel>Receiver Phone *</FieldLabel>
+              <Input name="receiverPhone" type="tel" placeholder="01XXX-XXXXXX" required />
+            </Field>
+          </div>
+
+          <Field>
+            <FieldLabel>Email Address *</FieldLabel>
+            <Input name="email" type="email" placeholder="your.email@example.com" required />
+          </Field>
+
+          <Field>
+            <FieldLabel>Receiver Country *</FieldLabel>
+            <div className="relative">
+              <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input name="country" placeholder="Enter country" className="pl-10" required />
             </div>
-            <div>
-              <Label htmlFor="lastName">Last Name *</Label>
-              <Input id="lastName" name="lastName" placeholder="Enter last name" required />
+          </Field>
+
+          <Field>
+            <FieldLabel>Receiver City *</FieldLabel>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input name="city" placeholder="Enter city" className="pl-10" required />
             </div>
-          </div>
-          <div>
-            <Label htmlFor="phone">Phone Number *</Label>
-            <Input 
-              id="phone" 
-              name="phone"
-              type="tel"
-              placeholder="01XXX-XXXXXX" 
-              required
-            />
-          </div>
-          <div>
-            <Label htmlFor="email">Email Address *</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="your.email@example.com"
-              required
-            />
-          </div>
-          <div>
-            <Label htmlFor="address">Full Address *</Label>
-            <Textarea
-              id="address"
-              name="address"
-              placeholder="House no, Road no, Area, City"
-              rows={3}
-              required
-            />
-          </div>
+          </Field>
+
+          <Field>
+            <FieldLabel>Receiver Address Detail *</FieldLabel>
+            <div className="relative">
+              <Home className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <Textarea
+                name="address_detail"
+                placeholder="Enter street/house"
+                rows={2}
+                className="pl-10 w-full resize-none"
+                required
+              />
+            </div>
+          </Field>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="city">City *</Label>
-              <Input id="city" name="city" placeholder="e.g. Dhaka" required />
-            </div>
-            <div>
-              <Label htmlFor="zipCode">Zip Code</Label>
-              <Input id="zipCode" name="zipCode" placeholder="1200" />
-            </div>
+            <Field>
+              <FieldLabel>Delivery Date *</FieldLabel>
+              <Input type="date" name="deliveryDate" required />
+            </Field>
+            <Field>
+              <FieldLabel>Delivery Time *</FieldLabel>
+              <Input type="time" name="deliveryTime" required />
+            </Field>
           </div>
-          <div>
-            <Label htmlFor="notes">Order Notes (Optional)</Label>
-            <Textarea
-              id="notes"
-              name="notes"
-              placeholder="Special instructions for delivery"
-              rows={2}
-            />
-          </div>
+
+          <Field>
+            <FieldLabel>Order Notes (Optional)</FieldLabel>
+            <Textarea name="notes" rows={2} placeholder="Special instructions for delivery" />
+          </Field>
         </CardContent>
       </Card>
 
-      {/* Payment Methods */}
+      {/* Payment Method (Online only) */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CreditCard className="h-5 w-5 text-surprise-pink" />
             Payment Method
           </CardTitle>
-          <CardDescription>
-            Choose your preferred payment method
-          </CardDescription>
+          <CardDescription>Online payment only</CardDescription>
         </CardHeader>
         <CardContent>
-          <RadioGroup
-            value={paymentMethod}
-            onValueChange={handlePaymentChange}
-            className="space-y-4"
-          >
-            {/* Online Payment */}
-            <div
-              className={`flex items-center space-x-4 p-4 border rounded-lg cursor-pointer transition-colors ${
-                paymentMethod === "online-payment"
-                  ? "border-surprise-pink bg-surprise-pink/5"
-                  : "border-border hover:border-surprise-pink/50"
-              }`}
-              onClick={() => handlePaymentChange("online-payment")}
-            >
-              <RadioGroupItem value="online-payment" id="online-payment" />
-              <Label
-                htmlFor="online-payment"
-                className="flex items-center gap-3 cursor-pointer flex-1"
-              >
-                <div className="bg-blue-100 p-2 rounded-lg">
-                  <CreditCard className="h-6 w-6 text-blue-600" />
-                </div>
-                <div>
-                  <p className="font-medium">Online Payment</p>
-                  <p className="text-sm text-muted-foreground">
-                    Cards, Mobile Banking, Net Banking
-                  </p>
-                </div>
-              </Label>
+          <Field>
+            <FieldLabel>Payment Method</FieldLabel>
+            <div className="flex items-center gap-3 p-4 border rounded-lg bg-surprise-pink/5">
+              <CreditCard className="h-6 w-6 text-blue-600" />
+              <span className="font-medium">Online Payment (Cards, Mobile Banking, Net Banking)</span>
             </div>
-          </RadioGroup>
+            <Input type="hidden" name="paymentMethod" value={paymentMethod} />
+          </Field>
         </CardContent>
       </Card>
-    </div>
+
+      {/* Submit Button */}
+      <div className="pt-4">
+        <Button type="submit" className="w-full bg-linear-to-r from-pink-500 to-purple-500 text-white">
+          Place Order
+        </Button>
+      </div>
+    </form>
   );
 }

@@ -26,32 +26,43 @@ export const getCommonNavItems = (role: UserRole): NavSection[] => {
 
 export const moderatorNavItems: NavSection[] = [
   {
-    title: "Moderator Management",
+    title: "User Management",
+    items: [
+      
+      {
+        title: "Users",
+        href: "/moderator/dashboard/users-management",
+        icon: "Users",
+        roles: ["MODERATOR", "ADMIN"], 
+      },
+    ],
+  },
+  {
+    title: "Gift Management",
     items: [
       {
-        title: "Appointments",
-        href: "/doctor/dashboard/appointments",
-        icon: "Calender",
-        badge: "3",
-        roles: ["MODERATOR"],
+        title: "Surprises",
+        href: "/admin/dashboard/surprises-management",
+        icon: "Gift",
+        roles: ["MODERATOR", "ADMIN"], 
       },
       {
-        title: "My Schedules",
-        href: "/doctor/dashboard/schedules",
-        icon: "Clock",
-        roles: ["MODERATOR"],
+        title: "Categories",
+        href: "/moderator/dashboard/categories-management",
+        icon: "category",
+        roles: ["MODERATOR", "ADMIN"], 
       },
       {
-        title: "Prescriptions",
-        href: "/doctor/dashboard/prescriptions",
-        icon: "FileText",
-        roles: ["MODERATOR"],
+        title: "Orders",
+        href: "/moderator/dashboard/orders-management",
+        icon: "Box",
+        roles: ["MODERATOR", "ADMIN"], 
       },
     ],
   },
 ];
 
-export const UserNavItems: NavSection[] = [
+export const userNavItems: NavSection[] = [
   {
     title: "Appointments",
     items: [
@@ -102,7 +113,7 @@ export const adminNavItems: NavSection[] = [
         title: "Users",
         href: "/admin/dashboard/users-management",
         icon: "Users",
-        roles: ["ADMIN"],
+        roles: ["ADMIN", "MODERATOR"],
       },
     ],
   },
@@ -113,19 +124,19 @@ export const adminNavItems: NavSection[] = [
         title: "Surprises",
         href: "/admin/dashboard/surprises-management",
         icon: "Gift",
-        roles: ["ADMIN"],
+        roles: ["ADMIN", "MODERATOR"],
       },
       {
         title: "Categories",
         href: "/admin/dashboard/categories-management",
         icon: "category",
-        roles: ["ADMIN"],
+        roles: ["ADMIN", "MODERATOR"],
       },
       {
         title: "Orders",
         href: "/admin/dashboard/orders-management",
         icon: "Box",
-        roles: ["ADMIN"],
+        roles: ["ADMIN", "MODERATOR"],
       },
     ],
   },
@@ -136,11 +147,11 @@ export const getNavItemsByRole = (role: UserRole): NavSection[] => {
 
   switch (role) {
     case "ADMIN":
-      return [...commonNavItems, ...adminNavItems];
+      return [...commonNavItems, ...adminNavItems, ...moderatorNavItems];
     case "MODERATOR":
       return [...commonNavItems, ...moderatorNavItems];
     case "USER":
-      return [...commonNavItems, ...UserNavItems];
+      return [...commonNavItems, ...userNavItems];
     default:
       return [];
   }

@@ -9,7 +9,6 @@ export default async function CheckOutPage({
 }) {
   const { productCode } = await params;
   const { data: surprise } = await getProductByCode(productCode);
-  console.log(surprise)
 
   return (
     <div className="min-h-screen bg-background">

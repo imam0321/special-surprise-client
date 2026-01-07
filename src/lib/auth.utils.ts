@@ -8,11 +8,11 @@ export type RouteConfig = {
 export const authRoutes = ["/login", "/register", "/forgot-password", "/reset-password"];
 
 export const commonProtectedRoutes: RouteConfig = {
-  exact: ["/my-profile", "/settings"],
-  patterns: [],
+  exact: ["/my-profile", "/settings", "/check-out"],
+  patterns: [/^\/surprises\/[^/]+\/check-out$/],
 }
 
-export const doctorProtectedRoutes: RouteConfig = {
+export const moderatorProtectedRoutes: RouteConfig = {
   patterns: [/^\/moderator/],
   exact: []
 }
@@ -22,7 +22,7 @@ export const adminProtectedRoutes: RouteConfig = {
   exact: []
 }
 
-export const patientProtectedRoutes: RouteConfig = {
+export const userProtectedRoutes: RouteConfig = {
   patterns: [/^\/dashboard/],
   exact: []
 }
@@ -41,8 +41,8 @@ export const isRouterMatches = (pathname: string, routes: RouteConfig): boolean 
 
 export const getRouteOwner = (pathname: string): "ADMIN" | "MODERATOR" | "USER" | "COMMON" | null => {
   if (isRouterMatches(pathname, adminProtectedRoutes)) return "ADMIN";
-  if (isRouterMatches(pathname, doctorProtectedRoutes)) return "MODERATOR";
-  if (isRouterMatches(pathname, patientProtectedRoutes)) return "USER";
+  if (isRouterMatches(pathname, moderatorProtectedRoutes)) return "MODERATOR";
+  if (isRouterMatches(pathname, userProtectedRoutes)) return "USER";
   if (isRouterMatches(pathname, commonProtectedRoutes)) return "COMMON";
   return null;
 }
@@ -52,7 +52,7 @@ export const getDefaultDashboardRoute = (role: UserRole): string => {
     case "ADMIN":
       return "/admin/dashboard";
     case "MODERATOR":
-      return "/doctor/dashboard";
+      return "/moderator/dashboard";
     case "USER":
       return "/dashboard";
     default:
