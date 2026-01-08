@@ -1,5 +1,5 @@
-import UserHeader from "@/components/modules/Admin/UsersManagement/UserHeader";
 import UserTable from "@/components/modules/Admin/UsersManagement/UserTable";
+import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
 import SearchFilter from "@/components/shared/SearchFilter";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { queryStringFormatter } from "@/lib/formatters";
@@ -17,7 +17,10 @@ export default async function UsersManagementPage({
 
   return (
     <div className="space-y-6">
-      <UserHeader />
+      <ManagementPageHeader
+        title="User Management"
+        description="This is a User Management"
+      />
       <div className="flex items-center gap-2">
         <SearchFilter paramName="searchTerm" placeholder="Search users..." />
       </div>
