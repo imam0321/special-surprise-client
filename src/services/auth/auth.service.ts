@@ -189,22 +189,24 @@ export async function getNewAccessToken() {
       throw new Error("Tokens not found in cookies");
     }
 
+    
+
     await deleteCookie("accessToken");
     await setCookie("accessToken", accessTokenObject.accessToken, {
-      secure: true,
       httpOnly: true,
-      maxAge: parseInt(accessTokenObject['Max-Age']) || 1000 * 60 * 60,
-      path: accessTokenObject.Path || "/",
-      sameSite: accessTokenObject['SameSite'] || "none",
+      secure: true,
+      sameSite: "none",
+      maxAge: parseInt(accessTokenObject["Max-Age"]) || 60 * 60 * 24,
+      path: accessTokenObject.Path || "/"
     });
 
     await deleteCookie("refreshToken");
     await setCookie("refreshToken", refreshTokenObject.refreshToken, {
-      secure: true,
       httpOnly: true,
-      maxAge: parseInt(refreshTokenObject['Max-Age']) || 1000 * 60 * 60 * 24 * 30,
-      path: refreshTokenObject.Path || "/",
-      sameSite: refreshTokenObject['SameSite'] || "none",
+      secure: true,
+      sameSite: "none",
+      maxAge: parseInt(refreshTokenObject["Max-Age"]) || 60 * 60 * 24 * 30,
+      path: refreshTokenObject.Path || "/"
     });
 
     if (!result.success) {

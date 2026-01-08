@@ -30,7 +30,7 @@ export default function CategorySelect({
       </FieldLabel>
 
       <Select
-        value={selectedCategoryId || undefined}
+        value={selectedCategoryId}
         onValueChange={onCategoryChange}
         disabled={disabled}
       >
@@ -53,8 +53,7 @@ export default function CategorySelect({
         </SelectContent>
       </Select>
 
-      {/* Form submit এর জন্য hidden input */}
-      <input type="hidden" name={name} value={selectedCategoryId || ""} />
+      <input type="hidden" name={name} value={selectedCategoryId} />
     </>
   );
 }

@@ -4,16 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Product } from "@/types/product.interface";
-import { Package, ShieldCheck } from "lucide-react";
-import { useState } from "react";
+import { Package } from "lucide-react";
 
 interface OrderSummaryProps {
   surprise: Product;
+  isPending: boolean;
 }
 
-export default function OrderSummary({ surprise }: OrderSummaryProps) {
-  const [isProcessing, setIsProcessing] = useState(false);
-
+export default function OrderSummary({
+  surprise,
+  isPending,
+}: OrderSummaryProps) {
   if (!surprise) {
     return (
       <Card>
@@ -24,29 +25,13 @@ export default function OrderSummary({ surprise }: OrderSummaryProps) {
     );
   }
 
-  // Calculate prices
   const basePrice = Number(surprise.price) || 0;
   const discount = Number(surprise.discountedPrice) || 0;
   const deliveryCharge = Number(surprise.deliveryCharge) || 0;
 
-  // Calculate discounted price if discount exists
   const discountAmount = discount > 0 ? (basePrice * discount) / 100 : 0;
   const priceAfterDiscount = basePrice - discountAmount;
   const total = priceAfterDiscount + deliveryCharge;
-
-  const handlePlaceOrder = async () => {
-    setIsProcessing(true);
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      console.log("Order placed successfully!");
-    } catch (error) {
-      console.error("Order placement failed:", error);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
 
   return (
     <Card className="sticky top-24">
@@ -57,7 +42,6 @@ export default function OrderSummary({ surprise }: OrderSummaryProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        {/* Product Info */}
         <div className="space-y-2">
           <p className="font-medium line-clamp-2">{surprise.title}</p>
           <div className="flex justify-between text-sm text-muted-foreground">
@@ -69,8 +53,7 @@ export default function OrderSummary({ surprise }: OrderSummaryProps) {
         </div>
 
         <Separator />
-
-        {/* Price Breakdown */}
+        
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span>Price</span>
@@ -105,31 +88,20 @@ export default function OrderSummary({ surprise }: OrderSummaryProps) {
         </div>
 
         <Separator />
-
-        {/* Total */}
         <div className="flex justify-between font-bold text-lg">
           <span>Total</span>
           <span className="text-surprise-pink">৳{total.toFixed(2)}</span>
         </div>
 
         {/* Place Order Button */}
+        <input type="hidden" name="productId" value={surprise.id} />
+        <input type="hidden" name="amount" value={total} />
         <Button
-          className="w-full"
-          style={{
-            background:
-              "linear-gradient(to right, var(--surprise-pink, #ec4899), var(--surprise-purple, #a855f7))",
-          }}
-          onClick={handlePlaceOrder}
-          disabled={isProcessing}
+          className="w-full text-white bg-linear-to-r from-surprise-pink to-surprise-purple hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+          disabled={isPending}
         >
-          {isProcessing ? "Processing..." : "Place Order"}
+          {isPending ? "Processing..." : "Place Order"}
         </Button>
-
-        {/* Security Badge */}
-        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground pt-2">
-          <ShieldCheck className="h-4 w-4" />
-          <span>Secure Checkout</span>
-        </div>
       </CardContent>
     </Card>
   );

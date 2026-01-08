@@ -8,7 +8,7 @@ export const surprisesColumns: Column<Product>[] = [
   {
     header: "Image",
     accessor: (surprise) => (
-      <UserAvatar name={surprise.title} image={surprise.thumbnail} size="sm" />
+      <UserAvatar name={surprise?.title} image={surprise?.thumbnail} size="sm" />
     ),
   },
 
@@ -16,7 +16,7 @@ export const surprisesColumns: Column<Product>[] = [
     header: "Title",
     accessor: (surprise) => (
       <div className="w-52">
-        <span className="text-sm w-52 text-wrap">{surprise.title}</span>
+        <span className="text-sm w-52 text-wrap">{surprise?.title}</span>
       </div>
     ),
   },
@@ -24,7 +24,7 @@ export const surprisesColumns: Column<Product>[] = [
     header: "Code",
     accessor: (surprise) => (
       <div className="flex flex-col">
-        <span className="text-sm">{surprise.productCode}</span>
+        <span className="text-sm">{surprise?.productCode}</span>
       </div>
     ),
   },
@@ -32,7 +32,7 @@ export const surprisesColumns: Column<Product>[] = [
     header: "Price",
     accessor: (surprise) => (
       <div className="flex flex-col">
-        <span className="text-sm">{surprise.price}</span>
+        <span className="text-sm">{surprise?.price}</span>
       </div>
     ),
   },
@@ -40,7 +40,7 @@ export const surprisesColumns: Column<Product>[] = [
     header: "Delivery",
     accessor: (surprise) => (
       <div className="flex flex-col">
-        <span className="text-sm">{surprise.deliveryCharge}</span>
+        <span className="text-sm">{surprise?.deliveryCharge}</span>
       </div>
     ),
   },
@@ -48,7 +48,7 @@ export const surprisesColumns: Column<Product>[] = [
     header: "Discounted",
     accessor: (surprise) => (
       <div className="flex flex-col">
-        <span className="text-sm">{surprise.discountedPrice}%</span>
+        <span className="text-sm">{surprise?.discountedPrice}%</span>
       </div>
     ),
   },
@@ -56,7 +56,7 @@ export const surprisesColumns: Column<Product>[] = [
     header: "Category",
     accessor: (surprise) => (
       <Badge className="bg-surprise-pink text-white">
-        {surprise.category.name}
+        {surprise?.category?.name}
       </Badge>
     ),
   },

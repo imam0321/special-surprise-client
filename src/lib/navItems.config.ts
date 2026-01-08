@@ -147,7 +147,7 @@ export const getNavItemsByRole = (role: UserRole): NavSection[] => {
 
   switch (role) {
     case "ADMIN":
-      return [...commonNavItems, ...adminNavItems, ...moderatorNavItems];
+      return [...commonNavItems, ...adminNavItems];
     case "MODERATOR":
       return [...commonNavItems, ...moderatorNavItems];
     case "USER":
