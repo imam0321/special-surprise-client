@@ -3,12 +3,14 @@
 
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
-import { forgotPasswordSchema, resetPasswordSchema } from "@/zod/auth.validation";
+import {
+  forgotPasswordSchema,
+  resetPasswordSchema,
+} from "@/zod/auth.validation";
 import { deleteCookie, getCookie, setCookie } from "./tokenHandlers";
 import { parse } from "cookie";
 import { verifyAccessToken } from "@/lib/jwt";
-import jwt from "jsonwebtoken";
-
+import { revalidateTag } from "next/cache";
 
 export const forgotPassword = async (
   _currentState: any,
@@ -27,7 +29,7 @@ export const forgotPassword = async (
         message: "Validation failed",
         formData: payload,
         errors: validatedPayload.errors,
-      }
+      };
     }
 
     const backendPayload = {
@@ -61,7 +63,10 @@ export const forgotPassword = async (
   }
 };
 
-export const resetPassword = async (_prevState: any, formData: FormData): Promise<any> => {
+export const resetPassword = async (
+  _prevState: any,
+  formData: FormData
+): Promise<any> => {
   const id = formData.get("id") as string;
   const token = formData.get("token") as string;
 
@@ -72,44 +77,41 @@ export const resetPassword = async (_prevState: any, formData: FormData): Promis
 
   const validatedPayload = zodValidator(validationPayload, resetPasswordSchema);
 
-  if (!validatedPayload.success && validatedPayload.errors) {
+  if (!validatedPayload.success) {
     return {
       success: false,
       message: "Validation failed",
-      formData: validationPayload,
       errors: validatedPayload.errors,
+      formData: validationPayload,
     };
   }
 
   if (!id || !token) {
     return {
       success: false,
-      message: "Invalid reset link",
+      message: "Invalid or expired reset link",
     };
   }
 
   try {
-    jwt.verify(token, process.env.JWT_RESET_SECRET as string);
-    const response = await serverFetch.post("/auth/reset-password", {
+    const res = await serverFetch.post("/auth/reset-password", {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `accessToken=${token}`,  
+        Authorization: `${token}`,
       },
       body: JSON.stringify({
         id,
-        password: validationPayload.newPassword,
+        newPassword: validationPayload.newPassword,
       }),
     });
 
-    const result = await response.json();
+    const result = await res.json();
 
     if (!result.success) {
-      return {
-        success: false,
-        message: result.message || "Password reset failed",
-        formData: validationPayload,
-      };
+      throw new Error(result.message || "Password reset failed");
     }
+
+    revalidateTag("user-info", { expire: 0 });
 
     return {
       success: true,
@@ -117,9 +119,19 @@ export const resetPassword = async (_prevState: any, formData: FormData): Promis
       redirectToLogin: true,
     };
   } catch (error: any) {
+    let message = "Something went wrong";
+
+    if (error.name === "TokenExpiredError") {
+      message = "Reset link has expired. Please request a new one.";
+    } else if (error.name === "JsonWebTokenError") {
+      message = "Invalid reset link";
+    } else if (error.message) {
+      message = error.message;
+    }
+
     return {
       success: false,
-      message: error?.message || "Something went wrong",
+      message,
       formData: validationPayload,
     };
   }
@@ -133,7 +145,7 @@ export async function getNewAccessToken() {
     if (!accessToken && !refreshToken) {
       return {
         tokenRefreshed: false,
-      }
+      };
     }
 
     if (accessToken) {
@@ -142,14 +154,14 @@ export async function getNewAccessToken() {
       if (verifiedToken.success) {
         return {
           tokenRefreshed: false,
-        }
+        };
       }
     }
 
     if (!refreshToken) {
       return {
         tokenRefreshed: false,
-      }
+      };
     }
 
     let accessTokenObject: null | any = null;
@@ -163,20 +175,19 @@ export async function getNewAccessToken() {
 
     const result = await response.json();
 
-
     const setCookieHeaders = response.headers.getSetCookie();
 
     if (setCookieHeaders && setCookieHeaders.length > 0) {
       setCookieHeaders.forEach((cookie: string) => {
         const parsedCookie = parse(cookie);
 
-        if (parsedCookie['accessToken']) {
+        if (parsedCookie["accessToken"]) {
           accessTokenObject = parsedCookie;
         }
-        if (parsedCookie['refreshToken']) {
+        if (parsedCookie["refreshToken"]) {
           refreshTokenObject = parsedCookie;
         }
-      })
+      });
     } else {
       throw new Error("No Set-Cookie header found");
     }
@@ -189,15 +200,13 @@ export async function getNewAccessToken() {
       throw new Error("Tokens not found in cookies");
     }
 
-    
-
     await deleteCookie("accessToken");
     await setCookie("accessToken", accessTokenObject.accessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
       maxAge: parseInt(accessTokenObject["Max-Age"]) || 60 * 60 * 24,
-      path: accessTokenObject.Path || "/"
+      path: accessTokenObject.Path || "/",
     });
 
     await deleteCookie("refreshToken");
@@ -206,21 +215,18 @@ export async function getNewAccessToken() {
       secure: true,
       sameSite: "none",
       maxAge: parseInt(refreshTokenObject["Max-Age"]) || 60 * 60 * 24 * 30,
-      path: refreshTokenObject.Path || "/"
+      path: refreshTokenObject.Path || "/",
     });
 
     if (!result.success) {
       throw new Error(result.message || "Token refresh failed");
     }
 
-
     return {
       tokenRefreshed: true,
       success: true,
-      message: "Token refreshed successfully"
+      message: "Token refreshed successfully",
     };
-
-
   } catch (error: any) {
     return {
       tokenRefreshed: false,

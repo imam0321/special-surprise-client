@@ -5,40 +5,45 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { resetPassword } from "@/services/auth/auth.service";
 import { UserPlus, Lock, Eye, EyeOff, Key } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface ResetPasswordFormProps {
+  redirect?: string;
   id?: string;
   token?: string;
 }
 
 export default function ResetPasswordForm({
+  redirect,
   id,
   token,
 }: ResetPasswordFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const router = useRouter();
   const [state, formAction, isPending] = useActionState(resetPassword, null);
 
   useEffect(() => {
-    if (state) {
-      if (
-        !state.success &&
-        state.message &&
-        state.message !== "Validation failed"
-      ) {
-        toast.error(state.message);
-      } else if (state.success && state.message) {
-        toast.success(state.message);
-      }
+    if (state && !state.success && state.message) {
+      toast.error(state.message);
     }
-  }, [state]);
+
+    if (state && state.success && state.redirectToLogin) {
+      toast.success(state.message);
+      setTimeout(() => {
+        router.push(redirect || "/login");
+      }, 1500);
+    }
+  }, [state, router, redirect]);
 
   return (
     <form action={formAction} className="space-y-4">
       {id && <Input type="hidden" name="id" value={id} />}
-      {token && <Input type="hidden" name="token" value={id} />}
+      {redirect && <Input type="hidden" name="redirect" value={redirect} />}
+      {token && <Input type="hidden" name="token" value={token} />}
+
       <Field>
         <FieldLabel>New Password</FieldLabel>
         <div className="relative">

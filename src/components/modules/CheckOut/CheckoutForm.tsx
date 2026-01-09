@@ -4,10 +4,22 @@ import ShippingInfo from "./ShippingInfo";
 import OrderSummary from "./OrderSummary";
 import { Product } from "@/types/product.interface";
 import { createOrder } from "@/services/order/order";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 export default function CheckoutForm({ surprise }: { surprise: Product }) {
   const [state, formAction, isPending] = useActionState(createOrder, null);
+
+  useEffect(() => {
+    if (state && !state.success && state.message) {
+      const message =
+        state.message === "You are not permitted to view this route"
+          ? "You are not allowed to place an order"
+          : state.message;
+
+      toast.error(message);
+    }
+  }, [state]);
 
   return (
     <form action={formAction}>

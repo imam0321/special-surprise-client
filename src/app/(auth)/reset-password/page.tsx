@@ -15,10 +15,10 @@ import ResetPasswordForm from "@/components/modules/Auth/ResetPasswordForm";
 export default async function ResetPasswordPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ id?: string; token?: string }>;
+  searchParams?: Promise<{ redirect?: string; id?: string; token?: string }>;
 }) {
   const params = (await searchParams) || {};
-  const { id, token } = params;
+  const { redirect, id, token } = params;
 
   return (
     <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-linear-to-br from-accent via-background to-background px-4">
@@ -44,7 +44,7 @@ export default async function ResetPasswordPage({
         </CardHeader>
 
         <CardContent>
-          <ResetPasswordForm id={id} token={token} />
+          <ResetPasswordForm redirect={redirect} id={id} token={token} />
         </CardContent>
 
         <CardFooter className="flex justify-center">

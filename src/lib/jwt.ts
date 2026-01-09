@@ -27,7 +27,7 @@ export const verifyResetPasswordToken = async (token: string) => {
   try {
     const verifiedResetToken = jwt.verify(
       token,
-      process.env.JWT_RESET_SECRET as string
+      process.env.JWT_ACCESS_SECRET as string
     ) as jwt.JwtPayload;
     return {
       success: true,
