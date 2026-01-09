@@ -54,19 +54,17 @@ export const OrdersColumns: Column<Order>[] = [
 },
 
   {
-    header: "Payment",
-    accessor: (row) => (
-      <Badge
-        className={
-          row.payment?.status === "PAID"
-            ? "bg-green-100 text-green-800"
-            : row?.payment?.status === "FAILED"
-            ? "bg-red-100 text-red-800"
-            : "bg-gray-100 text-gray-800"
-        }
-      >
-        {row?.payment?.status}
-      </Badge>
-    ),
+  header: "Payment",
+  accessor: (row) => {
+    const status = row?.payment?.status; 
+    const badgeClass =
+      status === "PAID"
+        ? "bg-green-100 text-green-800"
+        : status === "FAILED"
+        ? "bg-red-100 text-red-800"
+        : "bg-gray-100 text-gray-800";
+
+    return <Badge className={badgeClass}>{status}</Badge>;
   },
+},
 ];
