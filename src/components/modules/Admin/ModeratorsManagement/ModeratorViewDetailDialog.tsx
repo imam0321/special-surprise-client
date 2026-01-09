@@ -10,7 +10,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
 import { UserInfo } from "@/types/user.interface";
 import { Calendar, Mail, MapPin, Phone, User } from "lucide-react";
 
@@ -51,16 +50,9 @@ export default function ModeratorViewDetailDialog({
             </p>
 
             <div className="flex gap-2 mt-2 justify-center sm:justify-start flex-wrap">
-              <Badge>{moderator.role}</Badge>
-              <Badge
-                className={cn(
-                  "text-sm",
-                  moderator.status === "ACTIVE"
-                    ? "bg-green-100 text-green-800"
-                    : "bg-red-100 text-red-800"
-                )}
-              >
-                {moderator.status}
+              <Badge>{moderator?.role}</Badge>
+              <Badge variant={moderator?.isDeleted ? "destructive" : "default"}>
+                {moderator?.isDeleted ? "Deleted" : "Active"}
               </Badge>
             </div>
           </div>
@@ -75,15 +67,13 @@ export default function ModeratorViewDetailDialog({
             label="Phone"
             value={moderator.phone || "N/A"}
           />
-          {
-            moderator.role === "MODERATOR" && (
-              <InfoItem
-                icon={<User size={16} />}
-                label="NID"
-                value={moderator.nid || "N/A"}
-              />
-            )
-          }
+          {moderator.role === "MODERATOR" && (
+            <InfoItem
+              icon={<User size={16} />}
+              label="NID"
+              value={moderator.nid || "N/A"}
+            />
+          )}
           <InfoItem
             icon={<Calendar size={16} />}
             label="Joined"
@@ -99,8 +89,7 @@ export default function ModeratorViewDetailDialog({
             <MapPin size={18} /> Address
           </h3>
           <p className="text-muted-foreground text-sm sm:text-base">
-            {moderator.address?.address_detail},{" "}
-            {moderator.address?.city},{" "}
+            {moderator.address?.address_detail}, {moderator.address?.city},{" "}
             {moderator.address?.country}
           </p>
         </div>

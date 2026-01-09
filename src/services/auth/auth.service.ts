@@ -4,6 +4,7 @@
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
 import {
+  changePasswordSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
 } from "@/zod/auth.validation";
@@ -134,6 +135,44 @@ export const resetPassword = async (
       message,
       formData: validationPayload,
     };
+  }
+};
+
+export const changePassword = async (_prevState: any, formData: FormData) => {
+  const validationPayload = {
+    oldPassword: formData.get("oldPassword") as string,
+    newPassword: formData.get("newPassword") as string,
+  };
+
+  const validatedPayload = zodValidator(
+    validationPayload,
+    changePasswordSchema
+  );
+
+  if (!validatedPayload.success) {
+    return {
+      success: false,
+      message: "Validation failed",
+      errors: validatedPayload.errors,
+      formData: validationPayload,
+    };
+  }
+  try {
+    const res = await serverFetch.patch("/auth/change-password", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(validatedPayload.data),
+    });
+
+    const result = await res.json();
+
+    if (!result.success) {
+      throw new Error(result.message || "Password change failed");
+    }
+    return result;
+  } catch (error: any) {
+    return { success: false, message: error.message || "Something went wrong" };
   }
 };
 

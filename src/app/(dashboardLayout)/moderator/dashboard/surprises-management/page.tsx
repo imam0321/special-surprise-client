@@ -39,7 +39,7 @@ export default async function SurprisesManagementPage({
       </div>
       <Suspense fallback={<TableSkeleton columns={8} rows={6} />}>
         <SurpriseTable surprises={surprises?.data || []} categories={categoriesResult?.data || []} />
-        <TablePagination currentPage={surprises?.meta?.page || 1} totalPages={surprises?.meta?.totalPages} />
+        <TablePagination currentPage={surprises?.meta?.page} totalPages={surprises?.meta?.totalPages} />
       </Suspense>
     </div>
   );

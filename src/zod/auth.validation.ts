@@ -4,44 +4,39 @@ export const loginValidationZodSchema = z.object({
   email: z.email({
     message: "Please enter a valid email address",
   }),
-  password: z.string().min(1, { message: "Password is required" })
+  password: z.string().min(1, { message: "Password is required" }),
 });
 
-export const registerCustomerValidationZodSchema = z.object({
-  name: z
-    .string()
-    .min(2, "Name must be at least 2 characters")
-    .max(50, "Name cannot exceed 50 characters"),
+export const registerCustomerValidationZodSchema = z
+  .object({
+    name: z
+      .string()
+      .min(2, "Name must be at least 2 characters")
+      .max(50, "Name cannot exceed 50 characters"),
 
-  email: z
-    .email("Invalid email address"),
+    email: z.email("Invalid email address"),
 
-  password: z
-    .string()
-    .min(8, "Password must be 8 characters"),
+    password: z.string().min(8, "Password must be 8 characters"),
 
-  confirm_password: z
-    .string()
-    .min(8, "Confirm password must be 8 characters"),
+    confirm_password: z
+      .string()
+      .min(8, "Confirm password must be 8 characters"),
 
-  phone: z
-    .string()
-    .min(11, "Phone number must be 11 digits")
-    .max(11, "Phone number must be 11 digits"),
+    phone: z
+      .string()
+      .min(11, "Phone number must be 11 digits")
+      .max(11, "Phone number must be 11 digits"),
 
-  address: z.object({
-    country: z.string().min(1, "Country is required"),
-    city: z.string().min(1, "City is required"),
-    address_detail: z.string().min(2, "Address detail is required"),
-  }),
-})
-  .refine(
-    (data) => data.password === data.confirm_password,
-    {
-      message: "Passwords do not match",
-      path: ["confirm_password"],
-    }
-  );
+    address: z.object({
+      country: z.string().min(1, "Country is required"),
+      city: z.string().min(1, "City is required"),
+      address_detail: z.string().min(2, "Address detail is required"),
+    }),
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    message: "Passwords do not match",
+    path: ["confirm_password"],
+  });
 
 export const forgotPasswordSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -60,42 +55,45 @@ export const resetPasswordSchema = z
     path: ["confirmPassword"],
   });
 
-export const registerModeratorValidationZodSchema = z.object({
-  name: z
+export const changePasswordSchema = z.object({
+  oldPassword: z.string(),
+  newPassword: z
     .string()
-    .min(2, "Name must be at least 2 characters")
-    .max(50, "Name cannot exceed 50 characters"),
+    .min(8, "Password must be at least 8 characters")
+    .max(50, "Password cannot exceed 50 characters"),
+});
 
-  email: z
-    .email("Invalid email address"),
+export const registerModeratorValidationZodSchema = z
+  .object({
+    name: z
+      .string()
+      .min(2, "Name must be at least 2 characters")
+      .max(50, "Name cannot exceed 50 characters"),
 
-  password: z
-    .string()
-    .min(8, "Password must be 8 characters"),
+    email: z.email("Invalid email address"),
 
-  confirm_password: z
-    .string()
-    .min(8, "Confirm password must be 8 characters"),
+    password: z.string().min(8, "Password must be 8 characters"),
 
-  phone: z
-    .string()
-    .min(11, "Phone number must be 11 digits")
-    .max(11, "Phone number must be 11 digits"),
-  nid: z
-    .string()
-    .min(13, "NID number must be 13 digits")
-    .max(13, "NID number must be 13 digits"),
+    confirm_password: z
+      .string()
+      .min(8, "Confirm password must be 8 characters"),
 
-  address: z.object({
-    country: z.string().min(1, "Country is required"),
-    city: z.string().min(1, "City is required"),
-    address_detail: z.string().min(2, "Address detail is required"),
-  }),
-})
-  .refine(
-    (data) => data.password === data.confirm_password,
-    {
-      message: "Passwords do not match",
-      path: ["confirm_password"],
-    }
-  );
+    phone: z
+      .string()
+      .min(11, "Phone number must be 11 digits")
+      .max(11, "Phone number must be 11 digits"),
+    nid: z
+      .string()
+      .min(13, "NID number must be 13 digits")
+      .max(13, "NID number must be 13 digits"),
+
+    address: z.object({
+      country: z.string().min(1, "Country is required"),
+      city: z.string().min(1, "City is required"),
+      address_detail: z.string().min(2, "Address detail is required"),
+    }),
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    message: "Passwords do not match",
+    path: ["confirm_password"],
+  });
