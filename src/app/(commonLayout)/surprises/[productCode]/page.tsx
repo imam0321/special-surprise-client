@@ -9,32 +9,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import RecommendSurprises from "@/components/modules/Surprises/RecommendSurprises";
 
-const reviews = [
-  {
-    id: 1,
-    user: "Alice",
-    date: "2025-12-10",
-    comment: "Amazing product! Highly recommend.",
-  },
-  {
-    id: 2,
-    user: "Bob",
-    date: "2025-12-09",
-    comment: "Good quality, but delivery was slow.",
-  },
-  {
-    id: 3,
-    user: "Charlie",
-    date: "2025-12-08",
-    comment: "Not satisfied, expected better packaging.",
-  },
-  {
-    id: 4,
-    user: "Diana",
-    date: "2025-12-07",
-    comment: "Value for money. Will buy again.",
-  },
-];
 
 export default async function SurpriseDetailPage({
   params,
@@ -121,7 +95,6 @@ export default async function SurpriseDetailPage({
             <Tabs defaultValue="features">
               <TabsList className="bg-muted/50 w-full grid grid-cols-3">
                 <TabsTrigger value="features">Features</TabsTrigger>
-                <TabsTrigger value="reviews">Reviews</TabsTrigger>
               </TabsList>
               <div className="p-6">
                 <TabsContent value="features">
@@ -134,31 +107,6 @@ export default async function SurpriseDetailPage({
                       </li>
                     ))}
                   </ul>
-                </TabsContent>
-                <TabsContent value="reviews">
-                  <div>
-                    <div className="flex items-center justify-between mb-6">
-                      <h3 className="text-lg font-medium">Customer Reviews</h3>
-                      <Button>Write a Review</Button>
-                    </div>
-
-                    <div className="space-y-6">
-                      {reviews.map((review) => (
-                        <div
-                          key={review.id}
-                          className="border-b border-border pb-4 last:border-0"
-                        >
-                          <div className="flex justify-between mb-2">
-                            <span className="font-medium">{review.user}</span>
-                            <span className="text-sm text-muted-foreground">
-                              {review.date}
-                            </span>
-                          </div>
-                          <p>{review.comment}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 </TabsContent>
               </div>
             </Tabs>
