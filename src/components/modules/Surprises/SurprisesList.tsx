@@ -44,13 +44,10 @@ export default async function SurprisesList({
           <SurpriseCard key={surprise.id} surprise={surprise} />
         ))}
       </div>
-
-      {surprises?.meta?.totalPages > 1 && (
-        <PaginationHelper
-          currentPage={surprises.meta.page}
-          totalPages={surprises.meta.totalPages}
-        />
-      )}
+      <PaginationHelper
+        currentPage={surprises.meta.page}
+        totalPages={surprises.meta.totalPages}
+      />
     </>
   );
 }

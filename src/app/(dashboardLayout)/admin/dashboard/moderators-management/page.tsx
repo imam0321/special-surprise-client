@@ -1,5 +1,6 @@
 import ModeratorHeader from "@/components/modules/Admin/ModeratorsManagement/ModeratorHeader";
 import ModeratorTable from "@/components/modules/Admin/ModeratorsManagement/ModeratorTable";
+import PaginationHelper from "@/components/shared/PaginationHelper";
 import SearchFilter from "@/components/shared/SearchFilter";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { queryStringFormatter } from "@/lib/formatters";
@@ -26,6 +27,7 @@ export default async function ModeratorsManagementPage({
       </div>
       <Suspense fallback={<TableSkeleton columns={5} rows={6} />}>
         <ModeratorTable moderators={moderators?.data} />
+        <PaginationHelper currentPage={moderators?.meta?.page} totalPages={moderators?.meta?.totalPages} />
       </Suspense>
     </div>
   );

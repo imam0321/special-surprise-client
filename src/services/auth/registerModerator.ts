@@ -4,14 +4,12 @@
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { registerModeratorValidationZodSchema } from "@/zod/auth.validation";
-import { redirect } from "next/navigation";
 
 export const registerModerator = async (
   _currentState: any,
   formData: FormData
 ): Promise<any> => {
   try {
-    const redirectPath = formData.get("redirectPath") || null;
     const payload = {
       name: formData.get("name"),
       email: formData.get("email"),
@@ -75,15 +73,8 @@ export const registerModerator = async (
       };
     }
 
-    if (redirectPath) {
-      const requestedPath = redirectPath.toString();
-      redirect(requestedPath);
-    }
-
+    return result;
   } catch (error: any) {
-    if (error?.digest?.startsWith("NEXT_REDIRECT")) {
-      throw error;
-    }
     return {
       success: false,
       message: error.message || "Registration failed. Please try again.",

@@ -28,21 +28,17 @@ export default async function SurprisesPage({
       <h1 className="text-3xl font-bold mb-6">All Surprises Gift</h1>
 
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Desktop Filter - Sticky */}
         <aside className="hidden md:block w-64 shrink-0">
           <div className="sticky top-4">
             <SurpriseFilters categories={categories?.data} />
           </div>
         </aside>
 
-        {/* Products Section */}
         <div className="flex-1 min-w-0">
           {/* Search Bar */}
           <div className="flex justify-end gap-y-4 mb-6 pb-4 border-b">
             <SurprisesSearch />
           </div>
-
-          {/* Products Grid with Suspense */}
           <Suspense
             key={queryParams.toString()}
             fallback={<SurprisesLoading />}
