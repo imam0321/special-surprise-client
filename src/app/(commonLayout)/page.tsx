@@ -31,7 +31,7 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
-      <Categories categories={categories.data} />
+      <Categories categories={categories?.data} />
       <FeaturedSurprises />
       <HowItWorks />
       <CallToAction />

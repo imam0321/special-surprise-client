@@ -46,7 +46,7 @@ export default async function PaymentSuccessPage({
         </div>
 
         <Link
-          href="/orders"
+          href="/dashboard"
           className={`inline-block w-full py-3 rounded-lg text-white font-medium transition ${
             isSuccess
               ? "bg-linear-to-r from-surprise-pink to-surprise-purple hover:opacity-90"

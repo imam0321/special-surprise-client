@@ -125,7 +125,6 @@ export const getAllProduct = async (queryString?: string) => {
     const result = await res.json();
     return result;
   } catch (error: any) {
-    console.log(error);
     return {
       success: false,
       message: error.message,

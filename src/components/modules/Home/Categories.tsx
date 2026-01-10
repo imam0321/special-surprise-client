@@ -50,7 +50,7 @@ export default function Categories({ categories }: { categories: Category[] }) {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {categories.map((category, index) => (
+          {categories && categories.map((category, index) => (
             <Link href={`/surprises?category=${category.name}`} key={index}>
               <Card
                 className={`border-none shadow-sm hover:shadow-md transition-shadow ${

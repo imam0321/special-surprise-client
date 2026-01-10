@@ -69,40 +69,6 @@ export const moderatorNavItems: NavSection[] = [
 ];
 
 export const userNavItems: NavSection[] = [
-  {
-    title: "Appointments",
-    items: [
-      {
-        title: "My Appointments",
-        href: "/dashboard/my-appointments",
-        icon: "Calender",
-        roles: ["USER"],
-      },
-      {
-        title: "Book Appointment",
-        href: "/consultation",
-        icon: "ClipboardList",
-        roles: ["USER"],
-      },
-    ],
-  },
-  {
-    title: "Medical Records",
-    items: [
-      {
-        title: "My Prescriptions",
-        href: "/dashboard/my-prescriptions",
-        icon: "FileText",
-        roles: ["USER"],
-      },
-      {
-        title: "Health Records",
-        href: "/dashboard/health-records",
-        icon: "Activity",
-        roles: ["USER"],
-      },
-    ],
-  },
 ];
 
 export const adminNavItems: NavSection[] = [

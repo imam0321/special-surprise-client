@@ -1,4 +1,5 @@
 import ProfileForm from "@/components/modules/Profile/ProfileForm";
+import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
 import { getUserInfo } from "@/services/auth/getUserInfo";
 
 export default async function ProfilePage() {
@@ -7,9 +8,9 @@ export default async function ProfilePage() {
   if (!userInfo) return <div>Loading...</div>;
 
   return (
-    <section className="w-full max-w-3xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">My Profile</h1>
+    <div className="space-y-6">
+      <ManagementPageHeader title="My Profile" />
       <ProfileForm userInfo={userInfo} />
-    </section>
+    </div>
   );
 }

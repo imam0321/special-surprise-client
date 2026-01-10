@@ -108,14 +108,12 @@ export const getAllCategories = async (queryString: string) => {
       {
         next: {
           tags: ["categories-list"],
-          revalidate: 1800,
         },
       }
     );
     const result = await res.json();
     return result;
   } catch (error: any) {
-    console.log(error);
     return {
       success: false,
       message: error.message,

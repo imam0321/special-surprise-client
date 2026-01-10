@@ -30,7 +30,7 @@ export default async function SurprisesManagementPage({
         />
         <SelectFilter
              paramName="category"
-             options={categoriesResult.data.map((category: Category) => ({
+             options={categoriesResult?.data?.map((category: Category) => ({
                label: category.name,
                value: category.name,
              }))}

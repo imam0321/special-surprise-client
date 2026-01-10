@@ -97,3 +97,20 @@ export const registerModeratorValidationZodSchema = z
     message: "Passwords do not match",
     path: ["confirm_password"],
   });
+
+export const updateProfileValidationZodSchema = z.object({
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name cannot exceed 50 characters"),
+  phone: z
+    .string()
+    .min(11, "Phone number must be 11 digits")
+    .max(11, "Phone number must be 11 digits"),
+  address: z.object({
+    country: z.string().min(1, "Country is required"),
+    city: z.string().min(1, "City is required"),
+    address_detail: z.string().min(2, "Address detail is required"),
+  }),
+  profile: z.instanceof(File).optional().or(z.undefined()),
+});

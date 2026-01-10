@@ -2,21 +2,23 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/hooks/useAuth";
 import { updateOrderStatus } from "@/services/order/order";
 import { OrderStatus, PaymentStatus } from "@/types/order.type";
 import { Pencil, Check, X } from "lucide-react";
 import { useState, useRef } from "react";
-import { toast } from "sonner"; // Sonner toast
+import { toast } from "sonner";
 
 interface OrderStatusCellProps {
   row: {
     status: OrderStatus;
     id: string;
     paymentStatus: PaymentStatus;
-  },
+  };
 }
 
 export default function OrderStatusCell({ row }: OrderStatusCellProps) {
+  const { user } = useAuth();
   const { status, id, paymentStatus } = row;
   const [editing, setEditing] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(status);
@@ -64,28 +66,7 @@ export default function OrderStatusCell({ row }: OrderStatusCellProps) {
 
   return (
     <div className="relative flex items-center space-x-2">
-      {!editing ? (
-        <>
-          <Badge
-            className={`${statusColor[currentStatus]} ${statusTextColor[currentStatus]} flex items-center`}
-          >
-            {currentStatus}
-          </Badge>
-          {paymentStatus === "PAID" ? (
-            <Pencil
-              size={16}
-              className={`text-gray-600 cursor-pointer ${loading ? "opacity-50 pointer-events-none" : ""}`}
-              onClick={() => {
-                setTempStatus(currentStatus);
-                setEditing(true);
-                setTimeout(() => selectRef.current?.focus(), 0);
-              }}
-            />
-          ) : (
-            <X size={16} className="text-red-600" />
-          )}
-        </>
-      ) : (
+      {editing && user?.role !== "USER" ? (
         <div className="flex items-center space-x-2">
           <select
             ref={selectRef}
@@ -113,11 +94,36 @@ export default function OrderStatusCell({ row }: OrderStatusCellProps) {
           </select>
           <Check
             size={16}
-            className={`text-green-600 cursor-pointer ${loading ? "opacity-50 pointer-events-none" : ""}`}
+            className={`text-green-600 cursor-pointer ${
+              loading ? "opacity-50 pointer-events-none" : ""
+            }`}
             onMouseDown={(e) => e.preventDefault()}
             onClick={handleUpdate}
           />
         </div>
+      ) : (
+        <>
+          <Badge
+            className={`${statusColor[currentStatus]} ${statusTextColor[currentStatus]} flex items-center`}
+          >
+            {currentStatus}
+          </Badge>
+          {paymentStatus === "PAID" && user?.role !== "USER" ? (
+            <Pencil
+              size={16}
+              className={`text-gray-600 cursor-pointer ${
+                loading ? "opacity-50 pointer-events-none" : ""
+              }`}
+              onClick={() => {
+                setTempStatus(currentStatus);
+                setEditing(true);
+                setTimeout(() => selectRef.current?.focus(), 0);
+              }}
+            />
+          ) : (
+            user?.role !== "USER" && <X size={16} className="text-red-600" />
+          )}
+        </>
       )}
     </div>
   );

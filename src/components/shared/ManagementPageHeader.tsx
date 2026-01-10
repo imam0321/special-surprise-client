@@ -6,7 +6,7 @@ import Link from "next/link";
 
 interface ManagementPageHeaderProps {
   title: string;
-  description: string;
+  description?: string;
   action?: {
     icon?: LucideIcon;
     label: string;

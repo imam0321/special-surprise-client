@@ -135,3 +135,25 @@ export const updateOrderStatus = async (id: string, status: OrderStatus) => {
     };
   }
 };
+
+export const getMyOrders = async (queryString?: string) => {
+  try {
+    const res = await serverFetch.get(
+      `/order/my-orders${queryString ? `?${queryString}` : ""}`,
+      {
+        next: {
+          tags: ["order-list"],
+          revalidate: 1800,
+        },
+      }
+    );
+    const result = await res.json();
+    return result;
+  } catch (error: any) {
+    console.log(error);
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
