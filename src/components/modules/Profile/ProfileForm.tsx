@@ -37,7 +37,6 @@ export default function ProfileForm({ userInfo }: ProfileFormProps) {
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     if (file) {
-      // File size check (5MB)
       if (file.size > 5 * 1024 * 1024) {
         toast.error("File size should be less than 5MB");
         return;
@@ -109,11 +108,6 @@ export default function ProfileForm({ userInfo }: ProfileFormProps) {
         <div>
           <p className="text-lg font-semibold">{userInfo.name}</p>
           <p className="text-sm text-muted-foreground">{userInfo.email}</p>
-          {isEditing && (
-            <p className="text-xs text-muted-foreground mt-1">
-              Click avatar to change photo
-            </p>
-          )}
         </div>
       </div>
 
@@ -139,11 +133,7 @@ export default function ProfileForm({ userInfo }: ProfileFormProps) {
         {userInfo.role === "MODERATOR" && (
           <Field>
             <FieldLabel>NID</FieldLabel>
-            <Input
-              name="nid"
-              defaultValue={userInfo.nid || ""}
-              disabled={!isEditing || isPending}
-            />
+            <Input name="nid" defaultValue={userInfo.nid || ""} disabled />
             <InputFieldError field="nid" state={state} />
           </Field>
         )}
@@ -181,7 +171,11 @@ export default function ProfileForm({ userInfo }: ProfileFormProps) {
       </div>
       <div className="flex gap-2 pt-4">
         {!isEditing ? (
-          <Button type="button" onClick={() => setIsEditing(true)}>
+          <Button
+            type="button"
+            className="bg-linear-to-r from-surprise-pink to-surprise-purple text-white"
+            onClick={() => setIsEditing(true)}
+          >
             Edit Profile
           </Button>
         ) : (
@@ -194,7 +188,11 @@ export default function ProfileForm({ userInfo }: ProfileFormProps) {
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isPending}>
+            <Button
+              className="bg-linear-to-r from-surprise-pink to-surprise-purple text-white"
+              type="submit"
+              disabled={isPending}
+            >
               {isPending ? "Saving..." : "Save Changes"}
             </Button>
           </>
