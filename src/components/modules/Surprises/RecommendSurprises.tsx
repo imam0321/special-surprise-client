@@ -22,7 +22,7 @@ export default function RecommendSurprises({
               {/* Image */}
               <div className="aspect-square h-60 overflow-hidden">
                 <Image
-                  src={product.thumbnail || "/images/hero-cover.PNG"}
+                  src={product?.thumbnail || "/images/hero-cover.PNG"}
                   alt={product.title}
                   width={200}
                   height={200}
@@ -33,7 +33,7 @@ export default function RecommendSurprises({
               {/* Content */}
               <CardContent className="p-2">
                 <h4 className="font-semibold text-base mb-1 line-clamp-1">
-                  {product.title}
+                  {product?.title}
                 </h4>
 
                 <p className="text-sm text-gray-500 mb-2">
@@ -49,7 +49,7 @@ export default function RecommendSurprises({
                     className="bg-surprise-purple hover:bg-surprise-purple/90 btn-bounce"
                     asChild
                   >
-                    <Link href={`/product/${product.productCode}`}>
+                    <Link href={`/surprises/${product?.productCode}`}>
                       View Details
                     </Link>
                   </Button>
