@@ -34,10 +34,10 @@ export default async function PaymentFailPage({
         </div>
 
         <Link
-          href="/checkout"
+          href="/"
           className="inline-block w-full py-3 rounded-lg text-white font-medium transition bg-red-500 hover:bg-red-600"
         >
-          Try Again
+          Return to Home
         </Link>
       </div>
     </div>

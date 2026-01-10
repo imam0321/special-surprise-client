@@ -7,8 +7,7 @@
 ## 🔗 Live Link
 
 - **Frontend:** [https://special-surprise-client.vercel.app](https://special-surprise-client.vercel.app)
-- **Repository:** [https://github.com/imam0321/special-surprise-client](https://github.com/imam0321/special-surprise-client)
-
+- **Backend Repository**: [https://github.com/imam0321/special-surprise-server](https://github.com/imam0321/special-surprise-server)
 ---
 
 ## 🚀 Project Overview
@@ -67,25 +66,20 @@ Special Surprise is a **gift marketplace** where:
 
 **Frontend:**
 
-- **Framework:** React + Next.js 13
+- **Framework:** Next.js 16
 - **Language:** TypeScript
-- **UI:** Tailwind CSS + DaisyUI + Lucide Icons
+- **UI:** Tailwind CSS + Shadcn UI + Lucide Icons
 - **State Management:** React Context & Hooks
-- **Forms:** React Hook Form
-- **API Requests:** Axios
-
 **Other Tools:**
-
-- `sonner` for toast notifications
-- `react-query` for data fetching and caching
-- `@react-google-maps/api` for location selection
+- `JWT` 
+- `date-fns` 
 
 ---
 
 ## 📦 Key Pages / Modules
 
 - **Home Page:** Browse featured products
-- **Product Detail:** View product details and customize
+- **Product Detail:** View product details
 - **Cart / Checkout:** Place orders and pay online
 - **User Profile:** Manage personal information
 - **Admin/Moderator Dashboard:** View stats, manage products, and process orders

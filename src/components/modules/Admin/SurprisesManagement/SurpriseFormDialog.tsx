@@ -136,7 +136,7 @@ export default function SurpriseFormDialog({
 
             {/* Discount */}
             <Field>
-              <FieldLabel>Discounted Price</FieldLabel>
+              <FieldLabel>Discounted %</FieldLabel>
               <Input
                 name="discountedPrice"
                 type="number"

@@ -48,7 +48,13 @@ export default function CategoriesTable({
       setDeletingCategory(null);
       handleRefresh();
     } else {
-      toast.error(result.message || "Failed to delete category");
+      if (result.message?.toLowerCase().includes("foreign key")) {
+        toast.error(
+          "You can’t delete this category while products are still linked to it"
+        );
+      } else {
+        toast.error(result.message || "Failed to delete category");
+      }
     }
   };
 
