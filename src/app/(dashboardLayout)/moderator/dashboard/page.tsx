@@ -5,15 +5,17 @@ import { getAllOrders } from "@/services/order/order";
 import { getCustomers } from "@/services/admin/usersManagement";
 import { getModerators } from "@/services/admin/moderatorsManagement";
 import { Order } from "@/types/order.type";
+import { Skeleton } from "@/components/ui/skeleton";
+import BarChartOrdersByStatus from "@/components/shared/BarChartOrdersByStatus";
+import AreaChartPaidOrdersLast30Days from "@/components/shared/AreaChartPaidOrdersLast30Days";
 
 export default async function ModeratorDashboardPage() {
-  const [productsRes, ordersRes, customersRes] =
-    await Promise.all([
-      getAllProduct(),
-      getAllOrders(),
-      getCustomers(""),
-      getModerators(""),
-    ]);
+  const [productsRes, ordersRes, customersRes] = await Promise.all([
+    getAllProduct(),
+    getAllOrders(),
+    getCustomers(""),
+    getModerators(""),
+  ]);
 
   const totalRevenue = ordersRes.data?.reduce((sum: number, order: Order) => {
     const paymentAmount =
@@ -80,6 +82,16 @@ export default async function ModeratorDashboardPage() {
             </div>
           );
         })}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {!ordersRes?.data ? (
+          <Skeleton className="h-80 w-full" />
+        ) : (
+          <>
+            <BarChartOrdersByStatus orders={ordersRes.data} />
+            <AreaChartPaidOrdersLast30Days orders={ordersRes.data} />
+          </>
+        )}
       </div>
     </div>
   );

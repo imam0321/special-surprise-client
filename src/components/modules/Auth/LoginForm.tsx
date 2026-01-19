@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 import InputFieldError from "@/components/shared/InputFieldError";
 import { Button } from "@/components/ui/button";
@@ -9,8 +10,26 @@ import Link from "next/link";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
+const demoUsers = {
+  admin: {
+    email: "admin@gmail.com",
+    password: "123456789",
+  },
+  user: {
+    email: "imam.hossain0321@gmail.com",
+    password: "123456789",
+  },
+  moderator: {
+    email: "moderator@gmail.com",
+    password: "123456789",
+  },
+};
+
 export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const [state, formAction, isPending] = useActionState(loginUser, null);
 
   useEffect(() => {
@@ -25,8 +44,55 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
     }
   }, [state]);
 
+  useEffect(() => {
+    if (state?.formData) {
+      setEmail(state.formData.email || "");
+      setPassword(state.formData.password || "");
+    }
+  }, [state]);
+
+  const fillDemoUser = (role: "admin" | "user" | "moderator") => {
+    setEmail(demoUsers[role].email);
+    setPassword(demoUsers[role].password);
+  };
+
   return (
     <form action={formAction} className="space-y-4">
+      <div className="mb-4">
+        <p className="mb-2 text-sm text-muted-foreground text-center">
+          Demo Login
+        </p>
+
+        <div className="grid grid-cols-3 gap-2">
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => fillDemoUser("admin")}
+          >
+            Admin
+          </Button>
+
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => fillDemoUser("user")}
+          >
+            User
+          </Button>
+
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => fillDemoUser("moderator")}
+          >
+            Moderator
+          </Button>
+        </div>
+      </div>
+
       {redirectPath && (
         <Input type="hidden" name="redirectPath" value={redirectPath} />
       )}
@@ -38,7 +104,9 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
             name="email"
             type="email"
             placeholder="Enter email"
-            defaultValue={state?.formData?.email || ""}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            // defaultValue={state?.formData?.email || ""}
             className="pl-10"
             disabled={isPending}
           />
@@ -55,8 +123,10 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
           <Input
             name="password"
             type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter password"
-            defaultValue={state?.formData?.password || ""}
+            // defaultValue={state?.formData?.password || ""}
             className="pl-10 pr-10"
             disabled={isPending}
           />

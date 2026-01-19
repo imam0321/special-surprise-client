@@ -1,19 +1,19 @@
-import { Users, ShoppingBag, DollarSign, Package } from "lucide-react";
+import { Users, ShoppingBag, DollarSign } from "lucide-react";
 import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
-import { getAllProduct } from "@/services/product/product";
 import { getAllOrders } from "@/services/order/order";
 import { getCustomers } from "@/services/admin/usersManagement";
 import { getModerators } from "@/services/admin/moderatorsManagement";
 import { Order } from "@/types/order.type";
+import { Skeleton } from "@/components/ui/skeleton";
+import BarChartOrdersByStatus from "@/components/shared/BarChartOrdersByStatus";
+import AreaChartPaidOrdersLast30Days from "@/components/shared/AreaChartPaidOrdersLast30Days";
 
 export default async function AdminDashboardPage() {
-  const [productsRes, ordersRes, customersRes, moderatorsRes] =
-    await Promise.all([
-      getAllProduct(),
-      getAllOrders(),
-      getCustomers(""),
-      getModerators(""),
-    ]);
+  const [ordersRes, customersRes, moderatorsRes] = await Promise.all([
+    getAllOrders(),
+    getCustomers(""),
+    getModerators(""),
+  ]);
 
   const totalRevenue = ordersRes.data?.reduce((sum: number, order: Order) => {
     const paymentAmount =
@@ -36,13 +36,13 @@ export default async function AdminDashboardPage() {
       color: "bg-blue-500",
       trend: "up",
     },
-    {
-      title: "Active Products",
-      value: productsRes.data?.length.toString() || "0",
-      icon: Package,
-      color: "bg-orange-500",
-      trend: "up",
-    },
+    // {
+    //   title: "Active Products",
+    //   value: productsRes.data?.length.toString() || "0",
+    //   icon: Package,
+    //   color: "bg-orange-500",
+    //   trend: "up",
+    // },
     {
       title: "Total Users",
       value: customersRes.data?.length.toString() || "0",
@@ -87,6 +87,18 @@ export default async function AdminDashboardPage() {
             </div>
           );
         })}
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {!ordersRes?.data ? (
+          <Skeleton className="h-80 w-full" />
+        ) : (
+          <>
+            <BarChartOrdersByStatus orders={ordersRes.data} />
+            <AreaChartPaidOrdersLast30Days orders={ordersRes.data} />
+          </>
+        )}
       </div>
     </div>
   );
