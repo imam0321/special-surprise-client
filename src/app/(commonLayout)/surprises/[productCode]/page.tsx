@@ -3,26 +3,30 @@ import { Truck, Gift, Package, Calendar, ShoppingCart } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import Link from "next/link";
-import { getAllProduct, getProductByCode } from "@/services/product/product";
+import { getProductByCode } from "@/services/product/product";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import RecommendSurprises from "@/components/modules/Surprises/RecommendSurprises";
-
+import { Suspense } from "react";
+import SurpriseDetailsRecommendation from "@/components/modules/Surprises/SurpriseDetailsRecommendation";
+import SurprisesLoading from "@/components/modules/Surprises/SurprisesLoading";
 
 export default async function SurpriseDetailPage({
   params,
 }: {
-  params: { productCode: string };
+  params: Promise<{ productCode: string }>;
 }) {
   const { productCode } = await params;
   const { data: product } = await getProductByCode(productCode);
+
+  /*
   const { data: surprises } = await getAllProduct(
     `category=${product?.category?.name}`
   );
+  */
 
-  if (!surprises) {
-    return null;
+  if (!product) {
+    return <div className="container mx-auto py-10 text-center text-xl font-bold">Product not found</div>;
   }
 
   return (
@@ -112,7 +116,12 @@ export default async function SurpriseDetailPage({
             </Tabs>
           </CardContent>
         </Card>
-        <RecommendSurprises surprises={surprises} />
+
+        <Suspense fallback={<SurprisesLoading />}>
+          {product?.category?.name && (
+            <SurpriseDetailsRecommendation categoryName={product.category.name} />
+          )}
+        </Suspense>
       </div>
     </div>
   );

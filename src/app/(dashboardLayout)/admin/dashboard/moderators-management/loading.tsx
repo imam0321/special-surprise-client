@@ -1,7 +1,7 @@
 import { ManagementPageLoading } from '@/components/shared/ManagementPageLoading'
 
 
-export default function loading() {
+export default function ModeratorsManagementLoading() {
   return (
     <ManagementPageLoading
       columns={5}
