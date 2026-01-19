@@ -9,12 +9,14 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { getIconComponent } from "@/lib/icon-maper";
 import { usePathname } from "next/navigation";
 
 export function NavDocuments({ items }: { items: NavSection[] }) {
   const pathname = usePathname();
+  const { isMobile, setOpenMobile } = useSidebar();
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       {items.map((section, index) => (
@@ -35,7 +37,10 @@ export function NavDocuments({ items }: { items: NavSection[] }) {
                         : ""
                     }
                   >
-                    <Link href={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={() => isMobile && setOpenMobile(false)}
+                    >
                       <Icon className="h-4 w-4" />
                       <span>{item.title}</span>
                     </Link>

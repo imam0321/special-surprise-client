@@ -9,11 +9,13 @@ import LogoutSuccessToast from "@/components/shared/LogoutSuccessToast";
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
   variable: "--font-poppins",
+  subsets: ["latin"],
 });
 
 const pacifico = Pacifico({
   weight: "400",
   variable: "--font-pacifico",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -27,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.variable} ${pacifico.variable} antialiased`}>
         {children}
         <Toaster position="top-right" richColors />

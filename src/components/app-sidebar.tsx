@@ -6,6 +6,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { NavSection } from "@/types/dashboard.types";
@@ -17,10 +18,15 @@ export function AppSidebar({
 }: {
   navbarItems: NavSection[];
 } & React.ComponentProps<typeof Sidebar>) {
+  const { isMobile, setOpenMobile } = useSidebar();
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
-        <Link href="/" className="flex items-center space-x-2">
+        <Link
+          href="/"
+          className="flex items-center space-x-2"
+          onClick={() => isMobile && setOpenMobile(false)}
+        >
           <Gift className="h-8 w-8 text-surprise-pink" />
           <span className="font-display text-2xl gradient-text">
             Special Surprise
