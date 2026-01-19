@@ -6,6 +6,9 @@ import Link from "next/link";
 
 export default async function FeaturedSurprises() {
   const { data: surprises } = await getAllProduct();
+  if (!surprises) {
+    return
+  }
   
   return (
     <section className="bg-linear-to-b from-background to-accent/30 py-16">

@@ -9,6 +9,9 @@ export default async function CheckOutPage({
 }) {
   const { productCode } = await params;
   const { data: surprise } = await getProductByCode(productCode);
+  if (!surprise) {
+    return
+  }
 
   return (
     <div className="bg-background">
