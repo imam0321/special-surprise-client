@@ -8,6 +8,7 @@
 
 - **Frontend:** [https://special-surprise-client.vercel.app](https://special-surprise-client.vercel.app)
 - **Backend Repository**: [https://github.com/imam0321/special-surprise-server](https://github.com/imam0321/special-surprise-server)
+
 ---
 
 ## 🚀 Project Overview
@@ -70,9 +71,59 @@ Special Surprise is a **gift marketplace** where:
 - **Language:** TypeScript
 - **UI:** Tailwind CSS + Shadcn UI + Lucide Icons
 - **State Management:** React Context & Hooks
+
 **Other Tools:**
-- `JWT` 
-- `date-fns` 
+- `JWT` for authentication
+- `date-fns` for date formatting
+- `zod` for schema validation
+- `react-hook-form` for form handling
+
+---
+
+## 🚀 Getting Started
+
+To get a local copy up and running, follow these steps.
+
+### Prerequisites
+
+- Node.js (v18+ recommended)
+- Bun (optional, but recommended as lockfile is `bun.lock`) or npm/yarn
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/imam0321/special-surprise-client.git
+   cd special-surprise-client
+   ```
+
+2. **Install dependencies**
+   ```bash
+   bun install
+   # or
+   npm install
+   ```
+
+3. **Set up Environment Variables**
+   Create a `.env` file in the root directory and add the following variables:
+   ```env
+   # API Configuration
+   NEXT_PUBLIC_BASE_API=http://localhost:5000/api/v1  # or your production API value
+
+   # JWT Secrets (should match backend)
+   JWT_ACCESS_SECRET=your_access_secret_here
+   JWT_REFRESH_SECRET=your_refresh_secret_here
+   ```
+
+4. **Run the development server**
+   ```bash
+   bun run dev
+   # or
+   npm run dev
+   ```
+
+5. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
 
 ---
 
@@ -93,5 +144,3 @@ Special Surprise is a **gift marketplace** where:
 - Chat feature for support and order communication
 - Advanced filtering and recommendation system
 - Media uploads and gallery for products and orders
-
----
