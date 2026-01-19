@@ -28,10 +28,10 @@ export default async function UserDashboardPage({
   const deliveredOrders = myOrders?.data?.filter(
     (order: Order) => order.status === "COMPLETE"
   ).length;
-  
+
   return (
     <div className="space-y-6">
-      <ManagementPageHeader title="Dashboard Status" />
+      <ManagementPageHeader title="Dashboard Overview" description="Welcome back! Here's what's happening today." />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <Card>
           <CardContent className="flex items-center p-6">
