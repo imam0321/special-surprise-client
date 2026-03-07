@@ -2,8 +2,8 @@ import { Users, ShoppingBag, DollarSign } from "lucide-react";
 import { getAllOrders } from "@/services/order/order";
 import { getCustomers } from "@/services/admin/usersManagement";
 import { getModerators } from "@/services/admin/moderatorsManagement";
-import { Order } from "@/types/order.type";
 import SharedDashboardHome from "@/components/modules/Shared/Dashboard/SharedDashboardHome";
+import { calculateTotalRevenue, formatCurrency } from "@/lib/dashboard.utils";
 
 export default async function AdminDashboardPage() {
   const [ordersRes, customersRes, moderatorsRes] = await Promise.all([
@@ -12,39 +12,39 @@ export default async function AdminDashboardPage() {
     getModerators(""),
   ]);
 
-  const totalRevenue = ordersRes.data?.reduce((sum: number, order: Order) => {
-    const paymentAmount =
-      order.payment?.status === "PAID" ? order.payment.amount || 0 : 0;
-    return sum + paymentAmount;
-  }, 0);
+  const totalRevenue = calculateTotalRevenue(ordersRes.data);
 
   const stats = [
     {
       title: "Total Revenue",
-      value: `$${totalRevenue?.toLocaleString() || 0}`,
+      value: formatCurrency(totalRevenue, "USD"),
       icon: DollarSign,
-      color: "bg-green-500",
+      bgColorClass: "bg-green-500/20",
+      iconColorClass: "text-green-500",
       trend: "up",
     },
     {
       title: "Total Orders",
-      value: ordersRes.data?.length.toString() || "0",
+      value: ordersRes.data?.length || 0,
       icon: ShoppingBag,
-      color: "bg-blue-500",
+      bgColorClass: "bg-blue-500/20",
+      iconColorClass: "text-blue-500",
       trend: "up",
     },
     {
       title: "Total Users",
-      value: customersRes.data?.length.toString() || "0",
+      value: customersRes.data?.length || 0,
       icon: Users,
-      color: "bg-purple-500",
+      bgColorClass: "bg-purple-500/20",
+      iconColorClass: "text-purple-500",
       trend: "up",
     },
     {
       title: "Total Moderators",
-      value: moderatorsRes.data?.length.toString() || "0",
+      value: moderatorsRes.data?.length || 0,
       icon: Users,
-      color: "bg-surprise-pink",
+      bgColorClass: "bg-surprise-pink/20",
+      iconColorClass: "text-surprise-pink",
       trend: "up",
     },
   ];

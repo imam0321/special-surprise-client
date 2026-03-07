@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import LogoutButton from "./shared/LogoutButton";
+import LogoutButton from "../shared/LogoutButton";
 
 export function SiteHeader() {
   return (

@@ -8,23 +8,33 @@ export type RouteConfig = {
 export const authRoutes = ["/login", "/register", "/forgot-password", "/reset-password"];
 
 export const commonProtectedRoutes: RouteConfig = {
-  exact: ["/my-profile", "/settings", "/check-out", "/payment"],
+  exact: ["/dashboard/profile", "/settings", "/check-out", "/payment"],
   patterns: [/^\/surprises\/[^/]+\/check-out$/],
 }
 
 export const moderatorProtectedRoutes: RouteConfig = {
-  patterns: [/^\/moderator/],
+  patterns: [/^\/dashboard\/moderator/],
   exact: []
 }
 
 export const adminProtectedRoutes: RouteConfig = {
-  patterns: [/^\/admin/],
+  patterns: [/^\/dashboard\/admin/],
+  exact: []
+}
+
+export const staffProtectedRoutes: RouteConfig = {
+  patterns: [
+    /^\/dashboard\/categories-management/,
+    /^\/dashboard\/orders-management/,
+    /^\/dashboard\/surprises-management/,
+    /^\/dashboard\/users-management/,
+  ],
   exact: []
 }
 
 export const userProtectedRoutes: RouteConfig = {
   patterns: [/^\/dashboard/],
-  exact: []
+  exact: ["/dashboard"]
 }
 
 export const isAuthRoute = (pathname: string) => {
@@ -39,9 +49,10 @@ export const isRouterMatches = (pathname: string, routes: RouteConfig): boolean 
   return routes.patterns.some((pattern: RegExp) => pattern.test(pathname))
 }
 
-export const getRouteOwner = (pathname: string): "ADMIN" | "MODERATOR" | "USER" | "COMMON" | null => {
+export const getRouteOwner = (pathname: string): "ADMIN" | "MODERATOR" | "USER" | "COMMON" | "STAFF" | null => {
   if (isRouterMatches(pathname, adminProtectedRoutes)) return "ADMIN";
   if (isRouterMatches(pathname, moderatorProtectedRoutes)) return "MODERATOR";
+  if (isRouterMatches(pathname, staffProtectedRoutes)) return "STAFF";
   if (isRouterMatches(pathname, userProtectedRoutes)) return "USER";
   if (isRouterMatches(pathname, commonProtectedRoutes)) return "COMMON";
   return null;
@@ -50,9 +61,9 @@ export const getRouteOwner = (pathname: string): "ADMIN" | "MODERATOR" | "USER" 
 export const getDefaultDashboardRoute = (role: UserRole): string => {
   switch (role) {
     case "ADMIN":
-      return "/admin/dashboard";
+      return "/dashboard/admin";
     case "MODERATOR":
-      return "/moderator/dashboard";
+      return "/dashboard/moderator";
     case "USER":
       return "/dashboard";
     default:
@@ -67,6 +78,10 @@ export const isValidRedirectForRole = (redirectPath: string, role: UserRole): bo
   }
 
   if (routeOwner === role) {
+    return true
+  }
+
+  if (routeOwner === "STAFF" && (role === "ADMIN" || role === "MODERATOR")) {
     return true
   }
 

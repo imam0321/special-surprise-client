@@ -15,13 +15,13 @@ export const getCommonNavItems = (role: UserRole): NavSection[] => {
         },
         {
           title: "My Profile",
-          href: "/my-profile",
+          href: "/dashboard/profile",
           icon: "User",
           roles: ["ADMIN", "MODERATOR", "USER"],
         },
         {
           title: "Change Password",
-          href: "/change-password",
+          href: "/dashboard/change-password",
           icon: "Lock",
           roles: ["ADMIN", "MODERATOR", "USER"],
         },
@@ -34,12 +34,12 @@ export const moderatorNavItems: NavSection[] = [
   {
     title: "User Management",
     items: [
-      
+
       {
         title: "Users",
-        href: "/moderator/dashboard/users-management",
+        href: "/dashboard/users-management",
         icon: "Users",
-        roles: ["MODERATOR"], 
+        roles: ["MODERATOR"],
       },
     ],
   },
@@ -48,21 +48,21 @@ export const moderatorNavItems: NavSection[] = [
     items: [
       {
         title: "Surprises",
-        href: "/moderator/dashboard/surprises-management",
+        href: "/dashboard/surprises-management",
         icon: "Gift",
-        roles: ["MODERATOR"], 
+        roles: ["MODERATOR"],
       },
       {
         title: "Categories",
-        href: "/moderator/dashboard/categories-management",
+        href: "/dashboard/categories-management",
         icon: "category",
-        roles: ["MODERATOR"], 
+        roles: ["MODERATOR"],
       },
       {
         title: "Orders",
-        href: "/moderator/dashboard/orders-management",
+        href: "/dashboard/orders-management",
         icon: "Box",
-        roles: ["MODERATOR"], 
+        roles: ["MODERATOR"],
       },
     ],
   },
@@ -77,13 +77,13 @@ export const adminNavItems: NavSection[] = [
     items: [
       {
         title: "Moderators",
-        href: "/admin/dashboard/moderators-management",
+        href: "/dashboard/admin/moderators-management",
         icon: "Shield",
         roles: ["ADMIN"],
       },
       {
         title: "Users",
-        href: "/admin/dashboard/users-management",
+        href: "/dashboard/users-management",
         icon: "Users",
         roles: ["ADMIN"],
       },
@@ -94,19 +94,19 @@ export const adminNavItems: NavSection[] = [
     items: [
       {
         title: "Surprises",
-        href: "/admin/dashboard/surprises-management",
+        href: "/dashboard/surprises-management",
         icon: "Gift",
         roles: ["ADMIN"],
       },
       {
         title: "Categories",
-        href: "/admin/dashboard/categories-management",
+        href: "/dashboard/categories-management",
         icon: "category",
         roles: ["ADMIN"],
       },
       {
         title: "Orders",
-        href: "/admin/dashboard/orders-management",
+        href: "/dashboard/orders-management",
         icon: "Box",
         roles: ["ADMIN"],
       },

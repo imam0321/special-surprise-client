@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { NavDocuments } from "@/components/nav-documents";
+import { NavDocuments } from "./NavItems";
 import {
   Sidebar,
   SidebarContent,
