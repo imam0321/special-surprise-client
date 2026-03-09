@@ -1,6 +1,5 @@
 import {
   Facebook,
-  Gift,
   Instagram,
   Mail,
   MapPin,
@@ -11,6 +10,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -20,7 +20,7 @@ export default function Footer() {
           {/* About */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <Gift className="h-6 w-6 text-surprise-pink" />
+              <Image src="/images/special-surprise-logo.png" alt="Logo" width={40} height={40} />
               <span className="font-display text-xl gradient-text">
                 Special Surprise
               </span>
@@ -32,19 +32,19 @@ export default function Footer() {
             <div className="flex space-x-4">
               <Link
                 href="https://facebook.com/specialsurprise49"
-                className="text-muted-foreground hover:text-surprise-pink transition-colors"
+                className="text-muted-foreground hover:text-primary transition-colors"
               >
                 <Facebook size={20} />
               </Link>
               <Link
                 href="#"
-                className="text-muted-foreground hover:text-surprise-pink transition-colors"
+                className="text-muted-foreground hover:text-primary transition-colors"
               >
                 <Instagram size={20} />
               </Link>
               <Link
                 href="#"
-                className="text-muted-foreground hover:text-surprise-pink transition-colors"
+                className="text-muted-foreground hover:text-primary transition-colors"
               >
                 <Twitter size={20} />
               </Link>
@@ -95,11 +95,11 @@ export default function Footer() {
             <h3 className="font-bold text-lg mb-4">Contact Us</h3>
             <ul className="space-y-3">
               <li className="flex items-start">
-                <Phone size={18} className="mr-2 text-surprise-pink mt-1" />
+                <Phone size={18} className="mr-2 text-primary mt-1" />
                 <span className="text-muted-foreground">+880 1712-345678</span>
               </li>
               <li className="flex items-start">
-                <Mail size={18} className="mr-2 text-surprise-pink mt-1" />
+                <Mail size={18} className="mr-2 text-primary mt-1" />
                 <span className="text-muted-foreground">
                   info@specialsurprise.com
                 </span>
@@ -107,7 +107,7 @@ export default function Footer() {
               <li className="flex items-start">
                 <MapPin
                   size={18}
-                  className="mr-2 text-surprise-pink mt-1 shrink-0"
+                  className="mr-2 text-primary mt-1 shrink-0"
                 />
                 <span className="text-muted-foreground">
                   123 Surprise Street, Gulshan, Dhaka, Bangladesh
@@ -128,7 +128,7 @@ export default function Footer() {
                 placeholder="Your email"
                 className="bg-white"
               />
-              <Button className="bg-surprise-purple hover:bg-surprise-purple/90">
+              <Button className="bg-primary hover:bg-primary/90 text-white">
                 Subscribe
               </Button>
             </div>

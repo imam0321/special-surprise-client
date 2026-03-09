@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { Gift } from "lucide-react";
 import { Button } from "../ui/button";
 import MobileNavMenu from "./MobileNavMenu";
 import { getCookie } from "@/services/auth/tokenHandlers";
 import { getUserInfo } from "@/services/auth/getUserInfo";
 import { getDefaultDashboardRoute } from "@/lib/auth.utils";
 import LogoutButton from "./LogoutButton";
+import Image from "next/image";
 
 export default async function Navbar() {
   const accessToken = await getCookie("accessToken");
@@ -25,10 +25,10 @@ export default async function Navbar() {
   ];
 
   return (
-    <nav className="backdrop-blur-3xl sticky top-0 z-50 w-full py-1">
+    <nav className="glass-effect sticky top-0 z-50 w-full py-1">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2">
-          <Gift className="h-8 w-8 text-surprise-pink" />
+          <Image src="/images/special-surprise-logo.png" alt="Logo" width={40} height={40} />
           <span className="font-display text-2xl gradient-text">
             Special Surprise
           </span>
@@ -40,7 +40,7 @@ export default async function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-foreground hover:text-surprise-pink transition-colors"
+              className="text-foreground hover:text-primary transition-colors"
             >
               {link.name}
             </Link>
@@ -50,7 +50,7 @@ export default async function Navbar() {
             <LogoutButton />
           ) : (
             <Button
-              className="text-white bg-linear-to-r from-surprise-pink to-surprise-purple hover:opacity-90 btn-bounce"
+              className="text-white bg-primary hover:bg-primary/90 btn-bounce"
               asChild
             >
               <Link href="/login">Login</Link>

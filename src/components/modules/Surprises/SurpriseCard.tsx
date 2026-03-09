@@ -17,7 +17,7 @@ export default function SurpriseCard({ surprise }: { surprise: Product }) {
     surprise.description && surprise.description.length > 80;
 
   return (
-    <Card className="group flex flex-col h-full p-2 transition-all -p-2 duration-300 overflow-hidden hover:shadow-xl hover:shadow-blue-400/10 rounded-sm">
+    <Card className="glass-effect group flex flex-col h-full p-2 transition-all duration-300 overflow-hidden hover:shadow-xl hover:shadow-primary/10 rounded-sm">
       {/* Image Section */}
       <div className="relative shrink-0 w-full h-[200px] overflow-hidden">
         <Image
@@ -30,7 +30,7 @@ export default function SurpriseCard({ surprise }: { surprise: Product }) {
 
         {/* Discount Badge */}
         {hasDiscount && (
-          <Badge className="absolute top-3 right-3 bg-surprise-pink hover:bg-surprise-pink h-10 w-10 rounded-full flex items-center justify-center text-white font-semibold shadow-lg">
+          <Badge className="absolute top-3 right-3 bg-primary hover:bg-primary h-10 w-10 rounded-full flex items-center justify-center text-white font-semibold shadow-lg">
             {surprise.discountedPrice}%
           </Badge>
         )}
@@ -53,7 +53,7 @@ export default function SurpriseCard({ surprise }: { surprise: Product }) {
           {hasLongDescription && (
             <Link
               href={`/surprises/${surprise.productCode}`}
-              className="text-surprise-purple underline text-sm ml-1"
+              className="text-primary underline text-sm ml-1"
             >
               see more
             </Link>
@@ -64,7 +64,7 @@ export default function SurpriseCard({ surprise }: { surprise: Product }) {
         <div className="flex justify-between items-center mt-3">
           <div className="font-bold text-lg">৳{surprise.price}</div>
           {surprise.category?.name && (
-            <Badge className="bg-surprise-pink hover:bg-surprise-pink/90">
+            <Badge className="bg-primary/20 text-primary border-none hover:bg-primary/30">
               {surprise.category.name}
             </Badge>
           )}
@@ -75,7 +75,7 @@ export default function SurpriseCard({ surprise }: { surprise: Product }) {
       <CardFooter className="px-3 pb-4 mt-auto shrink-0">
         <Button
           size="sm"
-          className="bg-surprise-purple hover:bg-surprise-purple/90 btn-bounce w-full"
+          className="bg-primary hover:bg-primary/90 text-white btn-bounce w-full"
           asChild
         >
           <Link href={`/surprises/${surprise.productCode}`}>View Details</Link>

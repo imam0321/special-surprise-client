@@ -14,7 +14,7 @@ import ForgotPasswordForm from "@/components/modules/Auth/ForgotPasswordForm";
 
 export default function ForgotPasswordPage() {
   return (
-    <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-linear-to-br from-accent via-background to-background px-4">
+    <div className="min-h-screen relative flex items-center justify-center overflow-hidden px-4">
       <LogoWithTitle />
       <div className="absolute top-20 right-20 animate-float opacity-20">
         <Gift size={80} className="text-surprise-purple" />

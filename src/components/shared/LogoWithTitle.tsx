@@ -1,4 +1,4 @@
-import { Gift } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function LogoWithTitle() {
@@ -7,7 +7,7 @@ export default function LogoWithTitle() {
       href="/"
       className="absolute top-4 left-4 flex items-center space-x-2"
     >
-      <Gift className="h-8 w-8 text-surprise-pink" />
+      <Image src="/images/special-surprise-logo.png" alt="Logo" width={40} height={40} />
       <span className="font-display text-2xl gradient-text">
         Special Surprise
       </span>

@@ -151,7 +151,7 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
       <div className="text-right">
         <Link
           href="/forgot-password"
-          className="text-sm text-primary hover:underline hover:text-surprise-pink"
+          className="text-sm text-primary hover:underline"
         >
           Forgot password?
         </Link>
@@ -160,7 +160,7 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
       <Button
         type="submit"
         disabled={isPending}
-        className="w-full text-white bg-linear-to-r from-surprise-pink to-surprise-purple hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full text-white bg-primary hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed btn-bounce"
       >
         <LogIn className="mr-2 h-4 w-4" />
         {isPending ? "Logging in..." : "Log In"}

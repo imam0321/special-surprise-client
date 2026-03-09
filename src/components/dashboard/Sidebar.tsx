@@ -27,7 +27,7 @@ export function AppSidebar({
           className="flex items-center space-x-2"
           onClick={() => isMobile && setOpenMobile(false)}
         >
-          <Gift className="h-8 w-8 text-surprise-pink" />
+          <Gift className="h-8 w-8 text-primary" />
           <span className="font-display text-2xl gradient-text">
             Special Surprise
           </span>

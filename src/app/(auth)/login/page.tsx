@@ -20,18 +20,18 @@ export default async function LoginPage({
   const params = (await searchParams) || {};
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-linear-to-br from-accent via-background to-background px-4">
+    <div className="min-h-screen relative flex items-center justify-center overflow-hidden px-4">
       <LogoWithTitle />
       <div className="absolute top-20 right-20 animate-float opacity-20">
-        <Gift size={80} className="text-surprise-purple" />
+        <Gift size={80} className="text-primary" />
       </div>
       <div
         className="absolute bottom-20 left-10 animate-float opacity-20"
         style={{ animationDelay: "1s" }}
       >
-        <Heart size={60} className="text-surprise-pink" />
+        <Heart size={60} className="text-primary" />
       </div>
-      <Card className="w-full max-w-md">
+      <Card className="glass-effect w-full max-w-md border-none shadow-xl">
         <CardHeader>
           <CardTitle className="text-2xl text-center">Log In</CardTitle>
           <CardDescription className="text-center">
@@ -45,7 +45,7 @@ export default async function LoginPage({
 
         <CardFooter className="flex justify-center">
           <Link href="/register" className="w-full">
-            <Button variant="link" className="w-full hover:text-surprise-pink">
+            <Button variant="link" className="w-full hover:text-primary transition-colors">
               Don’t have an account? Register
             </Button>
           </Link>

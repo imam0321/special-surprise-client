@@ -15,29 +15,29 @@ import { JSX } from "react";
 
 export default function Categories({ categories }: { categories: Category[] }) {
   const categoryIcons: Record<string, JSX.Element> = {
-    Birthday: <Cake size={32} className="text-surprise-pink" />,
-    Anniversary: <Heart size={32} className="text-red-500" />,
-    Congratulations: <Award size={32} className="text-amber-500" />,
-    Romance: <Flower size={32} className="text-surprise-purple" />,
-    "Baby Shower": <Baby size={32} className="text-blue-400" />,
-    Festivals: <PartyPopper size={32} className="text-green-500" />,
-    "Just Because": <Sparkles size={32} className="text-surprise-teal" />,
-    Custom: <Gift size={32} className="text-surprise-coral" />,
+    Birthday: <Cake size={32} className="text-primary" />,
+    Anniversary: <Heart size={32} className="text-primary" />,
+    Congratulations: <Award size={32} className="text-primary" />,
+    Romance: <Flower size={32} className="text-primary" />,
+    "Baby Shower": <Baby size={32} className="text-primary" />,
+    Festivals: <PartyPopper size={32} className="text-primary" />,
+    "Just Because": <Sparkles size={32} className="text-primary" />,
+    Custom: <Gift size={32} className="text-primary" />,
   };
 
   const categoryColors: Record<string, string> = {
-    Birthday: "bg-surprise-pink/10 hover:bg-surprise-pink/20",
-    Anniversary: "bg-red-100 hover:bg-red-200",
-    Congratulations: "bg-amber-100 hover:bg-amber-200",
-    Romance: "bg-surprise-purple/10 hover:bg-surprise-purple/20",
-    "Baby Shower": "bg-blue-100 hover:bg-blue-200",
-    Festivals: "bg-green-100 hover:bg-green-200",
-    "Just Because": "bg-teal-100 hover:bg-teal-200",
-    Custom: "bg-surprise-coral/10 hover:bg-surprise-coral/20",
+    Birthday: "bg-primary/5 hover:bg-primary/10",
+    Anniversary: "bg-primary/5 hover:bg-primary/10",
+    Congratulations: "bg-primary/5 hover:bg-primary/10",
+    Romance: "bg-primary/5 hover:bg-primary/10",
+    "Baby Shower": "bg-primary/5 hover:bg-primary/10",
+    Festivals: "bg-primary/5 hover:bg-primary/10",
+    "Just Because": "bg-primary/5 hover:bg-primary/10",
+    Custom: "bg-primary/5 hover:bg-primary/10",
   };
 
   return (
-    <div className="py-16 bg-white">
+    <div className="py-16 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -53,9 +53,8 @@ export default function Categories({ categories }: { categories: Category[] }) {
           {categories && categories.map((category, index) => (
             <Link href={`/surprises?category=${category.name}`} key={index}>
               <Card
-                className={`border-none shadow-sm hover:shadow-md transition-shadow ${
-                  categoryColors[category.name] || "bg-gray-100"
-                } h-full`}
+                className={`glass-effect border-none shadow-sm hover:shadow-md transition-shadow ${categoryColors[category.name] || "bg-primary/5"
+                  } h-full`}
               >
                 <CardContent className="flex flex-col items-center justify-center p-6 text-center">
                   <div className="bg-white rounded-full p-3 shadow-sm mb-4">

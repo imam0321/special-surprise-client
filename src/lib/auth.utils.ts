@@ -8,7 +8,7 @@ export type RouteConfig = {
 export const authRoutes = ["/login", "/register", "/forgot-password", "/reset-password"];
 
 export const commonProtectedRoutes: RouteConfig = {
-  exact: ["/dashboard/profile", "/settings", "/check-out", "/payment"],
+  exact: ["/dashboard/profile", "/dashboard/change-password", "/settings", "/check-out", "/payment"],
   patterns: [/^\/surprises\/[^/]+\/check-out$/],
 }
 
@@ -50,11 +50,11 @@ export const isRouterMatches = (pathname: string, routes: RouteConfig): boolean 
 }
 
 export const getRouteOwner = (pathname: string): "ADMIN" | "MODERATOR" | "USER" | "COMMON" | "STAFF" | null => {
+  if (isRouterMatches(pathname, commonProtectedRoutes)) return "COMMON";
   if (isRouterMatches(pathname, adminProtectedRoutes)) return "ADMIN";
   if (isRouterMatches(pathname, moderatorProtectedRoutes)) return "MODERATOR";
   if (isRouterMatches(pathname, staffProtectedRoutes)) return "STAFF";
   if (isRouterMatches(pathname, userProtectedRoutes)) return "USER";
-  if (isRouterMatches(pathname, commonProtectedRoutes)) return "COMMON";
   return null;
 }
 

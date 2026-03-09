@@ -152,7 +152,7 @@ export default function ProfileForm({ userInfo }: ProfileFormProps) {
                 )}
 
                 {isEditing && (
-                  <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none rounded-full overflow-hidden">
+                  <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none overflow-hidden">
                     <span className="text-white font-medium text-sm">
                       Change
                     </span>

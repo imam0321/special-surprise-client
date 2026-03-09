@@ -14,13 +14,13 @@ export default function StatCard({
   title,
   value,
   icon: Icon,
-  iconColorClass = "text-surprise-pink",
-  bgColorClass = "bg-surprise-pink/20",
+  iconColorClass = "text-primary",
+  bgColorClass = "bg-primary/10",
   description,
 }: StatCardProps) {
   return (
-    <Card className="overflow-hidden border-none shadow-md hover:shadow-lg transition-shadow duration-300">
-      <CardContent className="flex items-center p-6 bg-white dark:bg-slate-900">
+    <Card className="glass-effect overflow-hidden border-none shadow-md hover:shadow-lg transition-shadow duration-300">
+      <CardContent className="flex items-center p-6 bg-transparent">
         <div className={`${bgColorClass} p-4 rounded-2xl mr-5 transition-transform duration-300 hover:scale-110`}>
           <Icon size={26} className={iconColorClass} />
         </div>

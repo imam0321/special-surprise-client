@@ -39,7 +39,7 @@ export default function ManagementPageHeader({
         <>
           {action.type === "link" && action.href ? (
             <Link href={action.href}>
-              <Button className="bg-linear-to-r from-surprise-pink to-surprise-purple text-white">
+              <Button className="bg-primary text-white hover:bg-primary/90 btn-bounce">
                 <Icon className="h-4 w-4" />
                 <span className="md:flex hidden ml-1">{action.label}</span>
               </Button>
@@ -47,7 +47,7 @@ export default function ManagementPageHeader({
           ) : (
             <Button
               onClick={action.onClick}
-              className="bg-linear-to-r from-surprise-pink to-surprise-purple text-white"
+              className="bg-primary text-white hover:bg-primary/90 btn-bounce"
             >
               <Icon className="h-4 w-4" />
               <span className="md:flex hidden">{action.label}</span>
